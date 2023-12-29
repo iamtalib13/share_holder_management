@@ -1,0 +1,59 @@
+{
+ "actions": [],
+ "autoname": "format:{account_gl_code}",
+ "creation": "2023-12-21 11:13:05.812412",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "account_gl_code",
+  "acc_name",
+  "ac_type"
+ ],
+ "fields": [
+  {
+   "fieldname": "account_gl_code",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Account GL Code"
+  },
+  {
+   "fieldname": "ac_type",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "A/C Type"
+  },
+  {
+   "fieldname": "acc_name",
+   "fieldtype": "Data",
+   "label": "A/C Name"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2023-12-26 12:13:17.618807",
+ "modified_by": "Administrator",
+ "module": "Share Holder Management",
+ "name": "Account GL Code",
+ "naming_rule": "Expression",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "show_title_field_in_link": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "account_gl_code"
+}
