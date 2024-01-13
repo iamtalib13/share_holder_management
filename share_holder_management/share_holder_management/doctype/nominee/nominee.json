@@ -1,0 +1,95 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2023-12-18 10:36:33.088108",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "section_break_fs1g",
+  "name1",
+  "address",
+  "nominee_relation",
+  "nominee_mobile_number",
+  "nominee_share_percentage",
+  "age",
+  "minor",
+  "guardian_name"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_fs1g",
+   "fieldtype": "Section Break"
+  },
+  {
+   "columns": 1,
+   "fieldname": "name1",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Name"
+  },
+  {
+   "columns": 2,
+   "fieldname": "address",
+   "fieldtype": "Small Text",
+   "in_list_view": 1,
+   "label": "Address"
+  },
+  {
+   "columns": 1,
+   "fieldname": "nominee_relation",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Nominee Relation"
+  },
+  {
+   "columns": 1,
+   "fieldname": "nominee_mobile_number",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Nominee Mobile Number"
+  },
+  {
+   "columns": 1,
+   "fieldname": "nominee_share_percentage",
+   "fieldtype": "Percent",
+   "in_list_view": 1,
+   "label": "Share %"
+  },
+  {
+   "columns": 1,
+   "fieldname": "age",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Age"
+  },
+  {
+   "columns": 1,
+   "default": "0",
+   "fieldname": "minor",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Minor or not"
+  },
+  {
+   "depends_on": "eval:doc.minor",
+   "fieldname": "guardian_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Guardian Name",
+   "mandatory_depends_on": "eval:doc.minor"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2023-12-18 10:59:14.626662",
+ "modified_by": "Administrator",
+ "module": "Share Holder Management",
+ "name": "Nominee",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

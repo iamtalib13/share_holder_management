@@ -1,0 +1,70 @@
+{
+ "actions": [],
+ "creation": "2024-01-12 12:59:24.073376",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "today",
+  "day_start",
+  "day_end",
+  "schedule_section",
+  "schedule_table"
+ ],
+ "fields": [
+  {
+   "default": "Today",
+   "fieldname": "today",
+   "fieldtype": "Date",
+   "label": "Today",
+   "read_only": 1
+  },
+  {
+   "fieldname": "day_start",
+   "fieldtype": "Datetime",
+   "label": "Day Start",
+   "read_only": 1
+  },
+  {
+   "fieldname": "day_end",
+   "fieldtype": "Datetime",
+   "label": "Day End",
+   "read_only": 1
+  },
+  {
+   "fieldname": "schedule_section",
+   "fieldtype": "Section Break",
+   "label": "Schedule"
+  },
+  {
+   "fieldname": "schedule_table",
+   "fieldtype": "Table",
+   "options": "Day Schedule"
+  }
+ ],
+ "hide_toolbar": 1,
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2024-01-12 13:17:59.189475",
+ "modified_by": "Administrator",
+ "module": "Share Holder Management",
+ "name": "Day Management",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

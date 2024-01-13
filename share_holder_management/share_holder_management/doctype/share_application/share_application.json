@@ -1,0 +1,560 @@
+{
+ "actions": [],
+ "allow_import": 1,
+ "autoname": "format:{application_sr_no}",
+ "creation": "2023-12-15 12:30:16.419702",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "personal_details_tab",
+  "application_sr_no",
+  "customer_id",
+  "account_type",
+  "column_break_hdes",
+  "ac_open_dt",
+  "application_date",
+  "status",
+  "personal_information_section",
+  "salutation",
+  "gender",
+  "occupation",
+  "sh_category",
+  "column_break_sb8h",
+  "customer_name",
+  "category",
+  "email_id",
+  "column_break_g9fn",
+  "date_of_birth",
+  "mobile",
+  "age",
+  "section_break_shvs",
+  "address",
+  "column_break_gctx",
+  "taluka",
+  "city",
+  "nationality",
+  "section_break_9s0o",
+  "aadhaar_number",
+  "column_break_uylz",
+  "pan_no",
+  "section_break_3kyx",
+  "column_break_nrre",
+  "membership_form",
+  "column_break_lhcd",
+  "payment_receipt",
+  "column_break_kxcr",
+  "kyc",
+  "ac_information_tab",
+  "ac_information_section",
+  "saving_current_gl_code",
+  "saving_current_ac_no",
+  "column_break_ajht",
+  "ac_type",
+  "share_customer_name",
+  "branch",
+  "branch_code",
+  "column_break_hgja",
+  "account_name",
+  "section_break_mkla",
+  "no_of_shares",
+  "column_break_iwul",
+  "base_share_amount",
+  "tot_share_amt",
+  "column_break_zigh",
+  "share_application_charges",
+  "amount_received_by",
+  "after_sanction_share_ac_information_section",
+  "share_gl_code",
+  "column_break_lq8k",
+  "share_ac_no",
+  "section_break_eqr0",
+  "sanction_date",
+  "column_break_t6xd",
+  "received_date",
+  "nominee_details_tab",
+  "nominee_details",
+  "dividend_transfer_ac_details_tab",
+  "branch_gl",
+  "column_break_qctw",
+  "div_ac_type",
+  "column_break_gpzl",
+  "ac_no",
+  "section_break_i1zq",
+  "section_break_vrrz",
+  "acc_name",
+  "dividend_remark",
+  "return_remark"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_shvs",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "application_sr_no",
+   "fieldtype": "Int",
+   "label": "Application Sr. No."
+  },
+  {
+   "fieldname": "column_break_hdes",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Today",
+   "fieldname": "application_date",
+   "fieldtype": "Date",
+   "label": "Application Date",
+   "read_only": 1
+  },
+  {
+   "fieldname": "personal_information_section",
+   "fieldtype": "Section Break",
+   "label": "Personal Information"
+  },
+  {
+   "fieldname": "customer_name",
+   "fieldtype": "Data",
+   "label": "Customer Name"
+  },
+  {
+   "default": "Individual",
+   "fieldname": "category",
+   "fieldtype": "Select",
+   "label": "Category",
+   "options": "Individual\nGroup"
+  },
+  {
+   "fieldname": "salutation",
+   "fieldtype": "Link",
+   "label": "Salutation",
+   "options": "Salutation"
+  },
+  {
+   "fieldname": "column_break_sb8h",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_g9fn",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "hidden": 1,
+   "in_standard_filter": 1,
+   "label": "Status",
+   "options": "Draft\nSubmitted\nReceived\nReturn To Branch\nPending From HO\nSanctioned\nRejected\nupdate"
+  },
+  {
+   "fieldname": "date_of_birth",
+   "fieldtype": "Date",
+   "label": "Birth Date"
+  },
+  {
+   "fieldname": "address",
+   "fieldtype": "Small Text",
+   "label": "Address"
+  },
+  {
+   "fieldname": "taluka",
+   "fieldtype": "Data",
+   "label": "Taluka / Tahshil"
+  },
+  {
+   "fieldname": "city",
+   "fieldtype": "Data",
+   "label": "City/District"
+  },
+  {
+   "fieldname": "mobile",
+   "fieldtype": "Data",
+   "label": "Mobile"
+  },
+  {
+   "fieldname": "age",
+   "fieldtype": "Data",
+   "label": "Age",
+   "read_only": 1
+  },
+  {
+   "fieldname": "pan_no",
+   "fieldtype": "Data",
+   "label": "PAN No."
+  },
+  {
+   "fieldname": "column_break_gctx",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "customer_id",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Customer ID"
+  },
+  {
+   "fieldname": "occupation",
+   "fieldtype": "Select",
+   "label": "Occupation",
+   "options": "\nFarmer\nBusiness\nTeacher\nAdvocate\nGovt Employee\nPrivate Employee\nDoctor"
+  },
+  {
+   "fieldname": "sh_category",
+   "fieldtype": "Data",
+   "label": "Sh Category"
+  },
+  {
+   "fieldname": "section_break_9s0o",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "section_break_3kyx",
+   "fieldtype": "Section Break",
+   "label": "KYC Details"
+  },
+  {
+   "fieldname": "membership_form",
+   "fieldtype": "Attach",
+   "label": "Membership form"
+  },
+  {
+   "fieldname": "column_break_lhcd",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "payment_receipt",
+   "fieldtype": "Attach",
+   "label": "Payment Receipt"
+  },
+  {
+   "fieldname": "column_break_kxcr",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "kyc",
+   "fieldtype": "Attach",
+   "label": "KYC ( Adhar / PAN / Voter ID )"
+  },
+  {
+   "fieldname": "column_break_nrre",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "dividend_transfer_ac_details_tab",
+   "fieldtype": "Tab Break",
+   "label": "Dividend Transfer A/C Details"
+  },
+  {
+   "fieldname": "branch_gl",
+   "fieldtype": "Link",
+   "label": "Branch GL",
+   "options": "Account GL Code"
+  },
+  {
+   "fieldname": "column_break_qctw",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "saving_current_gl_code.ac_type",
+   "fieldname": "ac_type",
+   "fieldtype": "Data",
+   "label": "Account Type",
+   "read_only": 1
+  },
+  {
+   "fieldname": "ac_no",
+   "fieldtype": "Data",
+   "label": "Account Number"
+  },
+  {
+   "fieldname": "section_break_i1zq",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "section_break_vrrz",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "dividend_remark",
+   "fieldtype": "Data",
+   "label": "Remark"
+  },
+  {
+   "fieldname": "personal_details_tab",
+   "fieldtype": "Tab Break",
+   "label": "Personal Information"
+  },
+  {
+   "fieldname": "ac_information_tab",
+   "fieldtype": "Tab Break",
+   "label": "A/C Information"
+  },
+  {
+   "fieldname": "saving_current_gl_code",
+   "fieldtype": "Link",
+   "label": "Account GL Code",
+   "options": "Account GL Code"
+  },
+  {
+   "fieldname": "saving_current_ac_no",
+   "fieldtype": "Data",
+   "label": "Account No."
+  },
+  {
+   "fetch_from": "branch_gl.ac_type",
+   "fieldname": "div_ac_type",
+   "fieldtype": "Data",
+   "label": "Account GL Type",
+   "read_only": 1
+  },
+  {
+   "fieldname": "ac_information_section",
+   "fieldtype": "Section Break",
+   "label": "A/C Information"
+  },
+  {
+   "fieldname": "branch_code",
+   "fieldtype": "Data",
+   "label": "Branch Code"
+  },
+  {
+   "fieldname": "column_break_ajht",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "share_customer_name",
+   "fieldtype": "Data",
+   "label": "Name"
+  },
+  {
+   "fieldname": "branch",
+   "fieldtype": "Data",
+   "in_standard_filter": 1,
+   "label": "Branch"
+  },
+  {
+   "fieldname": "section_break_mkla",
+   "fieldtype": "Section Break",
+   "label": "Shares Details"
+  },
+  {
+   "fieldname": "no_of_shares",
+   "fieldtype": "Int",
+   "label": "No. of Shares"
+  },
+  {
+   "fieldname": "column_break_iwul",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "base_share_amount",
+   "fieldtype": "Currency",
+   "label": "Base Share Amount",
+   "options": "currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_zigh",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "share_application_charges",
+   "fieldtype": "Currency",
+   "label": "Share Application Charges",
+   "read_only": 1
+  },
+  {
+   "fieldname": "amount_received_by",
+   "fieldtype": "Select",
+   "label": "Amount Received By",
+   "options": "\nTRF\nCASH"
+  },
+  {
+   "fieldname": "after_sanction_share_ac_information_section",
+   "fieldtype": "Section Break",
+   "label": "After Sanction Share A/C Information"
+  },
+  {
+   "fieldname": "share_gl_code",
+   "fieldtype": "Select",
+   "label": "Share GL Code",
+   "options": "SH-SHARE CAPITAL"
+  },
+  {
+   "fieldname": "column_break_lq8k",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "share_ac_no",
+   "fieldtype": "Data",
+   "label": "Share A/C No"
+  },
+  {
+   "fieldname": "section_break_eqr0",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_t6xd",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "received_date",
+   "fieldtype": "Date",
+   "label": "Received Date"
+  },
+  {
+   "fieldname": "sanction_date",
+   "fieldtype": "Date",
+   "label": "Sanction Date"
+  },
+  {
+   "fieldname": "nominee_details_tab",
+   "fieldtype": "Tab Break",
+   "label": "Nominee Details"
+  },
+  {
+   "fieldname": "nominee_details",
+   "fieldtype": "Table",
+   "label": "Nominee Details",
+   "options": "Nominee"
+  },
+  {
+   "fieldname": "tot_share_amt",
+   "fieldtype": "Currency",
+   "label": "Share Application Amount",
+   "read_only": 1
+  },
+  {
+   "fieldname": "aadhaar_number",
+   "fieldtype": "Data",
+   "label": "Aadhaar Number"
+  },
+  {
+   "default": "Indian",
+   "fieldname": "nationality",
+   "fieldtype": "Select",
+   "label": "Nationality",
+   "options": "Indian\nOther"
+  },
+  {
+   "fieldname": "account_type",
+   "fieldtype": "Select",
+   "label": "Account Type",
+   "options": "\nSAVING\nCURRENT\nLIABILITY\nLOAN"
+  },
+  {
+   "fieldname": "gender",
+   "fieldtype": "Select",
+   "label": "Gender",
+   "options": "\nMale\nFemale\nR\nFirm\nTransgender"
+  },
+  {
+   "default": "Today",
+   "fieldname": "ac_open_dt",
+   "fieldtype": "Date",
+   "label": "Account Opening Date",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_uylz",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "acc_name",
+   "fieldtype": "Data",
+   "label": "Account Holder Name"
+  },
+  {
+   "fieldname": "column_break_gpzl",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_hgja",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "saving_current_gl_code.acc_name",
+   "fieldname": "account_name",
+   "fieldtype": "Data",
+   "label": "Account Name",
+   "read_only": 1
+  },
+  {
+   "fieldname": "email_id",
+   "fieldtype": "Data",
+   "label": "Email ID"
+  },
+  {
+   "fieldname": "return_remark",
+   "fieldtype": "Small Text",
+   "label": "Return Remark"
+  }
+ ],
+ "hide_toolbar": 1,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-01-12 11:22:09.803436",
+ "modified_by": "Administrator",
+ "module": "Share Holder Management",
+ "name": "Share Application",
+ "naming_rule": "Expression",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "select": 1,
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Share Executive",
+   "select": 1,
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "show_title_field_in_link": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [
+  {
+   "color": "Green",
+   "title": "Sanctioned"
+  },
+  {
+   "color": "Red",
+   "title": "Rejected"
+  },
+  {
+   "color": "Blue",
+   "title": "Draft"
+  },
+  {
+   "color": "Orange",
+   "title": "Pending From HO"
+  },
+  {
+   "color": "Green",
+   "title": "Submitted"
+  },
+  {
+   "color": "Purple",
+   "title": "Received"
+  }
+ ],
+ "title_field": "application_sr_no"
+}
