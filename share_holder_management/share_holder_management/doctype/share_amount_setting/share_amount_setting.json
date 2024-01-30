@@ -1,0 +1,92 @@
+{
+ "actions": [],
+ "creation": "2024-01-30 16:14:10.312824",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "amount",
+  "date",
+  "add_share_amount",
+  "share_amount_history_section",
+  "save_status",
+  "share_amount_details",
+  "current_amount"
+ ],
+ "fields": [
+  {
+   "fieldname": "amount",
+   "fieldtype": "Currency",
+   "label": "Amount Per Share"
+  },
+  {
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "label": "Share Amount Date"
+  },
+  {
+   "fieldname": "add_share_amount",
+   "fieldtype": "Button",
+   "label": "Add Share Amount"
+  },
+  {
+   "fieldname": "share_amount_history_section",
+   "fieldtype": "Section Break",
+   "label": "Share Amount History"
+  },
+  {
+   "fieldname": "share_amount_details",
+   "fieldtype": "Table",
+   "label": "Share Amount Details",
+   "options": "Share Amount Details"
+  },
+  {
+   "fieldname": "save_status",
+   "fieldtype": "Button",
+   "label": "Save Status"
+  },
+  {
+   "fieldname": "current_amount",
+   "fieldtype": "Currency",
+   "label": "Current Amount"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2024-01-30 17:47:05.808483",
+ "modified_by": "Administrator",
+ "module": "Share Holder Management",
+ "name": "Share Amount Setting",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "Share Admin",
+   "select": 1,
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "track_seen": 1,
+ "track_views": 1
+}

@@ -19,14 +19,15 @@
   {
    "columns": 1,
    "fieldname": "nominee_relation",
-   "fieldtype": "Data",
+   "fieldtype": "Select",
    "in_list_view": 1,
-   "label": "Relation"
+   "label": "Relation",
+   "options": "\nSpouse\nParent\nMother\nFather\nSibling\nSon\nDaughter\nGrandfather\nGrandmother\nGrandchild\nAunt\nUncle\nCousin"
   },
   {
    "columns": 1,
    "fieldname": "nominee_mobile_number",
-   "fieldtype": "Int",
+   "fieldtype": "Data",
    "in_list_view": 1,
    "label": "Phone"
   },
@@ -35,7 +36,8 @@
    "fieldname": "nominee_share_percentage",
    "fieldtype": "Percent",
    "in_list_view": 1,
-   "label": "Share %"
+   "label": "Share %",
+   "precision": "0"
   },
   {
    "columns": 1,
@@ -43,7 +45,8 @@
    "fieldname": "minor",
    "fieldtype": "Check",
    "in_list_view": 1,
-   "label": "Minor ?"
+   "label": "Minor ?",
+   "read_only": 1
   },
   {
    "bold": 1,
@@ -65,7 +68,8 @@
    "fieldname": "nominee_age",
    "fieldtype": "Int",
    "in_list_view": 1,
-   "label": "Age"
+   "label": "Age",
+   "read_only_depends_on": "eval:!frappe.user.has_role('System Manager')"
   },
   {
    "depends_on": "eval:doc.minor",
@@ -79,7 +83,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2024-01-30 10:37:25.784782",
+ "modified": "2024-01-30 15:58:51.956369",
  "modified_by": "Administrator",
  "module": "Share Holder Management",
  "name": "Nominee",

@@ -2,8 +2,11 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on("Share Application", {
+  validate: function (frm) {},
   refresh(frm) {
     frm.trigger("section_colors");
+    frm.trigger("Intro_messages");
+    frm.trigger("child_table_controls");
 
     if (frm.is_new()) {
       if (!frappe.user.has_role("System Manager")) {
@@ -64,10 +67,11 @@ frappe.ui.form.on("Share Application", {
 
     if (!frm.is_new()) {
       if (frappe.user.has_role("System Manager")) {
-        frm
-          .add_custom_button(__("Admin receive"), function () {
+        frm.add_custom_button(
+          __("Receive"),
+          function () {
             frappe.confirm(
-              "Are you sure you want to submit the form to the Head-Office?",
+              "Admin -> Receive?",
               () => {
                 frm.set_value("status", "Received");
                 frm.refresh_field("status");
@@ -78,11 +82,28 @@ frappe.ui.form.on("Share Application", {
                 // action to perform if No is selected
               }
             );
-          })
-          .css({
-            "background-color": "#28a745", // Set green color
-            color: "#ffffff", // Set font color to white
-          });
+          },
+          __("Admin")
+        );
+        frm.add_custom_button(
+          __("Draft"),
+          function () {
+            frappe.confirm(
+              "Admin -> Draft?",
+              () => {
+                frm.set_value("status", "Draft");
+                frm.refresh_field("status");
+
+                frm.save();
+              },
+              () => {
+                // action to perform if No is selected
+              }
+            );
+          },
+          __("Admin")
+        );
+
         console.log("System Admin");
       } else if (frappe.user.has_role("Share Admin")) {
         console.log("Share Admin");
@@ -503,10 +524,14 @@ frappe.ui.form.on("Share Application", {
               frappe.confirm(
                 "Are you sure you want to submit the form to the Head-Office?",
                 () => {
-                  frm.set_value("status", "Submitted");
-                  frm.refresh_field("status");
+                  if (!frm.doc.nominee_details) {
+                    frappe.throw("Please Add Nominee before submit");
+                  } else {
+                    frm.set_value("status", "Submitted");
+                    frm.refresh_field("status");
 
-                  frm.save();
+                    frm.save();
+                  }
                 },
                 () => {
                   // action to perform if No is selected
@@ -525,10 +550,14 @@ frappe.ui.form.on("Share Application", {
               frappe.confirm(
                 "Are you sure you want to submit the form to the Head-Office?",
                 () => {
-                  frm.set_value("status", "Submitted");
-                  frm.refresh_field("status");
+                  if (!frm.doc.nominee_details) {
+                    frappe.throw("Please Add Nominee before submit");
+                  } else {
+                    frm.set_value("status", "Submitted");
+                    frm.refresh_field("status");
 
-                  frm.save();
+                    frm.save();
+                  }
                 },
                 () => {
                   // action to perform if No is selected
@@ -564,6 +593,22 @@ frappe.ui.form.on("Share Application", {
       border: "none", // Remove border if needed
       cursor: "pointer", // Change cursor to pointer for better UX
     });
+  },
+
+  child_table_controls(frm) {
+    frm.fields_dict["nominee_details"].grid.wrapper
+      .find(".grid-add-row")
+      .hide();
+  },
+
+  Intro_messages(frm) {
+    if (frm.doc.status == "Draft") {
+      // Set intro message
+      frm.set_intro(
+        "Please Submit your Form",
+        "blue" // Change the color as needed
+      );
+    }
   },
   section_colors(frm) {
     frm.fields_dict["nominee_form_section"].wrapper.css(
@@ -927,27 +972,27 @@ frappe.ui.form.on("Share Application", {
         frappe.throw("Please fill Guardian Name");
       }
       nominee_minor = 1; // Assuming you want to set nominee_minor to 1 if nominee_age is less than 18
+    } else {
+      let row = frm.add_child("nominee_details", {
+        nominee_name: nominee_fullname,
+        nominee_address: nominee_address,
+        nominee_relation: nominee_relation,
+        nominee_mobile_number: nominee_contact,
+        nominee_share_percentage: nominee_share,
+        nominee_age: nominee_age,
+        minor: nominee_minor,
+        nominee_guardian_name: nominee_guardian_name,
+      });
+
+      frm.refresh_field("nominee_details");
+      frm.set_value("nominee_fullname", null);
+      frm.set_value("nominee_guardian_name", null);
+      frm.set_value("nominee_address", null);
+      frm.set_value("nominee_relation", null);
+      frm.set_value("nominee_mobile_number", null);
+      frm.set_value("nominee_share_percentage", null);
+      frm.set_value("nominee_age", null);
+      frm.set_value("minor", 0); // Assuming you want to set nominee_minor to 0 after adding to child table
     }
-
-    let row = frm.add_child("nominee_details", {
-      nominee_name: nominee_fullname,
-      nominee_address: nominee_address,
-      nominee_relation: nominee_relation,
-      nominee_mobile_number: nominee_contact,
-      nominee_share_percentage: nominee_share,
-      nominee_age: nominee_age,
-      minor: nominee_minor,
-      nominee_guardian_name: nominee_guardian_name,
-    });
-
-    frm.refresh_field("nominee_details");
-    frm.set_value("nominee_fullname", null);
-    frm.set_value("nominee_guardian_name", null);
-    frm.set_value("nominee_address", null);
-    frm.set_value("nominee_relation", null);
-    frm.set_value("nominee_mobile_number", null);
-    frm.set_value("nominee_share_percentage", null);
-    frm.set_value("nominee_age", null);
-    frm.set_value("minor", 0); // Assuming you want to set nominee_minor to 0 after adding to child table
   },
 });

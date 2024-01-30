@@ -9,7 +9,13 @@ class ShareApplication(Document):
     pass
 
     def before_validate(self):
-       
+      
+    # Check if the 'status' field is equal to "Submitted"
+        if self.status == "Submitted":
+        # Check if the 'nominee_details' child table is empty
+            if not self.nominee_details:
+                frappe.throw("Please Add atleast one Nominee before submit the form")
+        
     
         
         # Check Aadhar number as per Indian government, it must be 12 digits
@@ -51,7 +57,7 @@ class ShareApplication(Document):
         self.tot_share_amt = (self.no_of_shares * 100) + 10
         self.share_customer_name = self.customer_name
         self.acc_name = self.customer_name
-        self.saving_current_ac_no = self.ac_no
+        #self.saving_current_ac_no = self.ac_no
         
         
         if self.status == "Sanctioned":
@@ -107,6 +113,22 @@ def check_branch_and_branch_code(owner):
         return employee_data
     else:
         frappe.msgprint(f"No records found for user_id '{owner}' in the 'Employee' table.")
+        return None
+    
+@frappe.whitelist()
+def check_current_enable_share_amount():
+    result = frappe.db.sql(
+        f"""SELECT amount FROM `tabShare Amount Details`
+            WHERE status='Enable'
+            LIMIT 1;""",
+        as_dict=True,
+    )
+
+    if result:
+        current_share_amount = result[0]['amount']
+        return current_share_amount
+    else:
+        frappe.msgprint("Server Error - Current share amount not detected")
         return None
 
         
