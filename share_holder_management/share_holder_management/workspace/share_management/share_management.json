@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"pqUprAS_RL\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h1\\\"><b>Share Management</b></span>\",\"col\":12}},{\"id\":\"BQ1uiZMiKm\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Create\",\"col\":3}},{\"id\":\"n-7njW8hzy\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Share Holders\",\"col\":3}},{\"id\":\"lhJWhkoqm8\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Status - Wise</b></span>\",\"col\":12}},{\"id\":\"kLAj6JIVQG\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Draft\",\"col\":3}},{\"id\":\"zCV3GGV7m6\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Pending\",\"col\":3}},{\"id\":\"dmMtlPotUj\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Sanctioned\",\"col\":3}},{\"id\":\"_83jtb7Dcw\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Rejected\",\"col\":3}},{\"id\":\"VDgZf7WtGt\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"updated\",\"col\":3}}]",
+ "content": "[{\"id\":\"pqUprAS_RL\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h1\\\"><b>Share Management</b></span>\",\"col\":12}},{\"id\":\"BQ1uiZMiKm\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Create\",\"col\":3}},{\"id\":\"n-7njW8hzy\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Share Holders\",\"col\":3}},{\"id\":\"lhJWhkoqm8\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Status - Wise</b></span>\",\"col\":12}},{\"id\":\"kLAj6JIVQG\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Draft\",\"col\":3}},{\"id\":\"zCV3GGV7m6\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Pending\",\"col\":3}},{\"id\":\"dmMtlPotUj\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Sanctioned\",\"col\":3}},{\"id\":\"_83jtb7Dcw\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Rejected\",\"col\":3}},{\"id\":\"5rWhdTUUkv\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Return To Branch\",\"col\":3}}]",
  "creation": "2024-01-09 10:53:34.815001",
  "custom_blocks": [],
  "docstatus": 0,
@@ -12,7 +12,7 @@
  "is_hidden": 0,
  "label": "Share Management",
  "links": [],
- "modified": "2024-01-10 12:42:40.035201",
+ "modified": "2024-01-19 10:58:29.442216",
  "modified_by": "Administrator",
  "module": "Share Holder Management",
  "name": "Share Management",
@@ -37,12 +37,21 @@
    "type": "DocType"
   },
   {
-   "color": "Grey",
+   "color": "Orange",
    "doc_view": "List",
    "format": "{}",
-   "label": "updated",
+   "label": "Pending",
    "link_to": "Share Application",
-   "stats_filter": "[[\"Share Application\",\"status\",\"=\",\"update\",false]]",
+   "stats_filter": "[[\"Share Application\",\"status\",\"in\",[\"Received\",\"Submitted\",null],false]]",
+   "type": "DocType"
+  },
+  {
+   "color": "Red",
+   "doc_view": "List",
+   "format": "{}",
+   "label": "Return To Branch",
+   "link_to": "Share Application",
+   "stats_filter": "[[\"Share Application\",\"status\",\"=\",\"Return To Branch\",false]]",
    "type": "DocType"
   },
   {
@@ -79,15 +88,6 @@
    "label": "Rejected",
    "link_to": "Share Application",
    "stats_filter": "[[\"Share Application\",\"status\",\"=\",\"Rejected\",false]]",
-   "type": "DocType"
-  },
-  {
-   "color": "Orange",
-   "doc_view": "List",
-   "format": "{}",
-   "label": "Pending",
-   "link_to": "Share Application",
-   "stats_filter": "[[\"Share Application\",\"status\",\"=\",\"Pending From HO\",false]]",
    "type": "DocType"
   }
  ],

@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"ha-SMFhHha\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Share Management - Executive</span>\",\"col\":12}},{\"id\":\"r6vanmC-HD\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Share Holders\",\"col\":3}},{\"id\":\"bInxAfNvQR\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"FLLqlzBDQL\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Status - Wise</b></span>\",\"col\":12}},{\"id\":\"sUmYzoDSYa\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Submitted\",\"col\":3}},{\"id\":\"BVmmKfBCBQ\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Sanctioned\",\"col\":3}},{\"id\":\"y9m50hszfP\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Rejected\",\"col\":3}}]",
+ "content": "[{\"id\":\"ha-SMFhHha\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Share Management - Executive</span>\",\"col\":12}},{\"id\":\"r6vanmC-HD\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Share Holders\",\"col\":3}},{\"id\":\"bInxAfNvQR\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"FLLqlzBDQL\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Status - Wise</b></span>\",\"col\":12}},{\"id\":\"sUmYzoDSYa\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Submitted\",\"col\":3}},{\"id\":\"BVmmKfBCBQ\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Sanctioned\",\"col\":3}},{\"id\":\"sEWrMe9iDA\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Received\",\"col\":3}},{\"id\":\"y9m50hszfP\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Rejected\",\"col\":3}}]",
  "creation": "2024-01-09 12:33:44.718788",
  "custom_blocks": [],
  "docstatus": 0,
@@ -10,12 +10,12 @@
  "icon": "number-card",
  "idx": 0,
  "is_hidden": 0,
- "label": "Share Management - Executive",
+ "label": "Executive",
  "links": [],
- "modified": "2024-01-12 11:10:23.547160",
+ "modified": "2024-01-19 11:07:24.818796",
  "modified_by": "Administrator",
  "module": "Share Holder Management",
- "name": "Share Management - Executive",
+ "name": "Executive",
  "number_cards": [],
  "owner": "Administrator",
  "parent_page": "",
@@ -35,6 +35,15 @@
    "label": "Submitted",
    "link_to": "Share Application",
    "stats_filter": "[[\"Share Application\",\"status\",\"=\",\"Submitted\",false]]",
+   "type": "DocType"
+  },
+  {
+   "color": "Green",
+   "doc_view": "List",
+   "format": "{}",
+   "label": "Received",
+   "link_to": "Share Application",
+   "stats_filter": "[[\"Share Application\",\"status\",\"=\",\"Received\",false]]",
    "type": "DocType"
   },
   {
@@ -65,5 +74,5 @@
    "type": "DocType"
   }
  ],
- "title": "Share Management - Executive"
+ "title": "Executive"
 }

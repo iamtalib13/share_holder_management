@@ -3,27 +3,48 @@
 
 frappe.ui.form.on("Share Application", {
   refresh(frm) {
+    frm.trigger("section_colors");
+
     if (frm.is_new()) {
-      // frm.call({
-      //   method: "check_last_application_sr_no",
-      //   args: {},
-      //   callback: function (r) {
-      //     // Check if the message array contains at least one object
-      //     if (r.message) {
-      //       // Log the response value to the console
-      //       console.log("Response -----");
-      //       console.log("Response:", r.message);
+      if (!frappe.user.has_role("System Manager")) {
+        frm.call({
+          method: "check_last_application_sr_no",
+          args: {},
+          callback: function (r) {
+            // Check if the message array contains at least one object
+            if (r.message) {
+              frm.set_value("application_sr_no", r.message);
+              frm.refresh_field("application_sr_no");
 
-      //       frm.set_value("application_sr_no", r.message);
-      //       frm.refresh_field("application_sr_no");
+              // Do something else with the response, if needed
+            } else {
+              frappe.throw("Server Down . .");
+              // Handle the case where there is no response
+            }
+          },
+        });
+        console.log("owner", frm.doc.owner);
+        frm.call({
+          method: "check_branch_and_branch_code",
+          args: {
+            owner: frm.doc.owner, // Pass owner directly instead of wrapping it in self
+          },
+          callback: function (r) {
+            // Check if the message array contains at least one object
+            if (r.message) {
+              frm.set_value("branch", r.message.branch);
+              frm.set_value("branch_code", r.message.branch_code);
 
-      //       // Do something else with the response, if needed
-      //     } else {
-      //       frappe.throw("Server Down . .");
-      //       // Handle the case where there is no response
-      //     }
-      //   },
-      // });
+              frm.refresh_fields(["branch", "branch_code"]); // Refresh the fields
+
+              // Do something else with the response, if needed
+            } else {
+              frappe.throw("Server Down . .");
+              // Handle the case where there is no response
+            }
+          },
+        });
+      }
 
       if (frappe.user.has_role("System Manager")) {
         console.log("System Admin");
@@ -43,6 +64,25 @@ frappe.ui.form.on("Share Application", {
 
     if (!frm.is_new()) {
       if (frappe.user.has_role("System Manager")) {
+        frm
+          .add_custom_button(__("Admin receive"), function () {
+            frappe.confirm(
+              "Are you sure you want to submit the form to the Head-Office?",
+              () => {
+                frm.set_value("status", "Received");
+                frm.refresh_field("status");
+
+                frm.save();
+              },
+              () => {
+                // action to perform if No is selected
+              }
+            );
+          })
+          .css({
+            "background-color": "#28a745", // Set green color
+            color: "#ffffff", // Set font color to white
+          });
         console.log("System Admin");
       } else if (frappe.user.has_role("Share Admin")) {
         console.log("Share Admin");
@@ -50,6 +90,173 @@ frappe.ui.form.on("Share Application", {
         frm.disable_form();
       } else if (frappe.user.has_role("Share User Creator")) {
         console.log("Share Executive & User Creator");
+
+        if (frm.doc.status == "Submitted") {
+          frm.disable_form();
+          frm.disable_save();
+          frm
+            .add_custom_button(__("Receive"), function () {
+              frappe.confirm(
+                "Are you sure you want to Receive - <b>" +
+                  frm.doc.customer_name +
+                  "</b>",
+                () => {
+                  frm.call({
+                    method: "get_server_datetime",
+                    callback: function (r) {
+                      if (!r.exc && r.message) {
+                        frm.set_value("received_date", r.message);
+                        frm.refresh_field("received_date");
+                        frm.set_value("status", "Received");
+                        frm.refresh_field("status");
+                        frm.save();
+                      } else {
+                        // Handle the case where there is an error or no response
+                        console.error(
+                          "SERVER INTERNET ERROR ",
+                          r.exc || "No response"
+                        );
+                      }
+                    },
+                  });
+                },
+                () => {
+                  // action to perform if No is selected
+                }
+              );
+            })
+            .css({
+              "background-color": "#28a745", // Set green color
+              color: "#ffffff", // Set font color to white
+            });
+
+          // Add custom button for Rejection
+          frm
+            .add_custom_button(__("Return To Branch"), function () {
+              let d = new frappe.ui.Dialog({
+                title: "Enter Return Remarks",
+                fields: [
+                  {
+                    label: "Return Remarks",
+                    fieldname: "return_remark",
+                    fieldtype: "Small Text",
+                    reqd: 1, // Set reqd property to make it mandatory
+                  },
+                ],
+                size: "small", // small, large, extra-large
+                primary_action_label: "Submit",
+                primary_action: function () {
+                  // Check if the return remarks field is provided
+                  if (!d.fields_dict.return_remark.get_value()) {
+                    frappe.msgprint(__("Please provide return remarks."));
+                    return;
+                  }
+
+                  // Use the return remarks value as needed, for example, updating a field in the main form
+                  frm.set_value(
+                    "return_remark",
+                    d.fields_dict.return_remark.get_value()
+                  );
+
+                  // Set the status field to "Return To Branch"
+                  frm.set_value("status", "Return To Branch");
+
+                  // Refresh the status field
+                  frm.refresh_field("status");
+                  frm.save();
+                  // Additional logic if needed
+                  console.log(
+                    "Submitted return remarks:",
+                    d.fields_dict.return_remark.get_value()
+                  );
+
+                  // Hide the dialog
+                  d.hide();
+                },
+              });
+
+              d.show();
+            })
+            .css({
+              "background-color": "#dc3545", // Set red color
+              color: "#ffffff", // Set font color to white
+            });
+        } else if (frm.doc.status == "Return To Branch") {
+          frm.trigger("return_intro");
+          frm.disable_save();
+          frm.disable_form();
+        } else if (
+          frm.doc.status == "Pending From HO" ||
+          frm.doc.status == "Received"
+        ) {
+          frm.disable_save();
+          frm
+            .add_custom_button(__("Sanction"), function () {
+              frappe.confirm(
+                "Are you sure you want to Approve - <b>" +
+                  frm.doc.customer_name +
+                  "</b>",
+                () => {
+                  frm.call({
+                    method: "get_server_datetime",
+                    callback: function (r) {
+                      if (!r.exc && r.message) {
+                        frm.set_value("sanction_date", r.message);
+                        frm.refresh_field("sanction_date");
+                        frm.set_value("status", "Sanctioned");
+                        frm.refresh_field("status");
+                        frm.save();
+                      } else {
+                        // Handle the case where there is an error or no response
+                        console.error(
+                          "SERVER INTERNET ERROR ",
+                          r.exc || "No response"
+                        );
+                      }
+                    },
+                  });
+                },
+                () => {
+                  // action to perform if No is selected
+                }
+              );
+            })
+            .css({
+              "background-color": "#28a745", // Set green color
+              color: "#ffffff", // Set font color to white
+            });
+
+          // Add custom button for Rejection
+          frm
+            .add_custom_button(__("Reject"), function () {
+              frappe.confirm(
+                "Are you sure you want to Reject- <b>" +
+                  frm.doc.customer_name +
+                  "</b>",
+                () => {
+                  // action to perform if Yes is selected
+                  frm.set_value("status", "Rejected");
+                  frm.refresh_field("status");
+                  console.log("Reject");
+                  frm.save();
+                },
+                () => {
+                  // action to perform if No is selected
+                }
+              );
+            })
+            .css({
+              "background-color": "#dc3545", // Set red color
+              color: "#ffffff", // Set font color to white
+            });
+        } else if (
+          frm.doc.status == "Sanctioned" ||
+          frm.doc.status == "Rejected"
+        ) {
+          frm.disable_save();
+          frm.disable_form();
+        }
+
         if (frm.doc.status == "Pending From HO") {
           frm.disable_save();
           frm
@@ -212,14 +419,14 @@ frappe.ui.form.on("Share Application", {
               "background-color": "#dc3545", // Set red color
               color: "#ffffff", // Set font color to white
             });
-        } else if (frm.doc.status == "Received") {
-          frm.disable_form();
-          frm.disable_save();
         } else if (frm.doc.status == "Return To Branch") {
           frm.trigger("return_intro");
           frm.disable_save();
           frm.disable_form();
-        } else if (frm.doc.status == "Pending From HO") {
+        } else if (
+          frm.doc.status == "Pending From HO" ||
+          frm.doc.status == "Received"
+        ) {
           frm.disable_save();
           frm
             .add_custom_button(__("Sanction"), function () {
@@ -347,7 +554,90 @@ frappe.ui.form.on("Share Application", {
     if (frm.doc.status == "Submitted") {
       frm.trigger("set_form_lock");
     }
+
+    frm.fields_dict.add_to_child.$input.css({
+      "background-color": "black", // Set the background color to black
+      color: "white", // Set the text color to white
+      width: "100%", // Set width to 100%
+      position: "relative", // Add position: relative
+      padding: "10px", // Add padding for better visibility and aesthetics
+      border: "none", // Remove border if needed
+      cursor: "pointer", // Change cursor to pointer for better UX
+    });
   },
+  section_colors(frm) {
+    frm.fields_dict["nominee_form_section"].wrapper.css(
+      "background-color",
+      "antiquewhite"
+    );
+
+    // Lightened blue for "ac_information_section"
+    frm.fields_dict["ac_information_section"].wrapper.css(
+      "background-color",
+      "#DCF2F1" // Hex color code for the lightened blue
+    );
+
+    // Lightened lavender for "no_of_share_section"
+    frm.fields_dict["no_of_share_section"].wrapper.css(
+      "background-color",
+      "#F5EEE6" // Hex color code for the lightened lavender
+    );
+
+    // Lightened mint green for "after_sanction_share_ac_information_section"
+    frm.fields_dict["after_sanction_share_ac_information_section"].wrapper.css(
+      "background-color",
+      "#DCF2F1" // Hex color code for the lightened mint green
+    );
+
+    frm.fields_dict["nominee_table_section"].wrapper.css(
+      "background-color",
+      "#DCF2F1" // Hex color code for the lightened mint green
+    );
+
+    //Personal Information Tab
+
+    frm.fields_dict["acc_section_details"].wrapper.css(
+      "background-color",
+      "#DCF2F1" // Hex color code for the lightened mint green
+    );
+
+    frm.fields_dict["personal_information_section"].wrapper.css(
+      "background-color",
+      "#F5EEE6" // Hex color code for the lightened lavender
+    );
+    frm.fields_dict["location_section"].wrapper.css(
+      "background-color",
+      "#DCF2F1" // Hex color code for the lightened mint green
+    );
+
+    frm.fields_dict["kyc_section"].wrapper.css(
+      "background-color",
+      "#F5EEE6" // Hex color code for the lightened lavender
+    );
+
+    frm.fields_dict["kyc_section_2"].wrapper.css(
+      "background-color",
+      "#F5EEE6" // Hex color code for the lightened lavender
+    );
+
+    //Divident Tab
+
+    frm.fields_dict["divident_section_1"].wrapper.css(
+      "background-color",
+      "#DCF2F1" // Hex color code for the lightened mint green
+    );
+
+    frm.fields_dict["personal_information_section"].wrapper.css(
+      "background-color",
+      "#F5EEE6" // Hex color code for the lightened lavender
+    );
+    frm.fields_dict["remark_section"].wrapper.css(
+      "background-color",
+      "#F5EEE6" // Hex color code for the lightened lavender
+    );
+  },
+
+  test_details_add: function (frm) {},
 
   return_intro: function (frm) {
     frm.set_intro("<b>Return Remark : </b>" + frm.doc.return_remark, "red");
@@ -378,9 +668,11 @@ frappe.ui.form.on("Share Application", {
       ) {
         // Set the age field value and refresh the field
         frm.set_value("age", age - 1);
+        frm.refresh_field("age");
       } else {
         // Set the age field value and refresh the field
         frm.set_value("age", age);
+        frm.refresh_field("age");
       }
 
       // Refresh the age field in the form
@@ -392,27 +684,45 @@ frappe.ui.form.on("Share Application", {
   },
 
   no_of_shares(frm) {},
+
+  nominee_age: function (frm) {
+    console.log(frm.doc.nominee_age);
+    if (frm.doc.nominee_age < 18) {
+      frm.set_value("minor", 1);
+      frm.refresh_field("minor");
+    } else {
+      frm.set_value("minor", 0);
+      frm.refresh_field("minor");
+    }
+  },
+
   onload_post_render: function (frm) {
     let share_base_amount = 100;
 
     frm.fields_dict["no_of_shares"].$input.on("input", function (event) {
       var value = frm.fields_dict["no_of_shares"].get_value();
-      console.log("Real-time input. No. of shares: ", value);
 
-      // Check if the number of shares is zero
-      if (value === 0) {
+      if (isNaN(value)) {
+        frappe.throw(__("Please enter only numbers (0-9)."));
+
+        frm.set_value("no_of_shares", null);
+        frm.refresh_field("no_of_shares");
+        return;
+      }
+
+      var noOfShares = parseFloat(value) || 0;
+      console.log("Real-time input. No. of shares: ", noOfShares);
+
+      if (noOfShares === 0) {
         frappe.throw("Number of shares cannot be 0");
         return;
       }
 
-      // Perform the calculation
-      var noOfShares = value || 0;
       var baseShareAmount = share_base_amount || 0;
       var applicationCharges = frm.doc.share_application_charges || 0;
       var totalAmount = noOfShares * baseShareAmount + applicationCharges;
       var totalBaseAmount = noOfShares * baseShareAmount;
 
-      // Log the values used in the calculation
       console.log(
         "Calculation Inputs: No. of shares=",
         noOfShares,
@@ -422,18 +732,164 @@ frappe.ui.form.on("Share Application", {
         applicationCharges
       );
 
-      // Set the calculated total amount back to the form
       frm.set_value("base_share_amount", totalBaseAmount);
       frm.refresh_field("base_share_amount");
 
-      // Set the calculated total amount back to the form
       frm.set_value("tot_share_amt", totalAmount);
       frm.refresh_field("tot_share_amt");
 
-      // Log the calculated total amount to the console
       console.log("Calculated Total Amount: ", totalAmount);
     });
+
+    frm.fields_dict["no_of_shares"].$input.on("keydown", function (event) {
+      var key = event.key;
+
+      if (key === "Backspace") {
+        // Handle Backspace key
+        frm.set_value("base_share_amount", null);
+        frm.set_value("tot_share_amt", null);
+      }
+
+      // Allow only numeric keys (0-9) and Backspace
+      if (!(key >= "0" && key <= "9") && key !== "Backspace") {
+        event.preventDefault();
+      }
+    });
+
+    // Logic for 'aadhaar_number' field
+    frm.fields_dict["aadhaar_number"].$input.on("keydown", function (event) {
+      var key = event.key;
+
+      // Validate that only numbers are allowed
+      var regex = /^[0-9]+$/;
+
+      // Allow only numeric keys (0-9) and Backspace
+      if (!(key >= "0" && key <= "9") && key !== "Backspace") {
+        event.preventDefault();
+      }
+
+      // Validate the entire input against the regex
+      var value = frm.fields_dict["aadhaar_number"].get_value();
+      if (!regex.test(value)) {
+        frm.set_value("aadhaar_number", null);
+        frm.refresh_field("aadhaar_number");
+      }
+    });
+
+    // Allow both uppercase and lowercase alphabets, and 0-9 numbers
+    frm.fields_dict["pan_no"].$input.on("input", function () {
+      var value = frm.fields_dict["pan_no"].get_value();
+
+      // Convert input to uppercase
+      value = value.toUpperCase();
+
+      // Validate that only uppercase alphabets and numbers are allowed
+      var regex = /^[A-Z0-9]+$/;
+
+      // Remove any characters that do not match the pattern
+      var sanitizedValue = value.replace(new RegExp(`[^A-Z0-9]`, "g"), "");
+
+      // Set the sanitized value back to the field
+      frm.fields_dict["pan_no"].set_input(sanitizedValue);
+    });
+    frm.fields_dict["nominee_share_percentage"].$input.on(
+      "keydown",
+      function (event) {
+        var key = event.key;
+
+        // Allow numeric keys (0-9), Backspace, and Left/Right Arrow keys
+        if (
+          !(key >= "0" && key <= "9") &&
+          key !== "Backspace" &&
+          key !== "ArrowLeft" &&
+          key !== "ArrowRight"
+        ) {
+          event.preventDefault();
+        }
+      }
+    );
+
+    frm.fields_dict["nominee_age"].$input.on("keydown", function (event) {
+      var key = event.key;
+
+      // Check if Backspace is pressed
+      if (key === "Backspace") {
+        // Get the current entered age
+        var currentAge = frm.fields_dict["nominee_age"].get_value();
+
+        // Check if the entered age is less than 18
+        if (parseInt(currentAge) > 18) {
+          console.log("Not a Minor");
+        } else {
+          console.log("Minor");
+        }
+
+        return; // Allow Backspace without further processing
+      }
+
+      // Allow numeric keys (0-9), and Left/Right Arrow keys
+      if (
+        !(key >= "0" && key <= "9") &&
+        key !== "ArrowLeft" &&
+        key !== "ArrowRight"
+      ) {
+        event.preventDefault();
+      }
+
+      // Get the entered age
+      var age = parseInt(frm.fields_dict["nominee_age"].get_value() + key);
+
+      // Check if the entered age is 18 or more
+      if (age >= 18) {
+        console.log("Not a Minor");
+      } else {
+        console.log("Minor");
+      }
+    });
+
+    frm.fields_dict["nominee_age"].$input.on("input", function (event) {
+      var key = event.key;
+
+      // Check if Backspace is pressed
+      if (key === "Backspace") {
+        // Get the current entered age
+        var currentAge = frm.fields_dict["nominee_age"].get_value();
+
+        // Check if the entered age is less than 18
+        if (parseInt(currentAge) > 18) {
+          console.log("Not a Minor");
+        } else {
+          console.log("Minor");
+        }
+
+        return; // Allow Backspace without further processing
+      }
+    });
+
+    // Logic for 'aadhaar_number' field
+    frm.fields_dict["nominee_mobile_number"].$input.on(
+      "keydown",
+      function (event) {
+        var key = event.key;
+
+        // Validate that only numbers are allowed
+        var regex = /^[0-9]+$/;
+
+        // Allow only numeric keys (0-9) and Backspace
+        if (!(key >= "0" && key <= "9") && key !== "Backspace") {
+          event.preventDefault();
+        }
+
+        // Validate the entire input against the regex
+        var value = frm.fields_dict["nominee_mobile_number"].get_value();
+        if (!regex.test(value)) {
+          frm.set_value("nominee_mobile_number", null);
+          frm.refresh_field("nominee_mobile_number");
+        }
+      }
+    );
   },
+
   // set_base_share_amount(frm) {
   //   frm.set_value("base_share_amount", 100);
   // },
@@ -446,5 +902,52 @@ frappe.ui.form.on("Share Application", {
     frm.disable_form();
     frm.disable_save();
     frm.page.clear_primary_action();
+  },
+  add_to_child: function (frm) {
+    let nominee_fullname = frm.doc.nominee_fullname;
+    let nominee_address = frm.doc.nominee_address;
+    let nominee_relation = frm.doc.nominee_relation;
+    let nominee_contact = frm.doc.nominee_mobile_number;
+    let nominee_share = frm.doc.nominee_share_percentage;
+    let nominee_age = frm.doc.nominee_age;
+    let nominee_guardian_name = frm.doc.nominee_guardian_name;
+    let nominee_minor = frm.doc.minor;
+
+    if (
+      !nominee_fullname ||
+      !nominee_address ||
+      !nominee_relation ||
+      !nominee_contact ||
+      !nominee_share ||
+      !nominee_age
+    ) {
+      frappe.throw("Please fill in all required fields.");
+    } else if (nominee_age < 18) {
+      if (!nominee_guardian_name) {
+        frappe.throw("Please fill Guardian Name");
+      }
+      nominee_minor = 1; // Assuming you want to set nominee_minor to 1 if nominee_age is less than 18
+    }
+
+    let row = frm.add_child("nominee_details", {
+      nominee_name: nominee_fullname,
+      nominee_address: nominee_address,
+      nominee_relation: nominee_relation,
+      nominee_mobile_number: nominee_contact,
+      nominee_share_percentage: nominee_share,
+      nominee_age: nominee_age,
+      minor: nominee_minor,
+      nominee_guardian_name: nominee_guardian_name,
+    });
+
+    frm.refresh_field("nominee_details");
+    frm.set_value("nominee_fullname", null);
+    frm.set_value("nominee_guardian_name", null);
+    frm.set_value("nominee_address", null);
+    frm.set_value("nominee_relation", null);
+    frm.set_value("nominee_mobile_number", null);
+    frm.set_value("nominee_share_percentage", null);
+    frm.set_value("nominee_age", null);
+    frm.set_value("minor", 0); // Assuming you want to set nominee_minor to 0 after adding to child table
   },
 });

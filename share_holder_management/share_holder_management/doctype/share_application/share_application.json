@@ -7,6 +7,7 @@
  "engine": "InnoDB",
  "field_order": [
   "personal_details_tab",
+  "acc_section_details",
   "application_sr_no",
   "customer_id",
   "account_type",
@@ -27,17 +28,17 @@
   "date_of_birth",
   "mobile",
   "age",
-  "section_break_shvs",
+  "location_section",
   "address",
   "column_break_gctx",
   "taluka",
   "city",
   "nationality",
-  "section_break_9s0o",
+  "kyc_section",
   "aadhaar_number",
   "column_break_uylz",
   "pan_no",
-  "section_break_3kyx",
+  "kyc_section_2",
   "column_break_nrre",
   "membership_form",
   "column_break_lhcd",
@@ -55,7 +56,7 @@
   "branch_code",
   "column_break_hgja",
   "account_name",
-  "section_break_mkla",
+  "no_of_share_section",
   "no_of_shares",
   "column_break_iwul",
   "base_share_amount",
@@ -72,34 +73,45 @@
   "column_break_t6xd",
   "received_date",
   "nominee_details_tab",
+  "nominee_form_section",
+  "nominee_fullname",
+  "nominee_relation",
+  "nominee_age",
+  "column_break_k6x0e",
+  "nominee_mobile_number",
+  "nominee_address",
+  "add_to_child",
+  "column_break_xcnzm",
+  "nominee_share_percentage",
+  "nominee_guardian_name",
+  "minor",
+  "nominee_table_section",
   "nominee_details",
   "dividend_transfer_ac_details_tab",
+  "divident_section_1",
   "branch_gl",
+  "ac_no",
   "column_break_qctw",
   "div_ac_type",
-  "column_break_gpzl",
-  "ac_no",
-  "section_break_i1zq",
-  "section_break_vrrz",
   "acc_name",
+  "remark_section",
   "dividend_remark",
   "return_remark"
  ],
  "fields": [
   {
-   "fieldname": "section_break_shvs",
-   "fieldtype": "Section Break"
-  },
-  {
+   "bold": 1,
    "fieldname": "application_sr_no",
    "fieldtype": "Int",
-   "label": "Application Sr. No."
+   "label": "Application Sr. No.",
+   "read_only": 1
   },
   {
    "fieldname": "column_break_hdes",
    "fieldtype": "Column Break"
   },
   {
+   "bold": 1,
    "default": "Today",
    "fieldname": "application_date",
    "fieldtype": "Date",
@@ -153,7 +165,8 @@
   {
    "fieldname": "address",
    "fieldtype": "Small Text",
-   "label": "Address"
+   "label": "Address",
+   "max_height": "180px"
   },
   {
    "fieldname": "taluka",
@@ -186,6 +199,7 @@
    "fieldtype": "Column Break"
   },
   {
+   "bold": 1,
    "fieldname": "customer_id",
    "fieldtype": "Data",
    "in_list_view": 1,
@@ -202,15 +216,6 @@
    "fieldname": "sh_category",
    "fieldtype": "Data",
    "label": "Sh Category"
-  },
-  {
-   "fieldname": "section_break_9s0o",
-   "fieldtype": "Section Break"
-  },
-  {
-   "fieldname": "section_break_3kyx",
-   "fieldtype": "Section Break",
-   "label": "KYC Details"
   },
   {
    "fieldname": "membership_form",
@@ -240,6 +245,7 @@
    "fieldtype": "Column Break"
   },
   {
+   "depends_on": "eval:frappe.user.has_role('System Manager') || frappe.user.has_role('Share User Creator') || frappe.user.has_role('Share Executive') || frappe.user.has_role('Share Admin')",
    "fieldname": "dividend_transfer_ac_details_tab",
    "fieldtype": "Tab Break",
    "label": "Dividend Transfer A/C Details"
@@ -265,14 +271,6 @@
    "fieldname": "ac_no",
    "fieldtype": "Data",
    "label": "Account Number"
-  },
-  {
-   "fieldname": "section_break_i1zq",
-   "fieldtype": "Section Break"
-  },
-  {
-   "fieldname": "section_break_vrrz",
-   "fieldtype": "Section Break"
   },
   {
    "fieldname": "dividend_remark",
@@ -315,7 +313,8 @@
   {
    "fieldname": "branch_code",
    "fieldtype": "Data",
-   "label": "Branch Code"
+   "label": "Branch Code",
+   "read_only": 1
   },
   {
    "fieldname": "column_break_ajht",
@@ -324,23 +323,21 @@
   {
    "fieldname": "share_customer_name",
    "fieldtype": "Data",
-   "label": "Name"
+   "label": "Name",
+   "read_only": 1
   },
   {
    "fieldname": "branch",
    "fieldtype": "Data",
    "in_standard_filter": 1,
-   "label": "Branch"
-  },
-  {
-   "fieldname": "section_break_mkla",
-   "fieldtype": "Section Break",
-   "label": "Shares Details"
+   "label": "Branch",
+   "read_only": 1
   },
   {
    "fieldname": "no_of_shares",
    "fieldtype": "Int",
-   "label": "No. of Shares"
+   "label": "No. of Shares",
+   "non_negative": 1
   },
   {
    "fieldname": "column_break_iwul",
@@ -358,18 +355,23 @@
    "fieldtype": "Column Break"
   },
   {
+   "depends_on": "eval:doc.no_of_shares",
    "fieldname": "share_application_charges",
    "fieldtype": "Currency",
    "label": "Share Application Charges",
    "read_only": 1
   },
   {
+   "default": "TRF",
+   "depends_on": "eval:doc.no_of_shares",
    "fieldname": "amount_received_by",
    "fieldtype": "Select",
    "label": "Amount Received By",
+   "mandatory_depends_on": "eval:doc.no_of_shares",
    "options": "\nTRF\nCASH"
   },
   {
+   "depends_on": "eval:doc.share_ac_no",
    "fieldname": "after_sanction_share_ac_information_section",
    "fieldtype": "Section Break",
    "label": "After Sanction Share A/C Information"
@@ -387,7 +389,8 @@
   {
    "fieldname": "share_ac_no",
    "fieldtype": "Data",
-   "label": "Share A/C No"
+   "label": "Share A/C No",
+   "read_only": 1
   },
   {
    "fieldname": "section_break_eqr0",
@@ -400,12 +403,14 @@
   {
    "fieldname": "received_date",
    "fieldtype": "Date",
-   "label": "Received Date"
+   "label": "Received Date",
+   "read_only": 1
   },
   {
    "fieldname": "sanction_date",
    "fieldtype": "Date",
-   "label": "Sanction Date"
+   "label": "Sanction Date",
+   "read_only": 1
   },
   {
    "fieldname": "nominee_details_tab",
@@ -416,7 +421,8 @@
    "fieldname": "nominee_details",
    "fieldtype": "Table",
    "label": "Nominee Details",
-   "options": "Nominee"
+   "options": "Nominee",
+   "read_only": 1
   },
   {
    "fieldname": "tot_share_amt",
@@ -437,6 +443,7 @@
    "options": "Indian\nOther"
   },
   {
+   "bold": 1,
    "fieldname": "account_type",
    "fieldtype": "Select",
    "label": "Account Type",
@@ -449,6 +456,7 @@
    "options": "\nMale\nFemale\nR\nFirm\nTransgender"
   },
   {
+   "bold": 1,
    "default": "Today",
    "fieldname": "ac_open_dt",
    "fieldtype": "Date",
@@ -463,10 +471,6 @@
    "fieldname": "acc_name",
    "fieldtype": "Data",
    "label": "Account Holder Name"
-  },
-  {
-   "fieldname": "column_break_gpzl",
-   "fieldtype": "Column Break"
   },
   {
    "fieldname": "column_break_hgja",
@@ -487,13 +491,116 @@
   {
    "fieldname": "return_remark",
    "fieldtype": "Small Text",
+   "hidden": 1,
    "label": "Return Remark"
+  },
+  {
+   "fieldname": "column_break_k6x0e",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_xcnzm",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "nominee_relation",
+   "fieldtype": "Select",
+   "label": "Relation",
+   "options": "\nSpouse\nParent\nMother\nFather\nSibling\nSon\nDaughter\nGrandfather\nGrandmother\nGrandchild\nAunt\nUncle\nCousin"
+  },
+  {
+   "fieldname": "nominee_mobile_number",
+   "fieldtype": "Data",
+   "label": "Phone"
+  },
+  {
+   "fieldname": "nominee_share_percentage",
+   "fieldtype": "Percent",
+   "label": "Share %",
+   "precision": "0"
+  },
+  {
+   "default": "0",
+   "depends_on": "eval:doc.nominee_age < 18 && doc.nominee_age ",
+   "fieldname": "minor",
+   "fieldtype": "Check",
+   "label": "Minor ?",
+   "read_only": 1
+  },
+  {
+   "fieldname": "add_to_child",
+   "fieldtype": "Button",
+   "label": "Add"
+  },
+  {
+   "description": "First Name + Middle Name + Last Name",
+   "fieldname": "nominee_fullname",
+   "fieldtype": "Data",
+   "label": "Full Name"
+  },
+  {
+   "fieldname": "nominee_age",
+   "fieldtype": "Select",
+   "label": "Age",
+   "options": "\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20\n21\n22\n23\n24\n25\n26\n27\n28\n29\n30\n31\n32\n33\n34\n35\n36\n37\n38\n39\n40\n41\n42\n43\n44\n45\n46\n47\n48\n49\n50\n51\n52\n53\n54\n55\n56\n57\n58\n59\n60\n61\n62\n63\n64\n65\n66\n67\n68\n69\n70\n71\n72\n73\n74\n75\n76\n77\n78\n79\n80\n81\n82\n83\n84\n85\n86\n87\n88\n89\n90\n91\n92\n93\n94\n95\n96\n97\n98\n99\n100"
+  },
+  {
+   "fieldname": "nominee_address",
+   "fieldtype": "Small Text",
+   "label": "Address"
+  },
+  {
+   "depends_on": "eval:doc.nominee_age < 18 && doc.nominee_age ",
+   "fieldname": "nominee_guardian_name",
+   "fieldtype": "Data",
+   "label": "Guardian Name"
+  },
+  {
+   "fieldname": "nominee_form_section",
+   "fieldtype": "Section Break",
+   "label": "Nominee Form"
+  },
+  {
+   "fieldname": "no_of_share_section",
+   "fieldtype": "Section Break",
+   "label": "Number of Shares"
+  },
+  {
+   "fieldname": "nominee_table_section",
+   "fieldtype": "Section Break",
+   "label": "Nominee Table"
+  },
+  {
+   "fieldname": "acc_section_details",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "location_section",
+   "fieldtype": "Section Break",
+   "label": "Location Details"
+  },
+  {
+   "fieldname": "kyc_section",
+   "fieldtype": "Section Break",
+   "label": "KYC Details"
+  },
+  {
+   "fieldname": "kyc_section_2",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "divident_section_1",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "remark_section",
+   "fieldtype": "Section Break"
   }
  ],
  "hide_toolbar": 1,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-01-12 11:22:09.803436",
+ "modified": "2024-01-30 11:26:57.280890",
  "modified_by": "Administrator",
  "module": "Share Holder Management",
  "name": "Share Application",
