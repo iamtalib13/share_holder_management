@@ -5,7 +5,7 @@ frappe.ui.form.on("Share Application", {
   validate: function (frm) {},
   refresh(frm) {
     frm.trigger("section_colors");
-    frm.trigger("Intro_messages");
+
     frm.trigger("child_table_controls");
 
     if (frm.is_new()) {
@@ -37,6 +37,65 @@ frappe.ui.form.on("Share Application", {
             if (r.message) {
               frm.set_value("branch", r.message.branch);
               frm.set_value("branch_code", r.message.branch_code);
+
+              let branch = r.message.branch;
+              frm.call({
+                method: "get_branch_checkin_details",
+                freeze: true, // Set to true to freeze the UI
+                freeze_message: "Please wait, processing data...",
+                args: {
+                  branch: branch, // Only pass the branch filter
+                },
+                callback: function (r) {
+                  if (!r.exc) {
+                    // Successful response handling code
+                    if (r.message === "Day Start") {
+                      console.log("day start");
+                      frm.trigger("Intro_messages");
+                    } else if (r.message === "Branch Day Not Started") {
+                      console.log("Branch Day Not Started and HO started");
+                      frm.disable_save();
+                      frm.disable_form();
+                      frm.set_intro(
+                        "<b>Day Not Started from <b>" +
+                          branch +
+                          "</b>" +
+                          " for " +
+                          "<b>" +
+                          new Date(frm.doc.creation).toLocaleDateString(
+                            "en-GB"
+                          ), // Format to DD/MM/YYYY
+                        "red" // Change the color as needed
+                      );
+                      frm.disable_save();
+                      frm.disable_form();
+                    } else if (r.message === "Branch and HO Day Not Started") {
+                      console.log("Branch and HO Day Not Started");
+                      frm.disable_save();
+                      frm.disable_form();
+                      frm.set_intro(
+                        "<b>Day Not Started from <b>" +
+                          "Gondia HO & " +
+                          branch +
+                          "</b>" +
+                          " for " +
+                          "<b>" +
+                          new Date(frm.doc.creation).toLocaleDateString(
+                            "en-GB"
+                          ), // Format to DD/MM/YYYY
+                        "red" // Change the color as needed
+                      );
+                      frm.disable_save();
+                      frm.disable_form();
+                    }
+                  } else {
+                    // Error handling code
+                    frappe.msgprint("Error: " + r.exc);
+                  }
+                },
+              });
+
+              console.log("Client Branch :", branch);
 
               frm.refresh_fields(["branch", "branch_code"]); // Refresh the fields
 

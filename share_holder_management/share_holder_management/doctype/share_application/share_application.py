@@ -143,3 +143,55 @@ def share_certificate_template(docname):
     doc = frappe.get_doc("Share Application", docname)
     html_content = frappe.render_template("share_holder_management/share_holder_management/doctype/share_application/templates/share_certificate_template.html", {"doc": doc})
     return {"html_content": html_content}
+
+
+@frappe.whitelist()
+def get_branch_checkin_details(branch):
+    # Get today's date and time
+    today_datetime = frappe.utils.now_datetime()
+
+    # Query records for the current date, the specified branch, and log types 'Start'
+    check_ho_day_start = frappe.db.sql(
+        f"""SELECT log_type FROM `tabDay Management Checkin`
+            WHERE DATE(log_time) = %s AND branch = %s AND log_type = 'Start'
+            LIMIT 1""",
+        (today_datetime.date(), "Gondia HO"),
+        as_dict=True,
+    )
+    
+    check_branch_day_start = frappe.db.sql(
+        f"""SELECT log_type FROM `tabDay Management Checkin`
+            WHERE DATE(log_time) = %s AND branch = %s AND log_type = 'Start'
+            LIMIT 1""",
+        (today_datetime.date(), branch),
+        as_dict=True,
+    )
+
+    # HTML string for the table
+    html_table = "<table border='1'>"
+
+    # Add header row
+    html_table += "<tr><th>Log Type</th></tr>"
+
+    # Add row for 'Gondia HO'
+    if check_ho_day_start:
+        html_table += f"<tr><td>{check_ho_day_start[0].get('log_type')}</td></tr>"
+
+    # Add row for the specified branch
+    if check_branch_day_start:
+        html_table += f"<tr><td>{check_branch_day_start[0].get('log_type')}</td></tr>"
+
+    # Close the table tag
+    html_table += "</table>"
+
+   
+ 
+    # Check if both check_ho_day_start and check_branch_day_start have 'Start' log_type values
+    if check_ho_day_start and check_branch_day_start:
+        flag = "Day Start"
+    elif check_ho_day_start:
+        flag = "Branch Day Not Started"
+    else:
+        flag = "Branch and HO Day Not Started"
+
+    return flag

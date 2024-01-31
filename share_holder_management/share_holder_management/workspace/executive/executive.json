@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"ha-SMFhHha\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Share Management - Executive</span>\",\"col\":12}},{\"id\":\"r6vanmC-HD\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Share Holders\",\"col\":3}},{\"id\":\"bInxAfNvQR\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"FLLqlzBDQL\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Status - Wise</b></span>\",\"col\":12}},{\"id\":\"sUmYzoDSYa\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Submitted\",\"col\":3}},{\"id\":\"BVmmKfBCBQ\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Sanctioned\",\"col\":3}},{\"id\":\"sEWrMe9iDA\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Received\",\"col\":3}},{\"id\":\"y9m50hszfP\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Rejected\",\"col\":3}}]",
+ "content": "[{\"id\":\"ha-SMFhHha\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h1\\\"><b>Share Management - Executive</b></span>\",\"col\":12}},{\"id\":\"r6vanmC-HD\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Share Holders\",\"col\":3}},{\"id\":\"bInxAfNvQR\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"FLLqlzBDQL\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Status - Wise</b></span>\",\"col\":12}},{\"id\":\"sUmYzoDSYa\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Submitted\",\"col\":3}},{\"id\":\"BVmmKfBCBQ\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Sanctioned\",\"col\":3}},{\"id\":\"sEWrMe9iDA\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Received\",\"col\":3}},{\"id\":\"y9m50hszfP\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Rejected\",\"col\":3}},{\"id\":\"N7pIpkDMyI\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"XaAAZamSUl\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Day Management</b></span>\",\"col\":12}},{\"id\":\"QCqzcjwCop\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Day Management\",\"col\":3}},{\"id\":\"_KOcJNt7jI\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Checkin\",\"col\":3}},{\"id\":\"OeMG1gLJ3v\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Checkin History\",\"col\":3}}]",
  "creation": "2024-01-09 12:33:44.718788",
  "custom_blocks": [],
  "docstatus": 0,
@@ -12,7 +12,7 @@
  "is_hidden": 0,
  "label": "Executive",
  "links": [],
- "modified": "2024-01-19 11:07:24.818796",
+ "modified": "2024-01-31 13:53:27.626432",
  "modified_by": "Administrator",
  "module": "Share Holder Management",
  "name": "Executive",
@@ -38,6 +38,14 @@
    "type": "DocType"
   },
   {
+   "color": "Grey",
+   "doc_view": "New",
+   "label": "Checkin",
+   "link_to": "Day Management Checkin",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
    "color": "Green",
    "doc_view": "List",
    "format": "{}",
@@ -47,11 +55,27 @@
    "type": "DocType"
   },
   {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Day Management",
+   "link_to": "Day Management",
+   "type": "DocType"
+  },
+  {
    "color": "Green",
    "doc_view": "List",
    "format": "{}",
    "label": "Share Holders",
    "link_to": "Share Application",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "format": "{}",
+   "label": "Checkin History",
+   "link_to": "Day Management Checkin",
    "stats_filter": "[]",
    "type": "DocType"
   },

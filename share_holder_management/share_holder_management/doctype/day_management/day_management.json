@@ -47,7 +47,7 @@
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2024-01-12 13:17:59.189475",
+ "modified": "2024-01-31 13:37:41.986296",
  "modified_by": "Administrator",
  "module": "Share Holder Management",
  "name": "Day Management",
@@ -60,6 +60,28 @@
    "print": 1,
    "read": 1,
    "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "Share Admin",
+   "select": 1,
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "Share Executive",
+   "select": 1,
    "share": 1,
    "write": 1
   }

@@ -1,0 +1,130 @@
+{
+ "actions": [],
+ "autoname": "{branch}-CKIN-.DD.-.MM.-.YY.-.###",
+ "creation": "2024-01-31 13:40:02.655399",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "date_and_time_section",
+  "log_type",
+  "column_break_za86l",
+  "log_time",
+  "employee_details_section",
+  "branch",
+  "column_break_skn7y",
+  "branch_code",
+  "column_break_ating",
+  "employee"
+ ],
+ "fields": [
+  {
+   "fieldname": "employee",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "in_list_view": 1,
+   "label": "Employee",
+   "options": "Employee"
+  },
+  {
+   "fetch_from": "employee.branch",
+   "fieldname": "branch",
+   "fieldtype": "Data",
+   "label": "Branch"
+  },
+  {
+   "fetch_from": "employee.branch_code",
+   "fieldname": "branch_code",
+   "fieldtype": "Data",
+   "label": "Branch Code"
+  },
+  {
+   "fieldname": "log_type",
+   "fieldtype": "Select",
+   "label": "Log Type",
+   "options": "\nStart\nEnd",
+   "reqd": 1
+  },
+  {
+   "fieldname": "log_time",
+   "fieldtype": "Datetime",
+   "label": "Log Time",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "date_and_time_section",
+   "fieldtype": "Section Break",
+   "label": "Checkin Details"
+  },
+  {
+   "fieldname": "employee_details_section",
+   "fieldtype": "Section Break",
+   "label": "Employee Details"
+  },
+  {
+   "fieldname": "column_break_skn7y",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_ating",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_za86l",
+   "fieldtype": "Column Break"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-01-31 18:08:38.715321",
+ "modified_by": "Administrator",
+ "module": "Share Holder Management",
+ "name": "Day Management Checkin",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Share User",
+   "select": 1,
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Share Executive",
+   "select": 1,
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
