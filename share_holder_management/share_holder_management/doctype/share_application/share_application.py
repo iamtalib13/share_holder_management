@@ -140,6 +140,6 @@ def get_server_datetime():
 
 @frappe.whitelist()
 def share_certificate_template(docname):
-    doc = frappe.get_doc("Details", docname)
-    html_content = frappe.render_template("first_app/first_app/doctype/details/templates/custom_report.html", {"doc": doc})
+    doc = frappe.get_doc("Share Application", docname)
+    html_content = frappe.render_template("share_holder_management/share_holder_management/doctype/share_application/templates/share_certificate_template.html", {"doc": doc})
     return {"html_content": html_content}

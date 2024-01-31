@@ -1,0 +1,156 @@
+<!-- custom_report_template.html -->
+<html>
+  <head>
+    <title>{{ doc.first_name }} {{ doc.second_name }} Report</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="first_app/first_app/public/css/custom_report.css"
+    />
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh; /* Make the body take up the full height of the viewport */
+        position: relative; /* Add relative positioning to the body */
+      }
+      @media print {
+        button {
+          display: none;
+        }
+        body {
+          color: inherit !important;
+          background: transparent !important;
+          /* print-color-adjust: exact; */
+          -webkit-print-color-adjust: exact;
+        }
+      }
+
+      .certificate {
+        width: 280mm; /* Further reduced A4 landscape width */
+        height: 180mm; /* Further reduced A4 landscape height */
+        margin: 0 auto;
+        background-color: #ffffff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border: 2px solid #000; /* Add border styling */
+        display: flex; /* Use flexbox for layout */
+      }
+      .certificate-30,
+      .certificate-70 {
+        box-sizing: border-box; /* Include padding and border in width calculation */
+      }
+      .certificate-30 {
+        width: 30%; /* 30% width */
+        border: 2px solid #000; /* Add border styling */
+        margin: 10px;
+      }
+      .certificate-70 {
+        width: 70%; /* 70% width */
+        border: 2px solid #000; /* Add border styling */
+        margin-top: 10px;
+        margin-right: 10px;
+        margin-bottom: 10px;
+      }
+      .header {
+        text-align: center;
+        padding: 20px;
+        background-color: #8adf45;
+        font-size: 24px;
+        font-weight: bold;
+        position: relative;
+        height: 80px;
+        margin: 5px;
+      }
+      .header img {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 200px; /* Adjust the width of the image */
+        height: auto; /* Maintain aspect ratio */
+      }
+
+      .content {
+        padding: 40px;
+        text-align: center;
+      }
+      .signature {
+        margin-top: 40px;
+      }
+      button {
+        position: absolute;
+        top: 10px; /* Adjust the top position as needed */
+        right: 10px; /* Adjust the right position as needed */
+      }
+    </style>
+    <script>
+      function printPage() {
+        window.print();
+      }
+    </script>
+  </head>
+  <body>
+    <button onclick="printPage()">Print</button>
+    <div class="certificate">
+      <div class="certificate-30">
+        <!-- Content for the 30% width div -->
+        <div class="header">
+          <img
+            src="https://sahayogmultistate.com/wp-content/uploads/2022/11/Sahayog-Multistate-Website-Logo-2.png"
+            alt="Image 1"
+          />
+        </div>
+        <hr />
+        <div style="background-color: #ffec96; text-align: center; margin: 5px">
+          <b>Share Certificate</b>
+        </div>
+        <hr />
+        <div class="content">
+          <p>This is to certify that</p>
+          <h3>{{ doc.first_name }} {{ doc.second_name }}</h3>
+          <p>is the proud owner of</p>
+          <h2>[Number of Shares] shares</h2>
+          <p>in</p>
+          <h3>[Company Name]</h3>
+          <div class="signature">
+            <p>______________________________</p>
+            <p>Authorized Signature</p>
+          </div>
+        </div>
+      </div>
+      <div class="certificate-70">
+        <!-- Content for the 70% width div -->
+        <div class="header">
+          <img
+            src="https://sahayogmultistate.com/wp-content/uploads/2022/11/Sahayog-Multistate-Website-Logo-2.png"
+            alt="Image 1"
+          />
+        </div>
+        <hr />
+        <div style="background-color: #ffec96; text-align: center; margin: 5px">
+          <b>Share Certificate</b>
+        </div>
+        <hr />
+        <div class="content">
+          <div>
+            <p>This is to certify that</p>
+            <h3>{{ doc.first_name }} {{ doc.second_name }}</h3>
+            <p>is the proud owner of</p>
+            <h2>[Number of Shares] shares</h2>
+            <p>in</p>
+            <h3>[Company Name]</h3>
+            <div class="signature">
+              <p>______________________________</p>
+              <p>Authorized Signature</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
