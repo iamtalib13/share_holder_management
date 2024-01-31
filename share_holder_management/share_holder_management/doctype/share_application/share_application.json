@@ -168,7 +168,7 @@
   {
    "fieldname": "address",
    "fieldtype": "Small Text",
-   "label": "Address",
+   "label": "Landmark",
    "max_height": "180px",
    "reqd": 1
   },
@@ -222,9 +222,11 @@
    "reqd": 1
   },
   {
+   "default": "Regular",
    "fieldname": "sh_category",
-   "fieldtype": "Data",
-   "label": "Sh Category"
+   "fieldtype": "Select",
+   "label": "Share Category",
+   "options": "Regular\nNominal"
   },
   {
    "fieldname": "membership_form",
@@ -593,7 +595,7 @@
   {
    "fieldname": "location_section",
    "fieldtype": "Section Break",
-   "label": "Location Details"
+   "label": "Address Details"
   },
   {
    "fieldname": "kyc_section",
@@ -616,7 +618,7 @@
  "hide_toolbar": 1,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-01-30 16:09:23.155494",
+ "modified": "2024-01-31 10:58:14.672791",
  "modified_by": "Administrator",
  "module": "Share Holder Management",
  "name": "Share Application",

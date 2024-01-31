@@ -136,3 +136,10 @@ def check_current_enable_share_amount():
 @frappe.whitelist()
 def get_server_datetime():
     return frappe.utils.now_datetime()
+
+
+@frappe.whitelist()
+def share_certificate_template(docname):
+    doc = frappe.get_doc("Details", docname)
+    html_content = frappe.render_template("first_app/first_app/doctype/details/templates/custom_report.html", {"doc": doc})
+    return {"html_content": html_content}
