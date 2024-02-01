@@ -10,7 +10,7 @@
   "day_start",
   "day_end",
   "schedule_section",
-  "schedule_table"
+  "day_management_html"
  ],
  "fields": [
   {
@@ -38,16 +38,15 @@
    "label": "Schedule"
   },
   {
-   "fieldname": "schedule_table",
-   "fieldtype": "Table",
-   "options": "Day Schedule"
+   "fieldname": "day_management_html",
+   "fieldtype": "HTML"
   }
  ],
  "hide_toolbar": 1,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2024-01-31 13:37:41.986296",
+ "modified": "2024-02-01 10:42:54.251919",
  "modified_by": "Administrator",
  "module": "Share Holder Management",
  "name": "Day Management",
