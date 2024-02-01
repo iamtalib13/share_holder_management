@@ -6,39 +6,22 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "today",
-  "day_start",
-  "day_end",
+  "ho_log_html",
   "schedule_section",
-  "day_management_html"
+  "branch_log_html"
  ],
  "fields": [
   {
-   "default": "Today",
-   "fieldname": "today",
-   "fieldtype": "Date",
-   "label": "Today",
-   "read_only": 1
-  },
-  {
-   "fieldname": "day_start",
-   "fieldtype": "Datetime",
-   "label": "Day Start",
-   "read_only": 1
-  },
-  {
-   "fieldname": "day_end",
-   "fieldtype": "Datetime",
-   "label": "Day End",
-   "read_only": 1
-  },
-  {
    "fieldname": "schedule_section",
-   "fieldtype": "Section Break",
-   "label": "Schedule"
+   "fieldtype": "Section Break"
   },
   {
-   "fieldname": "day_management_html",
+   "fieldname": "branch_log_html",
+   "fieldtype": "HTML",
+   "label": "log"
+  },
+  {
+   "fieldname": "ho_log_html",
    "fieldtype": "HTML"
   }
  ],
@@ -46,7 +29,7 @@
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2024-02-01 10:42:54.251919",
+ "modified": "2024-02-01 13:28:29.702047",
  "modified_by": "Administrator",
  "module": "Share Holder Management",
  "name": "Day Management",
