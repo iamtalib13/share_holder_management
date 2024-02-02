@@ -67,4 +67,29 @@ def show_branch_logs():
 
 @frappe.whitelist()
 def show_ho_logs():
-    return
+    query = """
+    SELECT log_type, log_time
+    FROM `tabDay Management Checkin`
+    WHERE branch = 'Gondia HO' AND DATE(log_time) = 2024-02-03;
+    """
+    result = frappe.db.sql(query, as_dict=True)
+
+    if result:
+        ho_log = result[0]
+
+        # Format the response based on your needs
+        response = {
+            "log_type": ho_log.get("log_type", ""),
+            "log_time": ho_log.get("log_time", ""),
+            "ho_day_start": True if ho_log.get("log_type") == "Started" else False,
+            "ho_start_date": ho_log.get("log_time").strftime('%d-%m-%Y') if ho_log.get("log_time") else None,
+            "ho_start_time": ho_log.get("log_time").strftime('%I:%M %p') if ho_log.get("log_time") else None,
+            # You can add more information as needed
+        }
+    else:
+        response = {
+            "ho_day_start": False,
+        }
+
+    return response
+
