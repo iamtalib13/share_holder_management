@@ -250,6 +250,11 @@ frappe.ui.form.on("Day Management", {
           //     ? `${data.ho_start_time} - ${data.ho_start_date}`
           //     : "HO Day Not Started Yet";
 
+          // Check if HO day is not started to display the start button
+          const startButtonHtml = !data.ho_day_start
+            ? `<button class="ho_start_button"  onclick="startHO()">Start HO Day</button>`
+            : "";
+
           // Check if log_type is "Start" to set ho_day_start to true
           const hoDayStartLabel =
             data.log_type === "Start"
@@ -258,12 +263,20 @@ frappe.ui.form.on("Day Management", {
           const hoDayStartInfo =
             data.log_type === "Start"
               ? `${data.ho_start_time} - ${data.ho_start_date}`
-              : "HO Day Not Started Yet";
+              : "";
 
-          // Check if HO day is not started to display the start button
-          const startButtonHtml = !data.log_type
-            ? `<button onclick="startHO()">Start HO Day</button>`
-            : "";
+          // Check if HO day is not ended to display the end button
+          // const endButtonHtml = !data.ho_day_end
+          //   ? `<button class="ho_end_button" onclick="endHO()">End HO Day</button>`
+          //   : "";
+
+          // Check if log_type is "End" to set ho_day_end to true
+          const hoDayEndLabel =
+            data.log_type === "End" ? "HO Day End" : "HO Day Not Ended Yet";
+          const hoDayEndInfo =
+            data.log_type === "End"
+              ? `${data.ho_end_time} - ${data.ho_end_date}`
+              : "";
 
           // Generate HTML dynamically based on the fetched data
           let html = `<!DOCTYPE html>
@@ -314,6 +327,8 @@ frappe.ui.form.on("Day Management", {
                                     background-color: #fff;
                                     border-radius: 5px;
                                     padding: 15px;
+                                    text-align: center;
+                                    border-radius: 15px;
                                 }
                         
                                 .ho_label {
@@ -323,8 +338,9 @@ frappe.ui.form.on("Day Management", {
                                 }
                         
                                 .ho_value {
-                                    display: flex;
+                                   
                                     align-items: center;
+                                    color: #50C878;
                                 }
                         
                                 .ho_delta,
@@ -349,17 +365,39 @@ frappe.ui.form.on("Day Management", {
                                     background-color: #50C878; /* Green color */
                                     border-radius: 4px;
                                 }
+
+                                /* Button style */
+                                .ho_start_button { 
+                                  background-color: #4CAF50;
+                                  border: none;
+                                  color: white;
+                                  padding: 8px 20px;
+                                  text-align: center;
+                                  text-decoration: none;
+                                  display: inline-block;
+                                  font-size: 16px;
+                                  cursor: pointer;
+                                  border-radius: 21px;
+                                  margin-top: 15px;
+}
+                                }
+                                button.ho_start_button:focus {
+                                  outline: none !important;
+                              }
                             </style>
                             <script>
+                            // Function to start the HO Day
                             function startHO() {
-                                if (confirm('Are you sure you want to start HO Day?')) {
-                                    frappe.ui.form.on('Day Management', 'refresh', function (frm) {
-                                        frm.trigger('start_ho_day');
-                                        frappe.set_route("List", "Day Management");
-                                    });
-                                }
+                              // Redirect to another page (replace 'YOUR_URL' with the actual URL)
+                              // route in parts
+                              frappe.new_doc("Day Management Checkin", function(doc) {
+                                frappe.set_route("Form", "Day Management Checkin", doc.name);
+                                
+                            });
+                            
                             }
-                        </script>
+                            </script>
+                           
                         </head>
                         
                         <body>
@@ -374,17 +412,16 @@ frappe.ui.form.on("Day Management", {
                                 <div class="ho_value">
                                     ${hoDayStartInfo}
                                 </div>
+                                <!-- Display the start button HTML conditionally -->
+                                    ${startButtonHtml}
                             </div>
-                                    <div class="ho_metric">
-                                        <div class="ho_label">HO Day End</div>
-                                        <div class="ho_value">
-                                            ${
-                                              data.ho_day_end
-                                                ? `${data.ho_end_time} - ${data.ho_end_date}`
-                                                : "HO Day Not Ended Yet"
-                                            }
-                                        </div>
-                                    </div>
+                            <div class="ho_metric">
+                            <div class="ho_label">${hoDayEndLabel}</div>
+                            <div class="ho_value">
+                                ${hoDayEndInfo}
+                            </div>
+                            
+                        </div>
                                     <div class="ho_metric">
                                         <div class="ho_label">Branch Day Start</div>
                                         <div class="ho_value">
@@ -439,5 +476,6 @@ frappe.ui.form.on("Day Management", {
 // // Function to start the HO Day
 // function startHO() {
 //   // Redirect to another page (replace 'YOUR_URL' with the actual URL)
-//   window.location.href = "";
+//   // route in parts
+//   frappe.set_route("List", "Day Management Checkin", "List");
 // }
