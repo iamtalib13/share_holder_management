@@ -216,4 +216,10 @@ frappe.ui.form.on("Day Management Checkin", {
       frm.disable_save();
     }
   },
+
+  after_save: function (frm) {
+    if (frappe.user.has_role("Share Executive")) {
+      frappe.set_route("/app/day-management");
+    }
+  },
 });

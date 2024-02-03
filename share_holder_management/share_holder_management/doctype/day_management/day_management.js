@@ -238,45 +238,68 @@ frappe.ui.form.on("Day Management", {
       callback: function (r) {
         if (!r.exc) {
           const data = r.message;
-          console.log(data);
+          console.log("Response", r.message);
 
-          // // Check if log_type is "Start" to set ho_day_start to true
-          // const hoDayStartLabel =
-          //   data.log_type === "Start"
-          //     ? "HO Day Start"
-          //     : "HO Day Not Started Yet";
-          // const hoDayStartInfo =
-          //   data.log_type === "Start"
-          //     ? `${data.ho_start_time} - ${data.ho_start_date}`
-          //     : "HO Day Not Started Yet";
+          //start deatils response
+          const startDetails = data.start_details || {};
+          console.log("start details : ", startDetails);
+
+          //end details response
+          const endDetails = data.end_details || {};
+
+          console.log("end details", endDetails);
+
+          // total start branches response
+          const totalStart = data.total_start_count;
+          console.log("Total Number of start : ", totalStart);
+
+          // total start branches response
+          const totalEnd = data.total_end_count;
+          console.log("Total Number of end : ", totalEnd);
+
+          //total branches response
+          const totalBranch = data.total_branch_count || {};
+          console.log("Total Number of Branches : ", totalBranch);
 
           // Check if HO day is not started to display the start button
-          const startButtonHtml = !data.ho_day_start
-            ? `<button class="ho_start_button"  onclick="startHO()">Start HO Day</button>`
+          const startButtonHtml = !startDetails.log_type
+            ? `<button class="ho_button"  onclick="startHO()">Start HO Day</button>`
             : "";
 
           // Check if log_type is "Start" to set ho_day_start to true
           const hoDayStartLabel =
-            data.log_type === "Start"
-              ? "HO Day Start"
-              : "HO Day Not Started Yet";
+            startDetails.log_type === "Start"
+              ? `<span style="color: green;">HO Day Start</span>`
+              : `<span style="color: red;">HO Day Not Started Yet</span>`;
+
           const hoDayStartInfo =
-            data.log_type === "Start"
-              ? `${data.ho_start_time} - ${data.ho_start_date}`
+            startDetails.log_type === "Start"
+              ? `${startDetails.ho_start_time} - ${startDetails.ho_start_date}`
               : "";
 
           // Check if HO day is not ended to display the end button
-          // const endButtonHtml = !data.ho_day_end
-          //   ? `<button class="ho_end_button" onclick="endHO()">End HO Day</button>`
-          //   : "";
+          const endButtonHtml =
+            totalEnd === totalBranch
+              ? `<button class="ho_button" onclick="startHO()">End HO Day</button>`
+              : "";
 
           // Check if log_type is "End" to set ho_day_end to true
           const hoDayEndLabel =
-            data.log_type === "End" ? "HO Day End" : "HO Day Not Ended Yet";
+            endDetails.log_type === "End"
+              ? `<span style="color: green;">HO Day End</span>`
+              : `<span style="color: red;">HO Day Not Ended Yet</span>`;
+
           const hoDayEndInfo =
-            data.log_type === "End"
-              ? `${data.ho_end_time} - ${data.ho_end_date}`
+            endDetails.log_type === "End"
+              ? `${endDetails.ho_end_time} - ${endDetails.ho_end_date}`
               : "";
+
+          // Calculate the progress percentage based on the number of branches started
+          const branchStartProgressPercentage =
+            (totalStart / totalBranch) * 100;
+
+          // Calculate the progress percentage based on the number of branches ended
+          const branchEndProgressPercentage = (totalEnd / totalBranch) * 100;
 
           // Generate HTML dynamically based on the fetched data
           let html = `<!DOCTYPE html>
@@ -340,7 +363,7 @@ frappe.ui.form.on("Day Management", {
                                 .ho_value {
                                    
                                     align-items: center;
-                                    color: #50C878;
+                                    color: green;
                                 }
                         
                                 .ho_delta,
@@ -367,7 +390,7 @@ frappe.ui.form.on("Day Management", {
                                 }
 
                                 /* Button style */
-                                .ho_start_button { 
+                                .ho_button { 
                                   background-color: #4CAF50;
                                   border: none;
                                   color: white;
@@ -393,11 +416,11 @@ frappe.ui.form.on("Day Management", {
                               frappe.new_doc("Day Management Checkin", function(doc) {
                                 frappe.set_route("Form", "Day Management Checkin", doc.name);
                                 
+                               
                             });
                             
-                            }
-                            </script>
-                           
+                            } </script>
+                            
                         </head>
                         
                         <body>
@@ -420,40 +443,51 @@ frappe.ui.form.on("Day Management", {
                             <div class="ho_value">
                                 ${hoDayEndInfo}
                             </div>
+                            <!-- Display the start button HTML conditionally -->
+                            ${endButtonHtml}
                             
                         </div>
                                     <div class="ho_metric">
+                                    
                                         <div class="ho_label">Branch Day Start</div>
                                         <div class="ho_value">
-                                            <span class="ho_value-text">${
-                                              data.branch_start
-                                            }/${data.total_branch}</span>
-                                            <span style="color: #50C878; font-size:15px;" class="ho_label-secondary">Total Branch</span>
+                                        <span class="ho_value-text">${
+                                          totalStart > 0
+                                            ? String(totalStart).padStart(
+                                                2,
+                                                "0"
+                                              )
+                                            : totalStart
+                                        }/${String(totalBranch).padStart(
+            2,
+            "0"
+          )}</span>
+                                            <span style="color: green; font-size:15px;" class="ho_label-secondary">Total Branch</span>
                                         </div>
                                         <br>
                                         <div class="ho_progress-container">
-                                            <div class="ho_progress-bar" style="width: ${
-                                              (data.branch_start /
-                                                data.total_branch) *
-                                              100
-                                            }%;"></div>
+                                        <div class="ho_progress-bar" style="width: ${branchStartProgressPercentage}%;"></div>
                                         </div>
                                     </div>
                                     <div class="ho_metric">
                                         <div class="ho_label">Branch Day End</div>
                                         <div class="ho_value">
-                                            <span class="ho_value-text">${
-                                              data.branch_end
-                                            }/${data.total_branch}</span>
-                                            <span style="color: #50C878; font-size:15px;" class="ho_label-secondary">Total Branch</span>
+                                        <span class="ho_value-text">${
+                                          totalEnd > 0
+                                            ? String(totalEnd).padStart(2, "0")
+                                            : totalEnd
+                                        }/${String(totalBranch).padStart(
+            2,
+            "0"
+          )}</span>
+
+
+
+                                            <span style="color: green; font-size:15px;" class="ho_label-secondary">Total Branch</span>
                                         </div>
                                         <br>
                                         <div class="ho_progress-container">
-                                            <div class="ho_progress-bar" style="width: ${
-                                              (data.branch_end /
-                                                data.total_branch) *
-                                              100
-                                            }%;"></div>
+                                            <div class="ho_progress-bar" style="width: ${branchEndProgressPercentage}%;"></div>
                                         </div>
                                     </div>
                                     <!-- Add more metrics here -->
@@ -472,10 +506,3 @@ frappe.ui.form.on("Day Management", {
     });
   },
 });
-
-// // Function to start the HO Day
-// function startHO() {
-//   // Redirect to another page (replace 'YOUR_URL' with the actual URL)
-//   // route in parts
-//   frappe.set_route("List", "Day Management Checkin", "List");
-// }

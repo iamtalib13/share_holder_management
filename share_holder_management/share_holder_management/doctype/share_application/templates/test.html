@@ -1,0 +1,301 @@
+<!-- custom_report_template.html -->
+<html>
+  <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;700&display=swap"
+      rel="stylesheet"
+    />
+    <title>{{ doc.first_name }} {{ doc.second_name }} Report</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        position: relative;
+      }
+
+      @media print {
+        button {
+          display: none;
+        }
+
+        body {
+          color: inherit !important;
+          background: transparent !important;
+          -webkit-print-color-adjust: exact;
+        }
+      }
+
+      .certificate {
+        display: flex;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+      }
+
+      .certificate-30,
+      .certificate-70 {
+        box-sizing: border-box;
+        position: relative;
+        height: 100%;
+      }
+
+      .certificate-30::before,
+      .certificate-70::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background-size: cover;
+        opacity: 0.95;
+        z-index: -1;
+      }
+      .certificate-30 {
+        width: 35%;
+        background: url("left side background.png") center center no-repeat;
+        background-size: cover;
+        display: flex;
+        flex-direction: column;
+        padding-top: 35px;
+      }
+      .certificate-70 {
+        width: 65%;
+        display: flex;
+        flex-direction: column;
+        background: url("right side background.png") center bottom no-repeat,
+          url("transparent logo.png") center center no-repeat;
+        background-size: cover, 200px 200px;
+        padding-bottom: 45px;
+      }
+
+      .certificate-30::before {
+        background: url("background_image_30.png") center center no-repeat,
+          url("transparent logo.png") center center no-repeat;
+        background-size: cover, 200px 200px;
+      }
+
+      .certificate-30::after {
+        content: "";
+        width: 1px; /* Adjust the width of the border as needed */
+        background-color: #000; /* Set the color of the border */
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: -1px; /* Adjust the position of the border */
+      }
+
+      .right_logo_2 {
+        width: 300px;
+        height: 120px;
+        margin-right: 10px;
+        padding-top: 37px;
+      }
+
+      .header-1 .left_logo_1_img {
+        width: 190px;
+        height: auto;
+      }
+      .header-1 .left_logo_2_img {
+        width: 162px;
+        height: 42px;
+      }
+      .header-1 {
+        display: inline-flex;
+        padding-left: 5px;
+      }
+      .header-2 img {
+        width: 318px;
+        height: auto;
+      }
+      .header-2 {
+        display: inline-flex;
+        justify-content: space-evenly;
+        height: 100px;
+      }
+
+      .content-30 {
+        padding: 0px 40px 40px 40px;
+        font-family: "Inter", sans-serif;
+        font-size: 12px;
+      }
+      .content-70 {
+        padding: 0px 40px 40px 40px;
+        font-family: "Inter", sans-serif;
+        font-size: 15px;
+      }
+
+      .signature {
+        margin-top: 40px;
+      }
+
+      button {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+      }
+
+      .center-text {
+        text-align: center;
+      }
+
+      .margin-5 {
+        margin: 5px;
+      }
+
+      .certificate-30-footer {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        text-align: center;
+      }
+
+      .certificate-30-footer img {
+        width: 100%;
+      }
+
+      .certificate-70-footer {
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        width: 100%;
+        text-align: center;
+      }
+
+      .certificate-70-footer img {
+        width: 100%;
+        margin-top: 45px;
+      }
+      .share_certi_logo {
+        width: 200px;
+      }
+    </style>
+    <script>
+      function printPage() {
+        window.print();
+      }
+    </script>
+  </head>
+  <body>
+    <button onclick="printPage()">Print</button>
+    <div class="certificate">
+      <div class="certificate-30">
+        <!-- <div class="certificate-30-start">
+          <div>Share Certificate No. {{number}}</div>
+          <div>Account No. {{xxx}}</div>
+        </div> -->
+        <div class="header-1">
+          <div class="left_logo_1">
+            <img
+              class="left_logo_1_img"
+              src="Share Certificate left side logo (2).png"
+              alt="Image 1"
+            />
+          </div>
+          <div class="left_logo_2">
+            <img
+              class="left_logo_2_img"
+              src="Share Certificate Left side stripe.png"
+              alt="Image 2"
+            />
+          </div>
+        </div>
+        <hr />
+        <div class="center-text margin-5">
+          <img
+            class="share_certi_logo"
+            src="right side share certificate font.png"
+            alt="Image 1"
+          />
+        </div>
+        <hr />
+        <div class="content-30">
+          <p>This is to certify that,</p>
+          <b>Shri/Smt.{{ doc.first_name }} {{ doc.second_name }}</b>
+          <p>R/o. {{address}}</p>
+          <p>has been allotted {{no_of_share}} shares Sr.no</p>
+          <p>From {{start_no_share}} to {{end_no_share}}</p>
+          <p>having Face Value of Rs. 10/- per share </p>
+          <p>and aggregating Rs. {{maybe_total_rs}}</p>
+          <p>as per the provisions of the Bye Laws </p>of the <p><b>Sahayog</b>
+          <b>Multi State Credit Co-operative Society Limited</b></p>
+          <p>
+            (Registered under Multi State Co-operative Societies Act</p> <p>2002 and as
+            amended time to time)
+          
+          Unless the shares are transferred as per the Bye Laws of the</p>
+          <p>Society, the transfer shall not be considered valid by the</p>
+          <p>Board of Directors. This Certificate bearing Seal of the</p>
+          <p>Society is issued on ................</p>
+          <div class="signature">
+            <p>______________________________</p>
+            <p>Authorized Signature</p>
+          </div>
+        </div>
+        <div class="certificate-30-footer">
+          <img
+            src="left side bottom stripe.png"
+            alt="Footer Image for Certificate-30"
+          />
+        </div>
+      </div>
+      <div class="certificate-70">
+        <div class="header-2">
+          <div class="right_logo_1">
+            <img
+              class="right_logo_1_img"
+              src="right side logo (1).png"
+              alt="Image 1"
+            />
+          </div>
+          <div class="right_logo_2">
+            <img
+              class="right_logo_2_img"
+              src="Share Certificate01.png"
+              alt="Image 2"
+            />
+          </div>
+        </div>
+
+        <div class="center-text margin-5">
+          <img
+            class="share_certi_logo"
+            src="right side share certificate font.png"
+            alt="Image 1"
+          />
+        </div>
+        <div class="content-70">
+          <p>This is to certify that,</p>
+          <p>Shri/Smt.{{ doc.first_name }} {{ doc.second_name }}........R/o. {{address}}</p>
+          <p>has been allotted {{no_of_share}} shares Sr.no From {{start_no_share}} to {{end_no_share}}</p>
+          <p>having Face Value of Rs. 10/- per share and aggregating Rs. {{maybe_total_rs}}</p>
+          <p>as per the provisions of the Bye Laws of the <b>Sahayog</b></p>
+          <p><b>Multi State Credit Co-operative Society Limited</b>
+            (Registered under Multi State Co-operative Societies Act 2002 and as</p>
+            <p>amended time to time)</p>
+          <p>Unless the shares are transferred as per the Bye Laws of the Society, the transfer </p>
+          <p>shall not be considered valid by the Board of Directors. This Certificate bearing Seal</p>
+           the Society is issued on ................................</p>
+          <div class="signature">
+            <p>______________________________</p>
+            <p>Authorized Signature</p>
+          </div>
+        </div>
+        <div class="certificate-70-footer">
+          <img
+            src="right side bottom stripe.png"
+            alt="Footer Image for Certificate-70"
+          />
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
