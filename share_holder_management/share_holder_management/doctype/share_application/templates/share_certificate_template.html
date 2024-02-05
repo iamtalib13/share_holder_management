@@ -11,6 +11,7 @@
     <style>
       * {
         box-sizing: border-box;
+        
       }
 
       body {
@@ -37,6 +38,8 @@
       .certificate {
         display: flex;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+        border: 1px solid black; 
+        overflow: hidden; /* Add this line to hide overflow content */
       }
 
       .certificate-30,
@@ -60,40 +63,42 @@
       }
       .certificate-30 {
         width: 35%;
-        background: url("https://attachments.office.net/owa/talib.s%40sahayogmultistate.com/service.svc/s/GetAttachmentThumbnail?id=AAMkADA5ZmRkMDY1LWFhZGItNDg5NS1hNzBiLTZkOTNkYWYyMDE4MgBGAAAAAADxiiF6b%2BW%2BQJxplUqKAzwCBwD%2BDBJobmT6SpqkfEH1l2%2B5AAAAAAEJAAD%2BDBJobmT6SpqkfEH1l2%2B5AAE3%2BjvjAAABEgAQAE86GzC4JBtFm79UgeMk04I%3D&thumbnailType=2&token=eyJhbGciOiJSUzI1NiIsImtpZCI6IkU1RDJGMEY4REE5M0I2NzA5QzQzQTlFOEE2MTQzQzAzRDYyRjlBODAiLCJ0eXAiOiJKV1QiLCJ4NXQiOiI1ZEx3LU5xVHRuQ2NRNm5vcGhROEE5WXZtb0EifQ.eyJvcmlnaW4iOiJodHRwczovL291dGxvb2sub2ZmaWNlLmNvbSIsInVjIjoiYWE3NjVmYzMzMDhmNGZlYjhiMTg4NjVlNzJjNzFiOGMiLCJzaWduaW5fc3RhdGUiOiJbXCJrbXNpXCJdIiwidmVyIjoiRXhjaGFuZ2UuQ2FsbGJhY2suVjEiLCJhcHBjdHhzZW5kZXIiOiJPd2FEb3dubG9hZEBjNTlmMTA1OS1mYmQyLTRjMmItODg2MC01MWU0OGU0ZGQ3MjYiLCJpc3NyaW5nIjoiV1ciLCJhcHBjdHgiOiJ7XCJtc2V4Y2hwcm90XCI6XCJvd2FcIixcInB1aWRcIjpcIjExNTM4MDExMjM1MTExMzQyMDJcIixcInNjb3BlXCI6XCJPd2FEb3dubG9hZFwiLFwib2lkXCI6XCIyNTFkMjI3OC0wYWIyLTQ5OTYtYmIzZS0zMjA4MGY0YjliNzZcIixcInByaW1hcnlzaWRcIjpcIlMtMS01LTIxLTY0MjI4NDkwOS0yNDg4NjUwMDk3LTQyNzE1MjE2NDktMjI1MjM3NDZcIn0iLCJuYmYiOjE3MDY5NDYyODksImV4cCI6MTcwNjk0Njg4OSwiaXNzIjoiMDAwMDAwMDItMDAwMC0wZmYxLWNlMDAtMDAwMDAwMDAwMDAwQGM1OWYxMDU5LWZiZDItNGMyYi04ODYwLTUxZTQ4ZTRkZDcyNiIsImF1ZCI6IjAwMDAwMDAyLTAwMDAtMGZmMS1jZTAwLTAwMDAwMDAwMDAwMC9hdHRhY2htZW50cy5vZmZpY2UubmV0QGM1OWYxMDU5LWZiZDItNGMyYi04ODYwLTUxZTQ4ZTRkZDcyNiIsImhhcHAiOiJvd2EifQ.fMQKyvZj9DDQeIAxiO4PDPL5ILxloP6O4gyA4TOM6xdepxFXuM0_Iez33lBYWa7HnRNBhqJSSDN1RuDnixtVu8bKQZSKTODecawiRIiiviAwB9kM0wTbKG5hTuw0jOmW9k7ZKoYT9El5Wny58vztTGfhotsHmvL7Nn6v8nlE7bloDs8ZUQ4wlQVTJHNgp9WP7KshFFYHaWIdH0SoV7aonkAnfoRiiVOB14yAFC7EL3gqctlv4w0IMCcBDrWQuKyQ7PvO9QxRBzE09rwa-tL93wKozwUUcaP7hREeti_t7k-30KEqhWd4BTH4xBsgtPPieUNrxQzHl3867sSDjOnXwA&X-OWA-CANARY=OkuicpbEgUe0b3OSwMx_w8Dj_XqMJNwYG33h0OhkaBMoFOrEaJr-TV_UOEERM7DI-wkMmP4tEEY.&owa=outlook.office.com&scriptVer=20240126002.06&clientId=237C791910E14B7D8ECEEEB3C1596700&animation=true") center center no-repeat;
+        background: url("/files/left side background.png") center center no-repeat;
         background-size: cover;
         display: flex;
         flex-direction: column;
-        padding-top: 35px;
+        padding-top: 30px;
+        padding-bottom: 35px;
+
       }
       .certificate-70 {
         width: 65%;
         display: flex;
         flex-direction: column;
         position: relative;
-        background: url("https://attachments.office.net/owa/talib.s%40sahayogmultistate.com/service.svc/s/GetAttachmentThumbnail?id=AAMkADA5ZmRkMDY1LWFhZGItNDg5NS1hNzBiLTZkOTNkYWYyMDE4MgBGAAAAAADxiiF6b%2BW%2BQJxplUqKAzwCBwD%2BDBJobmT6SpqkfEH1l2%2B5AAAAAAEJAAD%2BDBJobmT6SpqkfEH1l2%2B5AAE3%2BjvjAAABEgAQAPCu8M2BUDhEvHNvs5f6r9A%3D&thumbnailType=2&token=eyJhbGciOiJSUzI1NiIsImtpZCI6IkU1RDJGMEY4REE5M0I2NzA5QzQzQTlFOEE2MTQzQzAzRDYyRjlBODAiLCJ0eXAiOiJKV1QiLCJ4NXQiOiI1ZEx3LU5xVHRuQ2NRNm5vcGhROEE5WXZtb0EifQ.eyJvcmlnaW4iOiJodHRwczovL291dGxvb2sub2ZmaWNlLmNvbSIsInVjIjoiYWE3NjVmYzMzMDhmNGZlYjhiMTg4NjVlNzJjNzFiOGMiLCJzaWduaW5fc3RhdGUiOiJbXCJrbXNpXCJdIiwidmVyIjoiRXhjaGFuZ2UuQ2FsbGJhY2suVjEiLCJhcHBjdHhzZW5kZXIiOiJPd2FEb3dubG9hZEBjNTlmMTA1OS1mYmQyLTRjMmItODg2MC01MWU0OGU0ZGQ3MjYiLCJpc3NyaW5nIjoiV1ciLCJhcHBjdHgiOiJ7XCJtc2V4Y2hwcm90XCI6XCJvd2FcIixcInB1aWRcIjpcIjExNTM4MDExMjM1MTExMzQyMDJcIixcInNjb3BlXCI6XCJPd2FEb3dubG9hZFwiLFwib2lkXCI6XCIyNTFkMjI3OC0wYWIyLTQ5OTYtYmIzZS0zMjA4MGY0YjliNzZcIixcInByaW1hcnlzaWRcIjpcIlMtMS01LTIxLTY0MjI4NDkwOS0yNDg4NjUwMDk3LTQyNzE1MjE2NDktMjI1MjM3NDZcIn0iLCJuYmYiOjE3MDY5NDYyODksImV4cCI6MTcwNjk0Njg4OSwiaXNzIjoiMDAwMDAwMDItMDAwMC0wZmYxLWNlMDAtMDAwMDAwMDAwMDAwQGM1OWYxMDU5LWZiZDItNGMyYi04ODYwLTUxZTQ4ZTRkZDcyNiIsImF1ZCI6IjAwMDAwMDAyLTAwMDAtMGZmMS1jZTAwLTAwMDAwMDAwMDAwMC9hdHRhY2htZW50cy5vZmZpY2UubmV0QGM1OWYxMDU5LWZiZDItNGMyYi04ODYwLTUxZTQ4ZTRkZDcyNiIsImhhcHAiOiJvd2EifQ.fMQKyvZj9DDQeIAxiO4PDPL5ILxloP6O4gyA4TOM6xdepxFXuM0_Iez33lBYWa7HnRNBhqJSSDN1RuDnixtVu8bKQZSKTODecawiRIiiviAwB9kM0wTbKG5hTuw0jOmW9k7ZKoYT9El5Wny58vztTGfhotsHmvL7Nn6v8nlE7bloDs8ZUQ4wlQVTJHNgp9WP7KshFFYHaWIdH0SoV7aonkAnfoRiiVOB14yAFC7EL3gqctlv4w0IMCcBDrWQuKyQ7PvO9QxRBzE09rwa-tL93wKozwUUcaP7hREeti_t7k-30KEqhWd4BTH4xBsgtPPieUNrxQzHl3867sSDjOnXwA&X-OWA-CANARY=En4_cLHnKk2bGxb64GzuF6A1LFeMJNwYeS9M8Ty5BIMbwEtMosahd9DLFJ3e2no-vBctzA1zEbQ.&owa=outlook.office.com&scriptVer=20240126002.06&clientId=237C791910E14B7D8ECEEEB3C1596700&animation=true") center bottom no-repeat,
-          url("https://attachments.office.net/owa/talib.s%40sahayogmultistate.com/service.svc/s/GetAttachmentThumbnail?id=AAMkADA5ZmRkMDY1LWFhZGItNDg5NS1hNzBiLTZkOTNkYWYyMDE4MgBGAAAAAADxiiF6b%2BW%2BQJxplUqKAzwCBwD%2BDBJobmT6SpqkfEH1l2%2B5AAAAAAEJAAD%2BDBJobmT6SpqkfEH1l2%2B5AAE3%2BjvjAAABEgAQAMnylXtIKAxOoFXeWq4WKjQ%3D&thumbnailType=2&token=eyJhbGciOiJSUzI1NiIsImtpZCI6IkU1RDJGMEY4REE5M0I2NzA5QzQzQTlFOEE2MTQzQzAzRDYyRjlBODAiLCJ0eXAiOiJKV1QiLCJ4NXQiOiI1ZEx3LU5xVHRuQ2NRNm5vcGhROEE5WXZtb0EifQ.eyJvcmlnaW4iOiJodHRwczovL291dGxvb2sub2ZmaWNlLmNvbSIsInVjIjoiYWE3NjVmYzMzMDhmNGZlYjhiMTg4NjVlNzJjNzFiOGMiLCJzaWduaW5fc3RhdGUiOiJbXCJrbXNpXCJdIiwidmVyIjoiRXhjaGFuZ2UuQ2FsbGJhY2suVjEiLCJhcHBjdHhzZW5kZXIiOiJPd2FEb3dubG9hZEBjNTlmMTA1OS1mYmQyLTRjMmItODg2MC01MWU0OGU0ZGQ3MjYiLCJpc3NyaW5nIjoiV1ciLCJhcHBjdHgiOiJ7XCJtc2V4Y2hwcm90XCI6XCJvd2FcIixcInB1aWRcIjpcIjExNTM4MDExMjM1MTExMzQyMDJcIixcInNjb3BlXCI6XCJPd2FEb3dubG9hZFwiLFwib2lkXCI6XCIyNTFkMjI3OC0wYWIyLTQ5OTYtYmIzZS0zMjA4MGY0YjliNzZcIixcInByaW1hcnlzaWRcIjpcIlMtMS01LTIxLTY0MjI4NDkwOS0yNDg4NjUwMDk3LTQyNzE1MjE2NDktMjI1MjM3NDZcIn0iLCJuYmYiOjE3MDY5NDYyODksImV4cCI6MTcwNjk0Njg4OSwiaXNzIjoiMDAwMDAwMDItMDAwMC0wZmYxLWNlMDAtMDAwMDAwMDAwMDAwQGM1OWYxMDU5LWZiZDItNGMyYi04ODYwLTUxZTQ4ZTRkZDcyNiIsImF1ZCI6IjAwMDAwMDAyLTAwMDAtMGZmMS1jZTAwLTAwMDAwMDAwMDAwMC9hdHRhY2htZW50cy5vZmZpY2UubmV0QGM1OWYxMDU5LWZiZDItNGMyYi04ODYwLTUxZTQ4ZTRkZDcyNiIsImhhcHAiOiJvd2EifQ.fMQKyvZj9DDQeIAxiO4PDPL5ILxloP6O4gyA4TOM6xdepxFXuM0_Iez33lBYWa7HnRNBhqJSSDN1RuDnixtVu8bKQZSKTODecawiRIiiviAwB9kM0wTbKG5hTuw0jOmW9k7ZKoYT9El5Wny58vztTGfhotsHmvL7Nn6v8nlE7bloDs8ZUQ4wlQVTJHNgp9WP7KshFFYHaWIdH0SoV7aonkAnfoRiiVOB14yAFC7EL3gqctlv4w0IMCcBDrWQuKyQ7PvO9QxRBzE09rwa-tL93wKozwUUcaP7hREeti_t7k-30KEqhWd4BTH4xBsgtPPieUNrxQzHl3867sSDjOnXwA&X-OWA-CANARY=En4_cLHnKk2bGxb64GzuF6A1LFeMJNwYeS9M8Ty5BIMbwEtMosahd9DLFJ3e2no-vBctzA1zEbQ.&owa=outlook.office.com&scriptVer=20240126002.06&clientId=237C791910E14B7D8ECEEEB3C1596700&animation=true") center center no-repeat;
-        background-size: cover, 200px 200px;
+        background: url("/files/right side background.png") center center no-repeat,
+          url("/files/transparent logo.png") center center no-repeat;
+        background-size: cover, 300px 300px;
         position: relative;
         z-index: 1;
-        padding-bottom: 45px;
+        padding-bottom: 55px;
       }
 
       .certificate-30::before {
-        background: url("https://attachments.office.net/owa/talib.s%40sahayogmultistate.com/service.svc/s/GetAttachmentThumbnail?id=AAMkADA5ZmRkMDY1LWFhZGItNDg5NS1hNzBiLTZkOTNkYWYyMDE4MgBGAAAAAADxiiF6b%2BW%2BQJxplUqKAzwCBwD%2BDBJobmT6SpqkfEH1l2%2B5AAAAAAEJAAD%2BDBJobmT6SpqkfEH1l2%2B5AAE3%2BjvjAAABEgAQAE86GzC4JBtFm79UgeMk04I%3D&thumbnailType=2&token=eyJhbGciOiJSUzI1NiIsImtpZCI6IkU1RDJGMEY4REE5M0I2NzA5QzQzQTlFOEE2MTQzQzAzRDYyRjlBODAiLCJ0eXAiOiJKV1QiLCJ4NXQiOiI1ZEx3LU5xVHRuQ2NRNm5vcGhROEE5WXZtb0EifQ.eyJvcmlnaW4iOiJodHRwczovL291dGxvb2sub2ZmaWNlLmNvbSIsInVjIjoiYWE3NjVmYzMzMDhmNGZlYjhiMTg4NjVlNzJjNzFiOGMiLCJzaWduaW5fc3RhdGUiOiJbXCJrbXNpXCJdIiwidmVyIjoiRXhjaGFuZ2UuQ2FsbGJhY2suVjEiLCJhcHBjdHhzZW5kZXIiOiJPd2FEb3dubG9hZEBjNTlmMTA1OS1mYmQyLTRjMmItODg2MC01MWU0OGU0ZGQ3MjYiLCJpc3NyaW5nIjoiV1ciLCJhcHBjdHgiOiJ7XCJtc2V4Y2hwcm90XCI6XCJvd2FcIixcInB1aWRcIjpcIjExNTM4MDExMjM1MTExMzQyMDJcIixcInNjb3BlXCI6XCJPd2FEb3dubG9hZFwiLFwib2lkXCI6XCIyNTFkMjI3OC0wYWIyLTQ5OTYtYmIzZS0zMjA4MGY0YjliNzZcIixcInByaW1hcnlzaWRcIjpcIlMtMS01LTIxLTY0MjI4NDkwOS0yNDg4NjUwMDk3LTQyNzE1MjE2NDktMjI1MjM3NDZcIn0iLCJuYmYiOjE3MDY5NDYyODksImV4cCI6MTcwNjk0Njg4OSwiaXNzIjoiMDAwMDAwMDItMDAwMC0wZmYxLWNlMDAtMDAwMDAwMDAwMDAwQGM1OWYxMDU5LWZiZDItNGMyYi04ODYwLTUxZTQ4ZTRkZDcyNiIsImF1ZCI6IjAwMDAwMDAyLTAwMDAtMGZmMS1jZTAwLTAwMDAwMDAwMDAwMC9hdHRhY2htZW50cy5vZmZpY2UubmV0QGM1OWYxMDU5LWZiZDItNGMyYi04ODYwLTUxZTQ4ZTRkZDcyNiIsImhhcHAiOiJvd2EifQ.fMQKyvZj9DDQeIAxiO4PDPL5ILxloP6O4gyA4TOM6xdepxFXuM0_Iez33lBYWa7HnRNBhqJSSDN1RuDnixtVu8bKQZSKTODecawiRIiiviAwB9kM0wTbKG5hTuw0jOmW9k7ZKoYT9El5Wny58vztTGfhotsHmvL7Nn6v8nlE7bloDs8ZUQ4wlQVTJHNgp9WP7KshFFYHaWIdH0SoV7aonkAnfoRiiVOB14yAFC7EL3gqctlv4w0IMCcBDrWQuKyQ7PvO9QxRBzE09rwa-tL93wKozwUUcaP7hREeti_t7k-30KEqhWd4BTH4xBsgtPPieUNrxQzHl3867sSDjOnXwA&X-OWA-CANARY=OkuicpbEgUe0b3OSwMx_w8Dj_XqMJNwYG33h0OhkaBMoFOrEaJr-TV_UOEERM7DI-wkMmP4tEEY.&owa=outlook.office.com&scriptVer=20240126002.06&clientId=237C791910E14B7D8ECEEEB3C1596700&animation=true") center center no-repeat,
-          url("https://attachments.office.net/owa/talib.s%40sahayogmultistate.com/service.svc/s/GetAttachmentThumbnail?id=AAMkADA5ZmRkMDY1LWFhZGItNDg5NS1hNzBiLTZkOTNkYWYyMDE4MgBGAAAAAADxiiF6b%2BW%2BQJxplUqKAzwCBwD%2BDBJobmT6SpqkfEH1l2%2B5AAAAAAEJAAD%2BDBJobmT6SpqkfEH1l2%2B5AAE3%2BjvjAAABEgAQAMnylXtIKAxOoFXeWq4WKjQ%3D&thumbnailType=2&token=eyJhbGciOiJSUzI1NiIsImtpZCI6IkU1RDJGMEY4REE5M0I2NzA5QzQzQTlFOEE2MTQzQzAzRDYyRjlBODAiLCJ0eXAiOiJKV1QiLCJ4NXQiOiI1ZEx3LU5xVHRuQ2NRNm5vcGhROEE5WXZtb0EifQ.eyJvcmlnaW4iOiJodHRwczovL291dGxvb2sub2ZmaWNlLmNvbSIsInVjIjoiYWE3NjVmYzMzMDhmNGZlYjhiMTg4NjVlNzJjNzFiOGMiLCJzaWduaW5fc3RhdGUiOiJbXCJrbXNpXCJdIiwidmVyIjoiRXhjaGFuZ2UuQ2FsbGJhY2suVjEiLCJhcHBjdHhzZW5kZXIiOiJPd2FEb3dubG9hZEBjNTlmMTA1OS1mYmQyLTRjMmItODg2MC01MWU0OGU0ZGQ3MjYiLCJpc3NyaW5nIjoiV1ciLCJhcHBjdHgiOiJ7XCJtc2V4Y2hwcm90XCI6XCJvd2FcIixcInB1aWRcIjpcIjExNTM4MDExMjM1MTExMzQyMDJcIixcInNjb3BlXCI6XCJPd2FEb3dubG9hZFwiLFwib2lkXCI6XCIyNTFkMjI3OC0wYWIyLTQ5OTYtYmIzZS0zMjA4MGY0YjliNzZcIixcInByaW1hcnlzaWRcIjpcIlMtMS01LTIxLTY0MjI4NDkwOS0yNDg4NjUwMDk3LTQyNzE1MjE2NDktMjI1MjM3NDZcIn0iLCJuYmYiOjE3MDY5NDYyODksImV4cCI6MTcwNjk0Njg4OSwiaXNzIjoiMDAwMDAwMDItMDAwMC0wZmYxLWNlMDAtMDAwMDAwMDAwMDAwQGM1OWYxMDU5LWZiZDItNGMyYi04ODYwLTUxZTQ4ZTRkZDcyNiIsImF1ZCI6IjAwMDAwMDAyLTAwMDAtMGZmMS1jZTAwLTAwMDAwMDAwMDAwMC9hdHRhY2htZW50cy5vZmZpY2UubmV0QGM1OWYxMDU5LWZiZDItNGMyYi04ODYwLTUxZTQ4ZTRkZDcyNiIsImhhcHAiOiJvd2EifQ.fMQKyvZj9DDQeIAxiO4PDPL5ILxloP6O4gyA4TOM6xdepxFXuM0_Iez33lBYWa7HnRNBhqJSSDN1RuDnixtVu8bKQZSKTODecawiRIiiviAwB9kM0wTbKG5hTuw0jOmW9k7ZKoYT9El5Wny58vztTGfhotsHmvL7Nn6v8nlE7bloDs8ZUQ4wlQVTJHNgp9WP7KshFFYHaWIdH0SoV7aonkAnfoRiiVOB14yAFC7EL3gqctlv4w0IMCcBDrWQuKyQ7PvO9QxRBzE09rwa-tL93wKozwUUcaP7hREeti_t7k-30KEqhWd4BTH4xBsgtPPieUNrxQzHl3867sSDjOnXwA&X-OWA-CANARY=En4_cLHnKk2bGxb64GzuF6A1LFeMJNwYeS9M8Ty5BIMbwEtMosahd9DLFJ3e2no-vBctzA1zEbQ.&owa=outlook.office.com&scriptVer=20240126002.06&clientId=237C791910E14B7D8ECEEEB3C1596700&animation=true") center center no-repeat;
-        background-size: cover, 200px 200px;
+        background: url("background_image_30.png") center center no-repeat,
+          url("/files/transparent logo.png") center center no-repeat;
+        background-size: cover, 220px 220px;
       }
 
       .certificate-30::after {
-        content: "";
-        width: 1px; /* Adjust the width of the border as needed */
-        background-color: #000; /* Set the color of the border */
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        right: -1px; /* Adjust the position of the border */
-      }
+  content: "";
+  height: 100%; /* Adjust the height of the border as needed */
+  border-right: 1px dashed #000; /* Set the color and style of the border */
+  position: absolute;
+  top: 0;
+  right: -1px; /* Adjust the position of the border */
+}
+      
 
       .right_logo_2 {
         width: 300px;
@@ -104,43 +109,75 @@
         padding-top: 37px;
       }
       .header-1 .left_logo_1_img {
-    width: 244px;
+    width: 200px;
     height: auto;
-    margin-left: 5px;
       }
       .header-1 .left_logo_2_img {
-    width: 216px;
-    height: 50px;
+    width: 153px;
+    height: 43px;
     margin-top: 5px;
-      }
+   }
       .header-1 {
         display: inline-flex;
         padding-left: 5px;
       }
-      .header-2 img {
-        width: 318px;
+      .header-2 .right_logo_1_img {
+        width: 310px;
         height: auto;
+        margin-left:0px;
+      }
+      .header-2 .right_logo_2_img {
+        width: 360px;
+    height: 50px;
+    margin-top: -5px;
+
       }
       .header-2 {
         display: inline-flex;
+        gap:5px;
         justify-content: space-evenly;
         height: 100px;
-        /* margin-bottom: 45px; */
+        margin-bottom: 15px;
       }
 
       .content-30 {
-        padding: 0px 40px 40px 40px;
-        font-family: "Inter", sans-serif;
-        font-size: 12px;
+        padding: 0px 20px 20px 20px;
+    font-family: "Inter", sans-serif;
+    font-size: 12px;
+    margin-top: -10px;
+    margin-bottom: 15px;
+    text-align:justify;
       }
       .content-70 {
-        padding: 0px 40px 40px 40px;
+        padding: 0px 20px 40px 20px;
         font-family: "Inter", sans-serif;
         font-size: 15px;
+        text-align:justify;
+
       }
 
-      .signature {
-        margin-top: 40px;
+      .signature-30{
+        display: flex;
+    justify-content: space-evenly;
+    font-family: "Inter", sans-serif;
+    font-size: 13px;
+    padding: 10px;
+    gap: 70px;
+    font-weight: bold;
+    margin-top: 70px;
+    margin-bottom: -21px;
+  }
+
+      .signature-70 {
+        display: flex;
+    justify-content: space-evenly;
+    font-family: "Inter", sans-serif;
+    font-size: 15px;
+    padding: 10px;
+    gap: 150px;
+    font-weight: bold;
+    margin-top: 95px;
+    margin-bottom: -67.5px;
       }
 
       button {
@@ -148,20 +185,42 @@
         top: 10px;
         right: 10px;
       }
-      .share_certi_logo {
-        width: 200px;
+      .share_certi_logo_30 {
+        width: 210px;
+        margin-top:-10px;
+      }
+      .share_certi_logo_70 {
+        width: 245px;
+        margin-top:-25px;
       }
       .right_logo_1 {
-        padding-left: 2px;
-        padding-top: 20px;
+        
+    padding-top: 20px;
+    margin-left: -50px;
+    margin-right: -20px;
+      }
+      .right_logo_2{
+        margin-left: -40px;
+    /* margin-right: -10px; */
+
       }
       .left_logo_1 {
         padding: 5px;
       }
       .certificate-30-start {
-        display: inline-flex;
+        display: flex;
+        justify-content: space-around;
+        font-size: 11px;
+        font-family: "Inter", sans-serif;
+        padding:3px;
+        margin-bottom: 10px;
+    margin-top: -10px;
+      }
+      .certificate-70-start{
+        display: flex;
         justify-content: space-evenly;
-        font-size: 10px;
+        font-family: "Inter", sans-serif;
+        font-size: 13px;
       }
       .certificate-30-footer {
         position: absolute;
@@ -198,22 +257,22 @@
     <button onclick="printPage()">Print</button>
     <div class="certificate">
       <div class="certificate-30">
-        <!-- <div class="certificate-30-start">
-          <div>Share Certificate No. {{number}}</div>
-          <div>Account No. {{xxx}}</div>
-        </div> -->
+        <div class="certificate-30-start">
+          <div>Share Certificate No. {{doc.name}}</div>
+          <div>Account No. {{doc.saving_current_ac_no}}</div>
+        </div>
         <div class="header-1">
           <div class="left_logo_1">
             <img
               class="left_logo_1_img"
-              src="https://attachments.office.net/owa/talib.s%40sahayogmultistate.com/service.svc/s/GetAttachmentThumbnail?id=AAMkADA5ZmRkMDY1LWFhZGItNDg5NS1hNzBiLTZkOTNkYWYyMDE4MgBGAAAAAADxiiF6b%2BW%2BQJxplUqKAzwCBwD%2BDBJobmT6SpqkfEH1l2%2B5AAAAAAEJAAD%2BDBJobmT6SpqkfEH1l2%2B5AAE3%2BjvjAAABEgAQACOLDABoH%2BpPmA8YNkMvVPA%3D&thumbnailType=2&token=eyJhbGciOiJSUzI1NiIsImtpZCI6IkU1RDJGMEY4REE5M0I2NzA5QzQzQTlFOEE2MTQzQzAzRDYyRjlBODAiLCJ0eXAiOiJKV1QiLCJ4NXQiOiI1ZEx3LU5xVHRuQ2NRNm5vcGhROEE5WXZtb0EifQ.eyJvcmlnaW4iOiJodHRwczovL291dGxvb2sub2ZmaWNlLmNvbSIsInVjIjoiYWE3NjVmYzMzMDhmNGZlYjhiMTg4NjVlNzJjNzFiOGMiLCJzaWduaW5fc3RhdGUiOiJbXCJrbXNpXCJdIiwidmVyIjoiRXhjaGFuZ2UuQ2FsbGJhY2suVjEiLCJhcHBjdHhzZW5kZXIiOiJPd2FEb3dubG9hZEBjNTlmMTA1OS1mYmQyLTRjMmItODg2MC01MWU0OGU0ZGQ3MjYiLCJpc3NyaW5nIjoiV1ciLCJhcHBjdHgiOiJ7XCJtc2V4Y2hwcm90XCI6XCJvd2FcIixcInB1aWRcIjpcIjExNTM4MDExMjM1MTExMzQyMDJcIixcInNjb3BlXCI6XCJPd2FEb3dubG9hZFwiLFwib2lkXCI6XCIyNTFkMjI3OC0wYWIyLTQ5OTYtYmIzZS0zMjA4MGY0YjliNzZcIixcInByaW1hcnlzaWRcIjpcIlMtMS01LTIxLTY0MjI4NDkwOS0yNDg4NjUwMDk3LTQyNzE1MjE2NDktMjI1MjM3NDZcIn0iLCJuYmYiOjE3MDY5NDYyNTQsImV4cCI6MTcwNjk0Njg1NCwiaXNzIjoiMDAwMDAwMDItMDAwMC0wZmYxLWNlMDAtMDAwMDAwMDAwMDAwQGM1OWYxMDU5LWZiZDItNGMyYi04ODYwLTUxZTQ4ZTRkZDcyNiIsImF1ZCI6IjAwMDAwMDAyLTAwMDAtMGZmMS1jZTAwLTAwMDAwMDAwMDAwMC9hdHRhY2htZW50cy5vZmZpY2UubmV0QGM1OWYxMDU5LWZiZDItNGMyYi04ODYwLTUxZTQ4ZTRkZDcyNiIsImhhcHAiOiJvd2EifQ.g6xGZ-POMtZX6POog6GS5d0QVUgoeyf3DyUWwp-oTG4yUG1L8Bi5hK1GxEnWO6U0ItAAnz0LAzgiom3kU_oajCzrwspwsQ-Yqwslwej0GmF2ABfdw734nvjdRBgp5fOSAPIW0dgSS0GMKXdNN_MWoVj2Nr40N5-a6aG5-s23ZuYR6DSGPGgT3GTdf3APUcZNTdZ3vY39speIwP-hh-4qV6jnP_THNPdRzhntSx4oY3IlRresTs6tA0xVMSbIy7iSd-xn6eVc9WFlom5j7qM_-0n2qtOLVaw7E5tAqU9-4fr1C7_W7VMu8GtkGZVxrb2C-1xQ0JWpt6Cas9cDvbqYOg&X-OWA-CANARY=8RvwRCkrpUScjX8znsmPjqDvu-uLJNwY8bfjMZ7WH6hrz_P6KGaaoisIuL-N0RZIEqIYEAbw2h8.&owa=outlook.office.com&scriptVer=20240126002.06&clientId=237C791910E14B7D8ECEEEB3C1596700&animation=true"
+              src="/files/Share Certificate left side logo (2).png"
               alt="Image 1"
             />
           </div>
           <div class="left_logo_2">
             <img
               class="left_logo_2_img"
-              src="https://attachments.office.net/owa/talib.s%40sahayogmultistate.com/service.svc/s/GetAttachmentThumbnail?id=AAMkADA5ZmRkMDY1LWFhZGItNDg5NS1hNzBiLTZkOTNkYWYyMDE4MgBGAAAAAADxiiF6b%2BW%2BQJxplUqKAzwCBwD%2BDBJobmT6SpqkfEH1l2%2B5AAAAAAEJAAD%2BDBJobmT6SpqkfEH1l2%2B5AAE3%2BjvjAAABEgAQAGVSZH7GIHNDoa5ijU7fghw%3D&thumbnailType=2&token=eyJhbGciOiJSUzI1NiIsImtpZCI6IkU1RDJGMEY4REE5M0I2NzA5QzQzQTlFOEE2MTQzQzAzRDYyRjlBODAiLCJ0eXAiOiJKV1QiLCJ4NXQiOiI1ZEx3LU5xVHRuQ2NRNm5vcGhROEE5WXZtb0EifQ.eyJvcmlnaW4iOiJodHRwczovL291dGxvb2sub2ZmaWNlLmNvbSIsInVjIjoiYWE3NjVmYzMzMDhmNGZlYjhiMTg4NjVlNzJjNzFiOGMiLCJzaWduaW5fc3RhdGUiOiJbXCJrbXNpXCJdIiwidmVyIjoiRXhjaGFuZ2UuQ2FsbGJhY2suVjEiLCJhcHBjdHhzZW5kZXIiOiJPd2FEb3dubG9hZEBjNTlmMTA1OS1mYmQyLTRjMmItODg2MC01MWU0OGU0ZGQ3MjYiLCJpc3NyaW5nIjoiV1ciLCJhcHBjdHgiOiJ7XCJtc2V4Y2hwcm90XCI6XCJvd2FcIixcInB1aWRcIjpcIjExNTM4MDExMjM1MTExMzQyMDJcIixcInNjb3BlXCI6XCJPd2FEb3dubG9hZFwiLFwib2lkXCI6XCIyNTFkMjI3OC0wYWIyLTQ5OTYtYmIzZS0zMjA4MGY0YjliNzZcIixcInByaW1hcnlzaWRcIjpcIlMtMS01LTIxLTY0MjI4NDkwOS0yNDg4NjUwMDk3LTQyNzE1MjE2NDktMjI1MjM3NDZcIn0iLCJuYmYiOjE3MDY5NDYyODksImV4cCI6MTcwNjk0Njg4OSwiaXNzIjoiMDAwMDAwMDItMDAwMC0wZmYxLWNlMDAtMDAwMDAwMDAwMDAwQGM1OWYxMDU5LWZiZDItNGMyYi04ODYwLTUxZTQ4ZTRkZDcyNiIsImF1ZCI6IjAwMDAwMDAyLTAwMDAtMGZmMS1jZTAwLTAwMDAwMDAwMDAwMC9hdHRhY2htZW50cy5vZmZpY2UubmV0QGM1OWYxMDU5LWZiZDItNGMyYi04ODYwLTUxZTQ4ZTRkZDcyNiIsImhhcHAiOiJvd2EifQ.fMQKyvZj9DDQeIAxiO4PDPL5ILxloP6O4gyA4TOM6xdepxFXuM0_Iez33lBYWa7HnRNBhqJSSDN1RuDnixtVu8bKQZSKTODecawiRIiiviAwB9kM0wTbKG5hTuw0jOmW9k7ZKoYT9El5Wny58vztTGfhotsHmvL7Nn6v8nlE7bloDs8ZUQ4wlQVTJHNgp9WP7KshFFYHaWIdH0SoV7aonkAnfoRiiVOB14yAFC7EL3gqctlv4w0IMCcBDrWQuKyQ7PvO9QxRBzE09rwa-tL93wKozwUUcaP7hREeti_t7k-30KEqhWd4BTH4xBsgtPPieUNrxQzHl3867sSDjOnXwA&X-OWA-CANARY=qZohsm1neUqfZGsY603VpoCUXhmMJNwYpEfMc4eBAbXY2ozeSLPXeWz6TflhfYu4aMFR-qOEyuo.&owa=outlook.office.com&scriptVer=20240126002.06&clientId=237C791910E14B7D8ECEEEB3C1596700&animation=true"
+              src="/files/Share Certificate Left side stripe.png"
               alt="Image 2"
             />
           </div>
@@ -221,39 +280,37 @@
         <hr />
         <div style="text-align: center; margin: 5px">
           <img
-            class="share_certi_logo"
-            src="https://attachments.office.net/owa/talib.s%40sahayogmultistate.com/service.svc/s/GetAttachmentThumbnail?id=AAMkADA5ZmRkMDY1LWFhZGItNDg5NS1hNzBiLTZkOTNkYWYyMDE4MgBGAAAAAADxiiF6b%2BW%2BQJxplUqKAzwCBwD%2BDBJobmT6SpqkfEH1l2%2B5AAAAAAEJAAD%2BDBJobmT6SpqkfEH1l2%2B5AAE3%2BjvjAAABEgAQAFzpFQ9xVJZCtH6TTIM8OCM%3D&thumbnailType=2&token=eyJhbGciOiJSUzI1NiIsImtpZCI6IkU1RDJGMEY4REE5M0I2NzA5QzQzQTlFOEE2MTQzQzAzRDYyRjlBODAiLCJ0eXAiOiJKV1QiLCJ4NXQiOiI1ZEx3LU5xVHRuQ2NRNm5vcGhROEE5WXZtb0EifQ.eyJvcmlnaW4iOiJodHRwczovL291dGxvb2sub2ZmaWNlLmNvbSIsInVjIjoiYWE3NjVmYzMzMDhmNGZlYjhiMTg4NjVlNzJjNzFiOGMiLCJzaWduaW5fc3RhdGUiOiJbXCJrbXNpXCJdIiwidmVyIjoiRXhjaGFuZ2UuQ2FsbGJhY2suVjEiLCJhcHBjdHhzZW5kZXIiOiJPd2FEb3dubG9hZEBjNTlmMTA1OS1mYmQyLTRjMmItODg2MC01MWU0OGU0ZGQ3MjYiLCJpc3NyaW5nIjoiV1ciLCJhcHBjdHgiOiJ7XCJtc2V4Y2hwcm90XCI6XCJvd2FcIixcInB1aWRcIjpcIjExNTM4MDExMjM1MTExMzQyMDJcIixcInNjb3BlXCI6XCJPd2FEb3dubG9hZFwiLFwib2lkXCI6XCIyNTFkMjI3OC0wYWIyLTQ5OTYtYmIzZS0zMjA4MGY0YjliNzZcIixcInByaW1hcnlzaWRcIjpcIlMtMS01LTIxLTY0MjI4NDkwOS0yNDg4NjUwMDk3LTQyNzE1MjE2NDktMjI1MjM3NDZcIn0iLCJuYmYiOjE3MDY5NDU5NzcsImV4cCI6MTcwNjk0NjU3NywiaXNzIjoiMDAwMDAwMDItMDAwMC0wZmYxLWNlMDAtMDAwMDAwMDAwMDAwQGM1OWYxMDU5LWZiZDItNGMyYi04ODYwLTUxZTQ4ZTRkZDcyNiIsImF1ZCI6IjAwMDAwMDAyLTAwMDAtMGZmMS1jZTAwLTAwMDAwMDAwMDAwMC9hdHRhY2htZW50cy5vZmZpY2UubmV0QGM1OWYxMDU5LWZiZDItNGMyYi04ODYwLTUxZTQ4ZTRkZDcyNiIsImhhcHAiOiJvd2EifQ.dXNkXWIiObYRY6J4XQDPgFUsoehY-feKAgTIx1RUZeuqYbKeTLJCmHGe1D3n4QcaKsdbRJM-Z7PeT3RinQHT46XxKW8dDjK_zKTvRh6H1hZVkuYgMgnpI6JX9wNhvb2ByI2zek1bFaMJSTt08gfn7qEkJyNOZlDAHykKhbrB-4ZurCTYLHWGjwJCu4K72AJSyHdrUcmrN8A83aypG2vO9xx0JrSQkR6G8NkovZpmG-LAvnJcO5AY-J9vuWEp8LZH56PWu4S1dXCdiSfr3BB5W2WoMpGK_hJBy-PeCErhAlWmaE5Stdi7ltRKXGVW9iqV4m2mtyN6ZTw6q8X0TIPi6Q&X-OWA-CANARY=AURCEpic7UmfyxrNM6Ic70CZH8eLJNwYwp9iQRXpZ7yMYClH6dkOivYXLyjEvNxGpKCXCanlPxk.&owa=outlook.office.com&scriptVer=20240126002.06&clientId=237C791910E14B7D8ECEEEB3C1596700&animation=true"
+            class="share_certi_logo_30"
+            src="/files/left side certificate font.png"
             alt="Image 1"
           />
         </div>
         <hr />
         <div class="content-30">
           <p>This is to certify that,</p>
-          <b>Shri/Smt.{{ doc.customer_name|default('....................') }}
-          </b>
-          <p>R/o. {{address}}</p>
-          <p>has been alloted {{no_of_share}} shares Sr.no</p>
+          <p>Shri/Smt.<b>{{ doc.customer_name if doc.customer_name else '.....................' }}</b></p>
+          <p>R/o. <b>{{ doc.address + ',  ' if doc.address else '' }}{{ doc.taluka + ',  ' if doc.taluka else '' }} {{ doc.city if doc.city else '' }}</b></p>
+          <p>has been alloted <b>{{ doc.no_of_shares if doc.no_of_shares else '.....................' }} </b> shares Sr.no</p>
           <p>From {{start_no_share}} to {{end_no_share}}</p>
-          <p>having Face Value of Rs. 10/- per share </p><p>and aggregating
-          Rs. {{maybe_total_rs}}</p>
-          <p>as per the provisions of the Bye Laws </p>of the <p><b>Sahayog</b>
-          <b>Multi State Credit Co-operative Society Limited</b></p>
-          <p>
-            (Registered under Multi State Co-operative Societies Act</p> <p>2002 and as
-            amended time to time)
-          
-          Unless the shares are tranferred as per the Bye Laws of the</p>
-          <p>Society, the transfer shall not be considered valid by the</p>
-          <p>Board of Directors. This Certificate bearing Seal of the</p>
-          <p>Society is issued on ................</p>
-          <div class="signature">
-            <p>______________________________</p>
-            <p>Authorized Signature</p>
+          <p>having Face Value of  ₹10/- per share and aggregating</p>
+          <p> ₹<b>{{ doc.tot_share_amt if doc.tot_share_amt else '.....................' }} </b>
+          as per the provisions of the By Laws of the </p>
+          <p><b>Sahayog Multi State Credit Co-operative Society </b></p>
+          <p><b>Limited</b> (Registered under Multi State Co-operative</p> 
+          <p>Societies Act 2002 and as amended time to time)</p> 
+          <p>Unless the shares are tranferred as per the By Laws of</p>
+          <p>the Society, the transfer shall not be considered valid by</p>
+          <p>the Board of Directors. This Certificate bearing Seal of</p>
+          <p>the Society is issued on ......................</p>
+          <div class="signature-30">
+            <div>ACM/<br>Manager</div>
+            <div><br>Receiver</div>
+            <div>Br.Manager/<br>Incharge</div>
           </div>
         </div>
         <div class="certificate-30-footer">
           <img
-            src="https://attachments.office.net/owa/talib.s%40sahayogmultistate.com/service.svc/s/GetAttachmentThumbnail?id=AAMkADA5ZmRkMDY1LWFhZGItNDg5NS1hNzBiLTZkOTNkYWYyMDE4MgBGAAAAAADxiiF6b%2BW%2BQJxplUqKAzwCBwD%2BDBJobmT6SpqkfEH1l2%2B5AAAAAAEJAAD%2BDBJobmT6SpqkfEH1l2%2B5AAE3%2BjvjAAABEgAQAPNevCFUmrhFimRrYlUA%2F7s%3D&thumbnailType=2&token=eyJhbGciOiJSUzI1NiIsImtpZCI6IkU1RDJGMEY4REE5M0I2NzA5QzQzQTlFOEE2MTQzQzAzRDYyRjlBODAiLCJ0eXAiOiJKV1QiLCJ4NXQiOiI1ZEx3LU5xVHRuQ2NRNm5vcGhROEE5WXZtb0EifQ.eyJvcmlnaW4iOiJodHRwczovL291dGxvb2sub2ZmaWNlLmNvbSIsInVjIjoiYWE3NjVmYzMzMDhmNGZlYjhiMTg4NjVlNzJjNzFiOGMiLCJzaWduaW5fc3RhdGUiOiJbXCJrbXNpXCJdIiwidmVyIjoiRXhjaGFuZ2UuQ2FsbGJhY2suVjEiLCJhcHBjdHhzZW5kZXIiOiJPd2FEb3dubG9hZEBjNTlmMTA1OS1mYmQyLTRjMmItODg2MC01MWU0OGU0ZGQ3MjYiLCJpc3NyaW5nIjoiV1ciLCJhcHBjdHgiOiJ7XCJtc2V4Y2hwcm90XCI6XCJvd2FcIixcInB1aWRcIjpcIjExNTM4MDExMjM1MTExMzQyMDJcIixcInNjb3BlXCI6XCJPd2FEb3dubG9hZFwiLFwib2lkXCI6XCIyNTFkMjI3OC0wYWIyLTQ5OTYtYmIzZS0zMjA4MGY0YjliNzZcIixcInByaW1hcnlzaWRcIjpcIlMtMS01LTIxLTY0MjI4NDkwOS0yNDg4NjUwMDk3LTQyNzE1MjE2NDktMjI1MjM3NDZcIn0iLCJuYmYiOjE3MDY5NDY1ODgsImV4cCI6MTcwNjk0NzE4OCwiaXNzIjoiMDAwMDAwMDItMDAwMC0wZmYxLWNlMDAtMDAwMDAwMDAwMDAwQGM1OWYxMDU5LWZiZDItNGMyYi04ODYwLTUxZTQ4ZTRkZDcyNiIsImF1ZCI6IjAwMDAwMDAyLTAwMDAtMGZmMS1jZTAwLTAwMDAwMDAwMDAwMC9hdHRhY2htZW50cy5vZmZpY2UubmV0QGM1OWYxMDU5LWZiZDItNGMyYi04ODYwLTUxZTQ4ZTRkZDcyNiIsImhhcHAiOiJvd2EifQ.g38p9iNBw9DOKrXv2fv6VUdosVfgS_AmoO7UaYgztuLNUGkkpLwpUviajO6x0c3kSJHf1DyncGFbqDs5l3abCDrg1iZSEI2Gj05ScNzlBJWxHRUd2leY6NaRMnVJZgvbRsTgAzM8VxpsoJs_cjJHGUhTZxsbttbsHjQKAqmLOQgdudGyWOWeR6bc5DTnhRoskO7MJzd8cSVgK5rDgxDKjMP4vBnQLWJHVlsRvZcr19izAvhkRnvSY6UjSN3YIe1L-FfDx21_HwQL6B2Qxv8rw4C1t5xQHgWkYuuQy-DFNe2S9hCLvUzv1KxNyFtrlrPEfP_952ti7fEf2syTiQEGqA&X-OWA-CANARY=8vO-BXXAS0CKXeTqVTZyvpAoFtOMJNwYKPtUZK44Ab6NGKfx9WODk83sQS30Tr3oyP2K8AY6vYQ.&owa=outlook.office.com&scriptVer=20240126002.06&clientId=237C791910E14B7D8ECEEEB3C1596700&animation=true"
+            src="/files/left side bottom stripe.png"
             alt="Footer Image for Certificate-30"
           />
         </div>
@@ -263,14 +320,14 @@
           <div class="right_logo_1">
             <img
               class="right_logo_1_img"
-              src="https://attachments.office.net/owa/talib.s%40sahayogmultistate.com/service.svc/s/GetAttachmentThumbnail?id=AAMkADA5ZmRkMDY1LWFhZGItNDg5NS1hNzBiLTZkOTNkYWYyMDE4MgBGAAAAAADxiiF6b%2BW%2BQJxplUqKAzwCBwD%2BDBJobmT6SpqkfEH1l2%2B5AAAAAAEJAAD%2BDBJobmT6SpqkfEH1l2%2B5AAE3%2BjvjAAABEgAQAGMvH3Drht1Ci1%2FNeCKZfxI%3D&thumbnailType=2&token=eyJhbGciOiJSUzI1NiIsImtpZCI6IkU1RDJGMEY4REE5M0I2NzA5QzQzQTlFOEE2MTQzQzAzRDYyRjlBODAiLCJ0eXAiOiJKV1QiLCJ4NXQiOiI1ZEx3LU5xVHRuQ2NRNm5vcGhROEE5WXZtb0EifQ.eyJvcmlnaW4iOiJodHRwczovL291dGxvb2sub2ZmaWNlLmNvbSIsInVjIjoiYWE3NjVmYzMzMDhmNGZlYjhiMTg4NjVlNzJjNzFiOGMiLCJzaWduaW5fc3RhdGUiOiJbXCJrbXNpXCJdIiwidmVyIjoiRXhjaGFuZ2UuQ2FsbGJhY2suVjEiLCJhcHBjdHhzZW5kZXIiOiJPd2FEb3dubG9hZEBjNTlmMTA1OS1mYmQyLTRjMmItODg2MC01MWU0OGU0ZGQ3MjYiLCJpc3NyaW5nIjoiV1ciLCJhcHBjdHgiOiJ7XCJtc2V4Y2hwcm90XCI6XCJvd2FcIixcInB1aWRcIjpcIjExNTM4MDExMjM1MTExMzQyMDJcIixcInNjb3BlXCI6XCJPd2FEb3dubG9hZFwiLFwib2lkXCI6XCIyNTFkMjI3OC0wYWIyLTQ5OTYtYmIzZS0zMjA4MGY0YjliNzZcIixcInByaW1hcnlzaWRcIjpcIlMtMS01LTIxLTY0MjI4NDkwOS0yNDg4NjUwMDk3LTQyNzE1MjE2NDktMjI1MjM3NDZcIn0iLCJuYmYiOjE3MDY5NDYyODksImV4cCI6MTcwNjk0Njg4OSwiaXNzIjoiMDAwMDAwMDItMDAwMC0wZmYxLWNlMDAtMDAwMDAwMDAwMDAwQGM1OWYxMDU5LWZiZDItNGMyYi04ODYwLTUxZTQ4ZTRkZDcyNiIsImF1ZCI6IjAwMDAwMDAyLTAwMDAtMGZmMS1jZTAwLTAwMDAwMDAwMDAwMC9hdHRhY2htZW50cy5vZmZpY2UubmV0QGM1OWYxMDU5LWZiZDItNGMyYi04ODYwLTUxZTQ4ZTRkZDcyNiIsImhhcHAiOiJvd2EifQ.fMQKyvZj9DDQeIAxiO4PDPL5ILxloP6O4gyA4TOM6xdepxFXuM0_Iez33lBYWa7HnRNBhqJSSDN1RuDnixtVu8bKQZSKTODecawiRIiiviAwB9kM0wTbKG5hTuw0jOmW9k7ZKoYT9El5Wny58vztTGfhotsHmvL7Nn6v8nlE7bloDs8ZUQ4wlQVTJHNgp9WP7KshFFYHaWIdH0SoV7aonkAnfoRiiVOB14yAFC7EL3gqctlv4w0IMCcBDrWQuKyQ7PvO9QxRBzE09rwa-tL93wKozwUUcaP7hREeti_t7k-30KEqhWd4BTH4xBsgtPPieUNrxQzHl3867sSDjOnXwA&X-OWA-CANARY=34Srx05B1k6JqzcMP9P5MUAlWDOMJNwYL1S9rqrv4N6f7VfHJAcAeRUXUidBjw7V458WPXxrcng.&owa=outlook.office.com&scriptVer=20240126002.06&clientId=237C791910E14B7D8ECEEEB3C1596700&animation=true"
+              src="/files/right side logo (1).png"
               alt="Image 1"
             />
           </div>
           <div class="right_logo_2">
             <img
               class="right_logo_2_img"
-              src="https://attachments.office.net/owa/talib.s%40sahayogmultistate.com/service.svc/s/GetAttachmentThumbnail?id=AAMkADA5ZmRkMDY1LWFhZGItNDg5NS1hNzBiLTZkOTNkYWYyMDE4MgBGAAAAAADxiiF6b%2BW%2BQJxplUqKAzwCBwD%2BDBJobmT6SpqkfEH1l2%2B5AAAAAAEJAAD%2BDBJobmT6SpqkfEH1l2%2B5AAE3%2BjvjAAABEgAQAJ8LATl2%2BOBLtgJ32vaHgdw%3D&thumbnailType=2&token=eyJhbGciOiJSUzI1NiIsImtpZCI6IkU1RDJGMEY4REE5M0I2NzA5QzQzQTlFOEE2MTQzQzAzRDYyRjlBODAiLCJ0eXAiOiJKV1QiLCJ4NXQiOiI1ZEx3LU5xVHRuQ2NRNm5vcGhROEE5WXZtb0EifQ.eyJvcmlnaW4iOiJodHRwczovL291dGxvb2sub2ZmaWNlLmNvbSIsInVjIjoiYWE3NjVmYzMzMDhmNGZlYjhiMTg4NjVlNzJjNzFiOGMiLCJzaWduaW5fc3RhdGUiOiJbXCJrbXNpXCJdIiwidmVyIjoiRXhjaGFuZ2UuQ2FsbGJhY2suVjEiLCJhcHBjdHhzZW5kZXIiOiJPd2FEb3dubG9hZEBjNTlmMTA1OS1mYmQyLTRjMmItODg2MC01MWU0OGU0ZGQ3MjYiLCJpc3NyaW5nIjoiV1ciLCJhcHBjdHgiOiJ7XCJtc2V4Y2hwcm90XCI6XCJvd2FcIixcInB1aWRcIjpcIjExNTM4MDExMjM1MTExMzQyMDJcIixcInNjb3BlXCI6XCJPd2FEb3dubG9hZFwiLFwib2lkXCI6XCIyNTFkMjI3OC0wYWIyLTQ5OTYtYmIzZS0zMjA4MGY0YjliNzZcIixcInByaW1hcnlzaWRcIjpcIlMtMS01LTIxLTY0MjI4NDkwOS0yNDg4NjUwMDk3LTQyNzE1MjE2NDktMjI1MjM3NDZcIn0iLCJuYmYiOjE3MDY5NDYyODksImV4cCI6MTcwNjk0Njg4OSwiaXNzIjoiMDAwMDAwMDItMDAwMC0wZmYxLWNlMDAtMDAwMDAwMDAwMDAwQGM1OWYxMDU5LWZiZDItNGMyYi04ODYwLTUxZTQ4ZTRkZDcyNiIsImF1ZCI6IjAwMDAwMDAyLTAwMDAtMGZmMS1jZTAwLTAwMDAwMDAwMDAwMC9hdHRhY2htZW50cy5vZmZpY2UubmV0QGM1OWYxMDU5LWZiZDItNGMyYi04ODYwLTUxZTQ4ZTRkZDcyNiIsImhhcHAiOiJvd2EifQ.fMQKyvZj9DDQeIAxiO4PDPL5ILxloP6O4gyA4TOM6xdepxFXuM0_Iez33lBYWa7HnRNBhqJSSDN1RuDnixtVu8bKQZSKTODecawiRIiiviAwB9kM0wTbKG5hTuw0jOmW9k7ZKoYT9El5Wny58vztTGfhotsHmvL7Nn6v8nlE7bloDs8ZUQ4wlQVTJHNgp9WP7KshFFYHaWIdH0SoV7aonkAnfoRiiVOB14yAFC7EL3gqctlv4w0IMCcBDrWQuKyQ7PvO9QxRBzE09rwa-tL93wKozwUUcaP7hREeti_t7k-30KEqhWd4BTH4xBsgtPPieUNrxQzHl3867sSDjOnXwA&X-OWA-CANARY=34Srx05B1k6JqzcMP9P5MUAlWDOMJNwYL1S9rqrv4N6f7VfHJAcAeRUXUidBjw7V458WPXxrcng.&owa=outlook.office.com&scriptVer=20240126002.06&clientId=237C791910E14B7D8ECEEEB3C1596700&animation=true"
+              src="/files/Share Certificate01.png"
               alt="Image 2"
             />
           </div>
@@ -278,31 +335,36 @@
 
         <div style="text-align: center; margin: 5px">
           <img
-            class="share_certi_logo"
-            src="https://attachments.office.net/owa/talib.s%40sahayogmultistate.com/service.svc/s/GetAttachmentThumbnail?id=AAMkADA5ZmRkMDY1LWFhZGItNDg5NS1hNzBiLTZkOTNkYWYyMDE4MgBGAAAAAADxiiF6b%2BW%2BQJxplUqKAzwCBwD%2BDBJobmT6SpqkfEH1l2%2B5AAAAAAEJAAD%2BDBJobmT6SpqkfEH1l2%2B5AAE3%2BjvjAAABEgAQACuRpRLzR%2BJPhKFyu6ZvSFs%3D&thumbnailType=2&token=eyJhbGciOiJSUzI1NiIsImtpZCI6IkU1RDJGMEY4REE5M0I2NzA5QzQzQTlFOEE2MTQzQzAzRDYyRjlBODAiLCJ0eXAiOiJKV1QiLCJ4NXQiOiI1ZEx3LU5xVHRuQ2NRNm5vcGhROEE5WXZtb0EifQ.eyJvcmlnaW4iOiJodHRwczovL291dGxvb2sub2ZmaWNlLmNvbSIsInVjIjoiYWE3NjVmYzMzMDhmNGZlYjhiMTg4NjVlNzJjNzFiOGMiLCJzaWduaW5fc3RhdGUiOiJbXCJrbXNpXCJdIiwidmVyIjoiRXhjaGFuZ2UuQ2FsbGJhY2suVjEiLCJhcHBjdHhzZW5kZXIiOiJPd2FEb3dubG9hZEBjNTlmMTA1OS1mYmQyLTRjMmItODg2MC01MWU0OGU0ZGQ3MjYiLCJpc3NyaW5nIjoiV1ciLCJhcHBjdHgiOiJ7XCJtc2V4Y2hwcm90XCI6XCJvd2FcIixcInB1aWRcIjpcIjExNTM4MDExMjM1MTExMzQyMDJcIixcInNjb3BlXCI6XCJPd2FEb3dubG9hZFwiLFwib2lkXCI6XCIyNTFkMjI3OC0wYWIyLTQ5OTYtYmIzZS0zMjA4MGY0YjliNzZcIixcInByaW1hcnlzaWRcIjpcIlMtMS01LTIxLTY0MjI4NDkwOS0yNDg4NjUwMDk3LTQyNzE1MjE2NDktMjI1MjM3NDZcIn0iLCJuYmYiOjE3MDY5NDY1ODgsImV4cCI6MTcwNjk0NzE4OCwiaXNzIjoiMDAwMDAwMDItMDAwMC0wZmYxLWNlMDAtMDAwMDAwMDAwMDAwQGM1OWYxMDU5LWZiZDItNGMyYi04ODYwLTUxZTQ4ZTRkZDcyNiIsImF1ZCI6IjAwMDAwMDAyLTAwMDAtMGZmMS1jZTAwLTAwMDAwMDAwMDAwMC9hdHRhY2htZW50cy5vZmZpY2UubmV0QGM1OWYxMDU5LWZiZDItNGMyYi04ODYwLTUxZTQ4ZTRkZDcyNiIsImhhcHAiOiJvd2EifQ.g38p9iNBw9DOKrXv2fv6VUdosVfgS_AmoO7UaYgztuLNUGkkpLwpUviajO6x0c3kSJHf1DyncGFbqDs5l3abCDrg1iZSEI2Gj05ScNzlBJWxHRUd2leY6NaRMnVJZgvbRsTgAzM8VxpsoJs_cjJHGUhTZxsbttbsHjQKAqmLOQgdudGyWOWeR6bc5DTnhRoskO7MJzd8cSVgK5rDgxDKjMP4vBnQLWJHVlsRvZcr19izAvhkRnvSY6UjSN3YIe1L-FfDx21_HwQL6B2Qxv8rw4C1t5xQHgWkYuuQy-DFNe2S9hCLvUzv1KxNyFtrlrPEfP_952ti7fEf2syTiQEGqA&X-OWA-CANARY=3fOQoHDq40mLs9qiUcT4xSBy5faMJNwYjgS2vAFCzLRXCHIIvvLu7Ui41Vnrz46Dinz0fQxxT6Y.&owa=outlook.office.com&scriptVer=20240126002.06&clientId=237C791910E14B7D8ECEEEB3C1596700&animation=true"
+            class="share_certi_logo_70"
+            src="/files/right side share certificate font.png"
             alt="Image 1"
           />
         </div>
         <div class="content-70">
+          <div class="certificate-70-start">
+            <div>Share Certificate No. {{doc.name}}</div>
+            <div>Account No. {{doc.saving_current_ac_no}}</div>
+          </div>
           <p>This is to certify that,</p>
-          <p>Shri/Smt.{{ doc.customer_name }}........R/o. {{address}}</p>
-          <p>has been alloted {{no_of_share}} shares Sr.no From {{start_no_share}} to {{end_no_share}}</p>
-          <p>having Face Value of Rs. 10/- per share and aggregating Rs. {{maybe_total_rs}}</p>
-          <p>as per the provisions of the Bye Laws of the <b>Sahayog</b></p>
-          <p><b>Multi State Credit Co-operative Society Limited</b>
-            (Registered under Multi State Co-operative Societies Act 2002 and as</p>
-            <p>amended time to time)</p>
-          <p>Unless the shares are tranferred as per the Bye Laws of the Society, the transfer </p>
+          <p>Shri/Smt.<b>{{ doc.customer_name if doc.customer_name else '....................' }}</b></p>
+          <p>R/o. <b>{{ doc.address + ',  ' if doc.address else '' }}{{ doc.taluka + ',  ' if doc.taluka else '' }} {{ doc.city if doc.city else '' }}</b></p>
+          <p>has been alloted <b>{{ doc.no_of_shares if doc.no_of_shares else '..................' }} </b> shares Sr.no From {{start_no_share}} to {{end_no_share}}</p>
+          <p>having Face Value of  ₹10/- per share and aggregating  ₹<b>{{ doc.tot_share_amt if doc.tot_share_amt else '....................' }} </b></p>
+          <p>as per the provisions of the By Laws of the <b>Sahayog Multi State Credit Co-operative</b></p>
+          <p><b>Society Limited</b>(Registered under Multi State Co-operative Societies Act 2002 and as</p>
+          <p>amended time to time)</p>
+          <p>Unless the shares are tranferred as per the By Laws of the Society, the transfer </p>
           <p>shall not be considered valid by the Board of Directors. This Certificate bearing Seal</p>
-           the Society is issued on ................................</p>
-          <div class="signature">
-            <p>______________________________</p>
-            <p>Authorized Signature</p>
+           the Society is issued on ........................</p>
+          <div class="signature-70">
+            <div>ACM/<br>Manager</div>
+            <div><br>Seal</div>
+            <div>Br.Manager/<br>Incharge</div>
           </div>
         </div>
         <div class="certificate-70-footer">
           <img
-            src="https://attachments.office.net/owa/talib.s%40sahayogmultistate.com/service.svc/s/GetAttachmentThumbnail?id=AAMkADA5ZmRkMDY1LWFhZGItNDg5NS1hNzBiLTZkOTNkYWYyMDE4MgBGAAAAAADxiiF6b%2BW%2BQJxplUqKAzwCBwD%2BDBJobmT6SpqkfEH1l2%2B5AAAAAAEJAAD%2BDBJobmT6SpqkfEH1l2%2B5AAE3%2BjvjAAABEgAQAIBes8c7q2NJh4FhWOMMSlo%3D&thumbnailType=2&token=eyJhbGciOiJSUzI1NiIsImtpZCI6IkU1RDJGMEY4REE5M0I2NzA5QzQzQTlFOEE2MTQzQzAzRDYyRjlBODAiLCJ0eXAiOiJKV1QiLCJ4NXQiOiI1ZEx3LU5xVHRuQ2NRNm5vcGhROEE5WXZtb0EifQ.eyJvcmlnaW4iOiJodHRwczovL291dGxvb2sub2ZmaWNlLmNvbSIsInVjIjoiYWE3NjVmYzMzMDhmNGZlYjhiMTg4NjVlNzJjNzFiOGMiLCJzaWduaW5fc3RhdGUiOiJbXCJrbXNpXCJdIiwidmVyIjoiRXhjaGFuZ2UuQ2FsbGJhY2suVjEiLCJhcHBjdHhzZW5kZXIiOiJPd2FEb3dubG9hZEBjNTlmMTA1OS1mYmQyLTRjMmItODg2MC01MWU0OGU0ZGQ3MjYiLCJpc3NyaW5nIjoiV1ciLCJhcHBjdHgiOiJ7XCJtc2V4Y2hwcm90XCI6XCJvd2FcIixcInB1aWRcIjpcIjExNTM4MDExMjM1MTExMzQyMDJcIixcInNjb3BlXCI6XCJPd2FEb3dubG9hZFwiLFwib2lkXCI6XCIyNTFkMjI3OC0wYWIyLTQ5OTYtYmIzZS0zMjA4MGY0YjliNzZcIixcInByaW1hcnlzaWRcIjpcIlMtMS01LTIxLTY0MjI4NDkwOS0yNDg4NjUwMDk3LTQyNzE1MjE2NDktMjI1MjM3NDZcIn0iLCJuYmYiOjE3MDY5NDY1ODgsImV4cCI6MTcwNjk0NzE4OCwiaXNzIjoiMDAwMDAwMDItMDAwMC0wZmYxLWNlMDAtMDAwMDAwMDAwMDAwQGM1OWYxMDU5LWZiZDItNGMyYi04ODYwLTUxZTQ4ZTRkZDcyNiIsImF1ZCI6IjAwMDAwMDAyLTAwMDAtMGZmMS1jZTAwLTAwMDAwMDAwMDAwMC9hdHRhY2htZW50cy5vZmZpY2UubmV0QGM1OWYxMDU5LWZiZDItNGMyYi04ODYwLTUxZTQ4ZTRkZDcyNiIsImhhcHAiOiJvd2EifQ.g38p9iNBw9DOKrXv2fv6VUdosVfgS_AmoO7UaYgztuLNUGkkpLwpUviajO6x0c3kSJHf1DyncGFbqDs5l3abCDrg1iZSEI2Gj05ScNzlBJWxHRUd2leY6NaRMnVJZgvbRsTgAzM8VxpsoJs_cjJHGUhTZxsbttbsHjQKAqmLOQgdudGyWOWeR6bc5DTnhRoskO7MJzd8cSVgK5rDgxDKjMP4vBnQLWJHVlsRvZcr19izAvhkRnvSY6UjSN3YIe1L-FfDx21_HwQL6B2Qxv8rw4C1t5xQHgWkYuuQy-DFNe2S9hCLvUzv1KxNyFtrlrPEfP_952ti7fEf2syTiQEGqA&X-OWA-CANARY=YCGnssU17Em6Tx6TEAJKrTAwRLKMJNwYJD7zK4MW22aNQmUQZMu7CJao1MAeYKKiC0RJwk_3aZ8.&owa=outlook.office.com&scriptVer=20240126002.06&clientId=237C791910E14B7D8ECEEEB3C1596700&animation=true"
+            src="/files/right side bottom stripe.png"
             alt="Footer Image for Certificate-70"
           />
         </div>
