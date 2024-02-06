@@ -444,7 +444,7 @@ frappe.ui.form.on("Day Management", {
               const hoDayEndLabel =
                 endDetails.log_type === "End"
                   ? `<span style="color: green;">HO Day End</span>`
-                  : `<span style="color: red;">HO Day Not Ended Yet</span>`;
+                  : `<span style="color: red;">HO Day will end when all branches day Ended</span>`;
 
               const hoDayEndInfo =
                 endDetails.log_type === "End"

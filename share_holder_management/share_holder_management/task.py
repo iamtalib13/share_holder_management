@@ -51,21 +51,37 @@ def test():
     frappe.db.commit()  # Commit changes after updating all records
 
     print("\n\nUpdated range '\n\n")
-def update_status():
-    tickets = frappe.get_all(
-        "Share Application",
-        fields=["name", "application_sr_no", "no_of_shares", "status"],
-    )
+def update():
+    batch_size = 30000  # Adjust the batch size as needed
+    total_records = 333514
+    processed_records = 0
 
-    for ticket in tickets:
-        id = ticket.name
+    while processed_records < total_records:
+        tickets = frappe.get_all(
+            "Share Application",
+            filters={"status": "Draft"},
+            fields=["name", "status"],
+            start=processed_records,
+            limit=batch_size,
+        )
 
-        # Update status to "Sanctioned"
-        frappe.db.set_value("Share Application", id, "status", "Sanctioned", update_modified=False)
+        if not tickets:
+            break  # No more records
 
-    frappe.db.commit()  # Commit changes after updating all records
+        for ticket in tickets:
+            id = ticket.name
 
-    print("\n\nUpdated status for all records to 'Sanctioned'\n\n")
+            try:
+                # Update status to "Sanctioned"
+                frappe.db.set_value("Share Application", id, "status", "Sanctioned", update_modified=False)
+                print(f"Updated record {id}")
+            except Exception as e:
+                print(f"Error updating record {id}: {e}")
+
+        frappe.db.commit()  # Commit changes after updating each batch
+        processed_records += batch_size
+
+    print("\n\nUpdated status to 'Sanctioned' for records with status 'Draft'\n\n")
 
 
 

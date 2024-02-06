@@ -8,23 +8,19 @@ class ShareProceeding(Document):
 	pass
 
 @frappe.whitelist()
-def show_proceeding_logs():
+def show_proceeding_logs(proceeding_date):
     # Fetch data using Frappe database query
     query = """
         SELECT
-    application_sr_no,
-    sanction_date,
-    branch,
-    customer_name
-FROM
-    `tabShare Application`
-WHERE
-    sanction_date IS NOT NULL;
-
+            application_sr_no,
+            sanction_date,
+            branch,
+            customer_name
+        FROM
+            `tabShare Application`
+        WHERE
+            application_date = %s;
     """
 
-    result = frappe.db.sql(query, as_dict=True)
-
-    return {
-        "result": result
-    }
+    result = frappe.db.sql(query, (proceeding_date,), as_dict=True)
+    return result

@@ -279,6 +279,7 @@ frappe.ui.form.on("Share Application", {
                 () => {
                   frm.call({
                     method: "get_server_datetime",
+
                     callback: function (r) {
                       if (!r.exc && r.message) {
                         frm.set_value("sanction_date", r.message);
