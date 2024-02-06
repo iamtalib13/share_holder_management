@@ -5,5 +5,5 @@
 from frappe.tests.utils import FrappeTestCase
 
 
-class TestShareTest(FrappeTestCase):
+class TestShareProceeding(FrappeTestCase):
 	pass

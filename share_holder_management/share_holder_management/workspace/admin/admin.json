@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"Zs668BQM2D\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Share Management - Admin</span>\",\"col\":12}},{\"id\":\"_Z9OrWjLOo\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Share Holders\",\"col\":3}},{\"id\":\"EMoAC1YLcD\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Share amount setting\",\"col\":3}},{\"id\":\"EcXtpmKFAt\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"hkhFEsXSKC\",\"type\":\"card\",\"data\":{\"card_name\":\"Share Amount Setting\",\"col\":4}}]",
+ "content": "[{\"id\":\"Zs668BQM2D\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Share Management - Admin</span>\",\"col\":12}},{\"id\":\"_Z9OrWjLOo\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Share Holders\",\"col\":3}},{\"id\":\"EcXtpmKFAt\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"hkhFEsXSKC\",\"type\":\"card\",\"data\":{\"card_name\":\"Share Amount Setting\",\"col\":4}}]",
  "creation": "2024-01-09 12:22:25.089685",
  "custom_blocks": [],
  "docstatus": 0,
@@ -32,7 +32,7 @@
    "type": "Link"
   }
  ],
- "modified": "2024-01-30 16:49:46.654144",
+ "modified": "2024-02-06 10:43:19.539613",
  "modified_by": "Administrator",
  "module": "Share Holder Management",
  "name": "Admin",
@@ -55,13 +55,6 @@
    "label": "Share Holders",
    "link_to": "Share Application",
    "stats_filter": "[]",
-   "type": "DocType"
-  },
-  {
-   "color": "Grey",
-   "doc_view": "List",
-   "label": "Share amount setting",
-   "link_to": "Share Amount Setting",
    "type": "DocType"
   }
  ],

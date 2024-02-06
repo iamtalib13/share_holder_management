@@ -149,22 +149,29 @@ frappe.ui.form.on("Day Management", {
                       }
               
                       .branch-row_border {
-                          border-bottom: 1px solid;
+                          border-bottom: 1px solid #D9D9D9;
                           height: 60px;
                       }
               
                       .branch-row_border:hover {
-                          background-color: yellow;
+                          background-color: #c2d7df;
                           cursor: pointer;
                       }
               
                       .start-time {
-                          color: green;
-                          
+                        color: green;
+                        border: 2px solid green;
+                        padding: 3px 10px;
+                        border-radius: 2rem;
+                        font-weight: 600;
                       }
               
                       .end-time {
                           color: red;
+                          border: 2px solid red;
+                          padding: 3px 10px;
+                          border-radius: 2rem;
+                          font-weight: 600;
                       }
               
                       .branch_heading {

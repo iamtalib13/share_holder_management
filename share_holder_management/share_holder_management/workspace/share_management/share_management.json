@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"pqUprAS_RL\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h1\\\"><b>Share Management</b></span>\",\"col\":12}},{\"id\":\"BQ1uiZMiKm\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Create\",\"col\":3}},{\"id\":\"n-7njW8hzy\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Share Holders\",\"col\":3}},{\"id\":\"lhJWhkoqm8\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Status - Wise</b></span>\",\"col\":12}},{\"id\":\"kLAj6JIVQG\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Draft\",\"col\":3}},{\"id\":\"zCV3GGV7m6\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Pending\",\"col\":3}},{\"id\":\"dmMtlPotUj\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Sanctioned\",\"col\":3}},{\"id\":\"_83jtb7Dcw\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Rejected\",\"col\":3}},{\"id\":\"5rWhdTUUkv\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Return To Branch\",\"col\":3}},{\"id\":\"Gf-h26AJ17\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"3LsYU7_EkA\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Day Management Checkin</b></span>\",\"col\":12}},{\"id\":\"W-n20dNCU9\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Checkin\",\"col\":3}},{\"id\":\"JBqHldTcNE\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Checkin History\",\"col\":3}}]",
+ "content": "[{\"id\":\"pqUprAS_RL\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h1\\\"><b>Share Management</b></span>\",\"col\":12}},{\"id\":\"BQ1uiZMiKm\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Create\",\"col\":3}},{\"id\":\"n-7njW8hzy\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Share Holders\",\"col\":3}},{\"id\":\"lhJWhkoqm8\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Status - Wise</b></span>\",\"col\":12}},{\"id\":\"kLAj6JIVQG\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Draft\",\"col\":3}},{\"id\":\"zCV3GGV7m6\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Pending\",\"col\":3}},{\"id\":\"dmMtlPotUj\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Sanctioned\",\"col\":3}},{\"id\":\"_83jtb7Dcw\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Rejected\",\"col\":3}},{\"id\":\"5rWhdTUUkv\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Return To Branch\",\"col\":3}},{\"id\":\"3LsYU7_EkA\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Day Management Checkin</b></span>\",\"col\":12}},{\"id\":\"W-n20dNCU9\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Checkin\",\"col\":3}},{\"id\":\"JBqHldTcNE\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Checkin History\",\"col\":3}}]",
  "creation": "2024-01-09 10:53:34.815001",
  "custom_blocks": [],
  "docstatus": 0,
@@ -12,7 +12,7 @@
  "is_hidden": 0,
  "label": "Share Management",
  "links": [],
- "modified": "2024-01-31 13:47:53.183137",
+ "modified": "2024-02-05 22:28:13.010556",
  "modified_by": "Administrator",
  "module": "Share Holder Management",
  "name": "Share Management",

@@ -51,6 +51,21 @@ def test():
     frappe.db.commit()  # Commit changes after updating all records
 
     print("\n\nUpdated range '\n\n")
+def update_status():
+    tickets = frappe.get_all(
+        "Share Application",
+        fields=["name", "application_sr_no", "no_of_shares", "status"],
+    )
+
+    for ticket in tickets:
+        id = ticket.name
+
+        # Update status to "Sanctioned"
+        frappe.db.set_value("Share Application", id, "status", "Sanctioned", update_modified=False)
+
+    frappe.db.commit()  # Commit changes after updating all records
+
+    print("\n\nUpdated status for all records to 'Sanctioned'\n\n")
 
 
 

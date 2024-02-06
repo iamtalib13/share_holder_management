@@ -1,0 +1,61 @@
+{
+ "actions": [],
+ "creation": "2024-02-05 23:28:48.082635",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "proceeding_date",
+  "find_btn",
+  "section_break_uiqqm",
+  "proceeding_members"
+ ],
+ "fields": [
+  {
+   "default": "Today",
+   "fieldname": "proceeding_date",
+   "fieldtype": "Date",
+   "label": "Date"
+  },
+  {
+   "fieldname": "proceeding_members",
+   "fieldtype": "Table",
+   "label": "Proceeding Members",
+   "options": "Proceeding Records"
+  },
+  {
+   "fieldname": "section_break_uiqqm",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "find_btn",
+   "fieldtype": "Button",
+   "label": "Find"
+  }
+ ],
+ "hide_toolbar": 1,
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2024-02-05 23:36:44.759769",
+ "modified_by": "Administrator",
+ "module": "Share Holder Management",
+ "name": "Share Proceeding",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
