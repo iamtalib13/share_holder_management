@@ -12,7 +12,8 @@
   "start_range",
   "end_range",
   "status",
-  "branch"
+  "branch",
+  "barcode"
  ],
  "fields": [
   {
@@ -45,11 +46,16 @@
    "fieldname": "branch",
    "fieldtype": "Data",
    "label": "branch"
+  },
+  {
+   "fieldname": "barcode",
+   "fieldtype": "Barcode",
+   "label": "barcode"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-02-05 11:42:25.351276",
+ "modified": "2024-02-06 22:35:57.501569",
  "modified_by": "Administrator",
  "module": "Share Holder Management",
  "name": "Share Test",

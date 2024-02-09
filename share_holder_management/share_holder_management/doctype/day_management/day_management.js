@@ -132,8 +132,9 @@ frappe.ui.form.on("Day Management", {
               
                       .branch-th {
                           background-color: #c2d7df;
-                          height: 50px;
+                          height: 60px;
                           text-align: center;
+                          font-size: 15px;
                       }
               
                       .branch-td {
@@ -397,6 +398,23 @@ frappe.ui.form.on("Day Management", {
               // Form the desired date string
               const formattedDate = `${day}-${month}-${year}`;
 
+              // // Check if HO day is ended
+              // const hoDayEnded = totalEnd === totalBranch;
+
+              // // If HO day has ended, calculate the next day's date
+              // if (hoDayEnded) {
+              //   // Increment the current date by one day
+              //   dateObject.setDate(dateObject.getDate() + 1);
+
+              //   // Extract components of the next day's date
+              //   year = dateObject.getFullYear();
+              //   month = (dateObject.getMonth() + 1).toString().padStart(2, "0");
+              //   day = dateObject.getDate().toString().padStart(2, "0");
+              // }
+
+              // // Form the updated date string
+              // const updatedFormattedDate = `${day}-${month}-${year}`;
+
               //start deatils response
               const startDetails = data.start_details || {};
               console.log("start details : ", startDetails);
@@ -458,6 +476,13 @@ frappe.ui.form.on("Day Management", {
               // Calculate the progress percentage based on the number of branches ended
               const branchEndProgressPercentage =
                 (totalEnd / totalBranch) * 100;
+
+              // Check if the HO day has ended
+              const checkhoDayEnded = totalEnd === totalBranch;
+
+              // Set the flag based on the condition
+              const dayEndedFlag = checkhoDayEnded ? "true" : "false";
+              console.log("Branch ended", dayEndedFlag);
 
               // Generate HTML dynamically based on the fetched data
               let html = `<!DOCTYPE html>
@@ -571,6 +596,7 @@ frappe.ui.form.on("Day Management", {
                 }
               </style>
               <script>
+            
                 // Function to start the HO Day
                 function startHO() {
                   // Redirect to another page (replace 'YOUR_URL' with the actual URL)

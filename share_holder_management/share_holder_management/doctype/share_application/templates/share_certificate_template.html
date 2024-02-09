@@ -83,6 +83,7 @@
         z-index: 1;
         padding-bottom: 55px;
       }
+     
 
       .certificate-30::before {
         background: url("background_image_30.png") center center no-repeat,
@@ -119,7 +120,8 @@
    }
       .header-1 {
         display: inline-flex;
-        padding-left: 5px;
+    padding-left: 5px;
+    margin-top: -5px;
       }
       .header-2 .right_logo_1_img {
         width: 310px;
@@ -144,9 +146,9 @@
         padding: 0px 20px 20px 20px;
     font-family: "Inter", sans-serif;
     font-size: 12px;
-    margin-top: -10px;
+    margin-top: 15px;
     margin-bottom: 15px;
-    text-align:justify;
+    text-align: justify;
       }
       .content-70 {
         padding: 0px 20px 40px 20px;
@@ -164,8 +166,8 @@
     padding: 10px;
     gap: 70px;
     font-weight: bold;
-    margin-top: 70px;
-    margin-bottom: -21px;
+    margin-top: 73px;
+    margin-bottom: -46px;
   }
 
       .signature-70 {
@@ -176,7 +178,7 @@
     padding: 10px;
     gap: 150px;
     font-weight: bold;
-    margin-top: 95px;
+    margin-top: 76px;
     margin-bottom: -67.5px;
       }
 
@@ -187,7 +189,7 @@
       }
       .share_certi_logo_30 {
         width: 210px;
-        margin-top:-10px;
+    margin-top: -15px;
       }
       .share_certi_logo_70 {
         width: 245px;
@@ -209,18 +211,19 @@
       }
       .certificate-30-start {
         display: flex;
-        justify-content: space-around;
-        font-size: 11px;
-        font-family: "Inter", sans-serif;
-        padding:3px;
-        margin-bottom: 10px;
-    margin-top: -10px;
+    justify-content: space-around;
+    font-size: 11px;
+    font-family: "Inter", sans-serif;
+    padding: 3px;
+    margin-bottom: -45px;
+    margin-top: -5px;
       }
       .certificate-70-start{
         display: flex;
-        justify-content: space-evenly;
-        font-family: "Inter", sans-serif;
-        font-size: 13px;
+    justify-content: space-between;
+    font-family: "Inter", sans-serif;
+    font-size: 13px;
+    margin-bottom: -35px;
       }
       .certificate-30-footer {
         position: absolute;
@@ -229,7 +232,6 @@
         width: 100%;
         text-align: center;
       }
-
       .certificate-30-footer img {
         width: 100%; /* Set the image width to 100% of the div width */
       }
@@ -246,6 +248,29 @@
         width: 100%; /* Set the image width to 100% of the div width */
         margin-top: 45px;
       }
+
+.barcode-value-70 {
+  font-size: 13px;
+    width: 100px;
+    height: auto;
+    margin-top: -30px;
+}
+.barcode-value-30
+{
+  font-size: 13px;
+    width: 100px;
+    height: auto;
+    margin-top: -30px;
+}
+g text{
+  display:none;
+}
+.left_logo_2{
+  position:absolute;
+  right:0;
+}
+
+
     </style>
     <script>
       function printPage() {
@@ -257,10 +282,6 @@
     <button onclick="printPage()">Print</button>
     <div class="certificate">
       <div class="certificate-30">
-        <div class="certificate-30-start">
-          <div>Share Certificate No. {{doc.name}}</div>
-          <div>Account No. {{doc.saving_current_ac_no}}</div>
-        </div>
         <div class="header-1">
           <div class="left_logo_1">
             <img
@@ -284,6 +305,10 @@
             src="/files/left side certificate font.png"
             alt="Image 1"
           />
+        </div>
+        <div class="certificate-30-start">
+          <div>Account No &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {{doc.saving_current_ac_no}} <br> Share Certificate No : {{doc.name}}</div>
+          <div class="barcode-value-30">{{ doc.application_sr_no_barcode }}</div>
         </div>
         <hr />
         <div class="content-30">
@@ -342,8 +367,9 @@
         </div>
         <div class="content-70">
           <div class="certificate-70-start">
-            <div>Share Certificate No. {{doc.name}}</div>
             <div>Account No. {{doc.saving_current_ac_no}}</div>
+            <div>Share Certificate No. {{doc.name}}</div>
+            <div class="barcode-value-70">{{ doc.application_sr_no_barcode }}</div>
           </div>
           <p>This is to certify that,</p>
           <p>Shri/Smt.<b>{{ doc.customer_name if doc.customer_name else '....................' }}</b></p>

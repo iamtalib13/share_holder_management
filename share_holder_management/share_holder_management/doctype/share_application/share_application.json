@@ -10,6 +10,7 @@
   "personal_details_tab",
   "acc_section_details",
   "application_sr_no",
+  "application_sr_no_barcode",
   "customer_id",
   "account_type",
   "column_break_hdes",
@@ -232,7 +233,8 @@
   {
    "fieldname": "membership_form",
    "fieldtype": "Attach",
-   "label": "Membership form"
+   "label": "Membership form",
+   "reqd": 1
   },
   {
    "fieldname": "column_break_lhcd",
@@ -241,7 +243,8 @@
   {
    "fieldname": "payment_receipt",
    "fieldtype": "Attach",
-   "label": "Payment Receipt"
+   "label": "Payment Receipt",
+   "reqd": 1
   },
   {
    "fieldname": "column_break_kxcr",
@@ -250,7 +253,8 @@
   {
    "fieldname": "kyc",
    "fieldtype": "Attach",
-   "label": "KYC ( Adhar / PAN / Voter ID )"
+   "label": "KYC ( Adhar / PAN / Voter ID )",
+   "reqd": 1
   },
   {
    "fieldname": "column_break_nrre",
@@ -574,7 +578,7 @@
    "label": "Guardian Name"
   },
   {
-   "depends_on": "eval:doc.status==\"Draft\"",
+   "depends_on": "eval:doc.status==\"Draft\" || doc.status==\"Not Saved\"",
    "fieldname": "nominee_form_section",
    "fieldtype": "Section Break",
    "label": "Nominee Form"
@@ -614,12 +618,17 @@
   {
    "fieldname": "remark_section",
    "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "application_sr_no_barcode",
+   "fieldtype": "Barcode",
+   "label": "Barcode"
   }
  ],
  "hide_toolbar": 1,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-02-06 12:46:44.618706",
+ "modified": "2024-02-08 16:57:45.461421",
  "modified_by": "Administrator",
  "module": "Share Holder Management",
  "name": "Share Application",

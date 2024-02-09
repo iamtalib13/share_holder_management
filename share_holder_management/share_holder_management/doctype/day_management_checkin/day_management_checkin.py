@@ -162,6 +162,8 @@ def branch_day_start_and_end(branch):
         (today_datetime.date(), branch),
         as_dict=True,
     )
+    
+
 
     # HTML string for the table
     html_table = "<table border='1'>"
@@ -185,10 +187,13 @@ def branch_day_start_and_end(branch):
        # Check if records are found with 'Start' and 'End' log types
     start_found = any(record['log_type'] == 'Start' for record in day)
     end_found = any(record['log_type'] == 'End' for record in day)
+    
 
     # Determine the flag
     if start_found and end_found:
         flag = "Day Completed"
+    #elif check_branch_day_end:
+        #flag = "You Can End HO"
     elif start_found:
         flag = "Day Not Ended"
     else:

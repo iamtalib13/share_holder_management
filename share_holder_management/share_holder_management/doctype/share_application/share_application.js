@@ -16,8 +16,12 @@ frappe.ui.form.on("Share Application", {
           callback: function (r) {
             // Check if the message array contains at least one object
             if (r.message) {
+              var barcodeValue = String(r.message);
               frm.set_value("application_sr_no", r.message);
+              frm.set_value("application_sr_no_barcode", barcodeValue);
+
               frm.refresh_field("application_sr_no");
+              frm.refresh_field("application_sr_no_barcode");
 
               // Do something else with the response, if needed
             } else {
@@ -48,12 +52,43 @@ frappe.ui.form.on("Share Application", {
                 },
                 callback: function (r) {
                   if (!r.exc) {
+                    console.log("response:", r.message);
+
                     // Successful response handling code
                     if (r.message === "Day Start") {
                       console.log("day start");
                       frm.trigger("Intro_messages");
+                    } else if (r.message === "Branch Day Ended") {
+                      console.log("Branch Day Ended");
+                      $(".form-page").css("display", "none");
+                      frm.disable_save();
+                      frm.disable_form();
+
+                      frm.set_intro(
+                        "<b>Day Ended from <b>" +
+                          branch +
+                          "</b>" +
+                          " for " +
+                          "<b>" +
+                          "Today",
+                        "red" // Change the color as needed
+                      );
+                      frappe.msgprint({
+                        message:
+                          "Day has been Ended from branch. Please Go to Home page.",
+                        // primary_action: {
+                        //   label: __("OK"),
+                        //   action: function () {
+                        //     frappe.msgprint.hide(); // Hide the message
+                        //   },
+                        // },
+                      });
+
+                      frm.disable_save();
+                      frm.disable_form();
                     } else if (r.message === "Branch Day Not Started") {
                       console.log("Branch Day Not Started and HO started");
+                      $(".form-page").css("display", "none");
                       frm.disable_save();
                       frm.disable_form();
                       frm.set_intro(
@@ -62,15 +97,65 @@ frappe.ui.form.on("Share Application", {
                           "</b>" +
                           " for " +
                           "<b>" +
-                          new Date(frm.doc.creation).toLocaleDateString(
-                            "en-GB"
-                          ), // Format to DD/MM/YYYY
+                          "Today",
                         "red" // Change the color as needed
                       );
+
+                      // // Custom buttons
+                      // frm.add_custom_button("Click Here to Start", () => {
+                      //   frappe.new_doc(
+                      //     "Day Management Checkin",
+                      //     function (doc) {
+                      //       frappe.set_route(
+                      //         "Form",
+                      //         "Day Management Checkin",
+                      //         doc.name
+                      //       );
+                      //     }
+                      //   );
+                      // });
+                      // Message to be displayed in the dialog
+                      var message =
+                        "Branch Day Not Started. Do you want to start?";
+
+                      // Create a Frappe dialog
+                      var dialog = new frappe.ui.Dialog({
+                        title: "Start Branch Day",
+                        fields: [
+                          {
+                            fieldtype: "HTML",
+                            options: message,
+                          },
+                        ],
+                        primary_action: function () {
+                          // Redirect to the Day Management Checkin form
+                          frappe.new_doc(
+                            "Day Management Checkin",
+                            function (doc) {
+                              frappe.set_route(
+                                "Form",
+                                "Day Management Checkin",
+                                doc.name
+                              );
+                            }
+                          );
+                          dialog.hide();
+                        },
+                        primary_action_label: __("Yes"),
+                        secondary_action_label: __("No"),
+                        secondary_action: function () {
+                          dialog.hide();
+                        },
+                      });
+
+                      // Show the dialog
+                      dialog.show();
+
                       frm.disable_save();
                       frm.disable_form();
                     } else if (r.message === "Branch and HO Day Not Started") {
                       console.log("Branch and HO Day Not Started");
+                      $(".form-page").css("display", "none");
                       frm.disable_save();
                       frm.disable_form();
                       frm.set_intro(
@@ -80,11 +165,13 @@ frappe.ui.form.on("Share Application", {
                           "</b>" +
                           " for " +
                           "<b>" +
-                          new Date(frm.doc.creation).toLocaleDateString(
-                            "en-GB"
-                          ), // Format to DD/MM/YYYY
+                          "Today",
                         "red" // Change the color as needed
                       );
+                      frappe.msgprint(
+                        "Gondia HO not started. Please Contact HO"
+                      );
+
                       frm.disable_save();
                       frm.disable_form();
                     }
@@ -249,7 +336,6 @@ frappe.ui.form.on("Share Application", {
                     "Submitted return remarks:",
                     d.fields_dict.return_remark.get_value()
                   );
-
                   // Hide the dialog
                   d.hide();
                 },
@@ -802,7 +888,7 @@ frappe.ui.form.on("Share Application", {
   },
 
   onload_post_render: function (frm) {
-    let share_base_amount = 100;
+    let share_base_amount = 10;
 
     frm.fields_dict["no_of_shares"].$input.on("input", function (event) {
       var value = frm.fields_dict["no_of_shares"].get_value();
@@ -1027,12 +1113,15 @@ frappe.ui.form.on("Share Application", {
       !nominee_age
     ) {
       frappe.throw("Please fill in all required fields.");
-    } else if (nominee_age < 18) {
-      if (!nominee_guardian_name) {
-        frappe.throw("Please fill Guardian Name");
-      }
-      nominee_minor = 1; // Assuming you want to set nominee_minor to 1 if nominee_age is less than 18
+    } else if (nominee_age < 18 && !nominee_guardian_name) {
+      frappe.throw("Please fill Guardian Name");
     } else {
+      if (nominee_age < 18) {
+        nominee_minor = 1; // Assuming you want to set nominee_minor to 1 if nominee_age is less than 18
+      } else {
+        nominee_minor = 0; // Assuming you want to set nominee_minor to 0 if nominee_age is 18 or above
+      }
+
       let row = frm.add_child("nominee_details", {
         nominee_name: nominee_fullname,
         nominee_address: nominee_address,
@@ -1045,14 +1134,149 @@ frappe.ui.form.on("Share Application", {
       });
 
       frm.refresh_field("nominee_details");
-      frm.set_value("nominee_fullname", null);
-      frm.set_value("nominee_guardian_name", null);
-      frm.set_value("nominee_address", null);
-      frm.set_value("nominee_relation", null);
-      frm.set_value("nominee_mobile_number", null);
-      frm.set_value("nominee_share_percentage", null);
-      frm.set_value("nominee_age", null);
+      frm.set_value("nominee_fullname", "");
+      frm.set_value("nominee_guardian_name", "");
+      frm.set_value("nominee_address", "");
+      frm.set_value("nominee_relation", "");
+      frm.set_value("nominee_mobile_number", "");
+      frm.set_value("nominee_share_percentage", "");
+      frm.set_value("nominee_age", "");
       frm.set_value("minor", 0); // Assuming you want to set nominee_minor to 0 after adding to child table
+
+      frm.save();
     }
+  },
+});
+
+frappe.ui.form.on("Share Application", {
+  refresh(frm) {
+    if (!frm.is_new()) {
+      if (frappe.user.has_role("System Manager")) {
+        // Additional logic for System Manager role
+        frm.trigger("share_application_english_print");
+        frm.trigger("share_application_hindi_print");
+        frm.trigger("share_application_marathi_print");
+        frm.trigger("share_application_default_print");
+        frm.trigger("share_certificate_print");
+      } else if (
+        frappe.user.has_role("Share Admin") ||
+        frappe.user.has_role("Share User Creator") ||
+        frappe.user.has_role("Share Executive")
+      ) {
+        frm.trigger("share_application_default_print");
+        frm.trigger("share_application_english_print");
+        frm.trigger("share_application_hindi_print");
+        frm.trigger("share_application_marathi_print");
+
+        if (frm.doc.status === "Sanctioned") {
+          frm.trigger("share_certificate_print");
+        }
+      } else if (frappe.user.has_role("Share User")) {
+        if (frm.doc.status === "Sanctioned") {
+          frm.trigger("share_certificate_print");
+        }
+      }
+
+      // Set button types
+      frm.set_df_property("Print", "button_type", "success");
+      frm.set_df_property("Print-Hin", "button_type", "primary");
+      frm.set_df_property("Print-Mar", "button_type", "warning");
+    }
+  },
+
+  share_application_english_print(frm) {
+    frm.add_custom_button(
+      __("English"),
+      function () {
+        var printUrl = frappe.urllib.get_full_url(
+          "/api/method/frappe.utils.weasyprint.download_pdf?" +
+            "doctype=" +
+            encodeURIComponent("Share Application") +
+            "&name=" +
+            encodeURIComponent(frm.doc.name) +
+            "&print_format=Share English Form" +
+            "&letterhead=Share Head English"
+        );
+        var newWindow = window.open(printUrl);
+        console.log(printUrl); // Log the URL to the console
+        // Additional logic if needed
+      },
+      __("Lang-Print")
+    );
+  },
+
+  share_application_hindi_print(frm) {
+    frm.add_custom_button(
+      __("Hindi"),
+      function () {
+        var printUrl = frappe.urllib.get_full_url(
+          "/api/method/frappe.utils.weasyprint.download_pdf?" +
+            "doctype=" +
+            encodeURIComponent("Share Application") +
+            "&name=" +
+            encodeURIComponent(frm.doc.name) +
+            "&print_format=Share Hindi Form" +
+            "&letterhead=Share Head Hindi"
+        );
+        var newWindow = window.open(printUrl);
+        console.log(printUrl); // Log the URL to the console
+        // Additional logic if needed
+      },
+      __("Lang-Print")
+    );
+  },
+
+  share_application_marathi_print(frm) {
+    frm.add_custom_button(
+      __("Marathi"),
+      function () {
+        var printUrl = frappe.urllib.get_full_url(
+          "/api/method/frappe.utils.weasyprint.download_pdf?" +
+            "doctype=" +
+            encodeURIComponent("Share Application") +
+            "&name=" +
+            encodeURIComponent(frm.doc.name) +
+            "&print_format=Share Marathi Form" +
+            "&letterhead=Share Head Marathi"
+        );
+        var newWindow = window.open(printUrl);
+        console.log(printUrl); // Log the URL to the console
+        // Additional logic if needed
+      },
+      __("Lang-Print")
+    );
+  },
+
+  share_application_default_print(frm) {
+    frm.add_custom_button(__("Form Print"), function () {
+      var printUrl = frappe.urllib.get_full_url(
+        "/api/method/frappe.utils.weasyprint.download_pdf?" +
+          "doctype=" +
+          encodeURIComponent("Share Application") +
+          "&name=" +
+          encodeURIComponent(frm.doc.name) +
+          "&print_format=Share Marathi Form" +
+          "&letterhead=Share Head Marathi"
+      );
+      var newWindow = window.open(printUrl);
+      console.log(printUrl); // Log the URL to the console
+      // Additional logic if needed
+    });
+  },
+
+  share_certificate_print(frm) {
+    frm.add_custom_button(__("Certificate"), function () {
+      frappe.call({
+        method:
+          "share_holder_management.share_holder_management.doctype.share_application.share_application.share_certificate_template",
+        args: { docname: frm.doc.name },
+        callback: function (response) {
+          if (response.message && response.message.html_content) {
+            var newWindow = window.open();
+            newWindow.document.write(response.message.html_content);
+          }
+        },
+      });
+    });
   },
 });

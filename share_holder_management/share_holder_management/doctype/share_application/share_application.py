@@ -50,11 +50,12 @@ class ShareApplication(Document):
     def before_insert(self):
         # Set application_sr_no using the value from check_last_application_sr_no
         self.application_sr_no = check_last_application_sr_no()
+        
       
 
     def before_save(self):
-        self.base_share_amount = self.no_of_shares * 100  
-        self.tot_share_amt = (self.no_of_shares * 100) + 10
+        self.base_share_amount = self.no_of_shares * 10  
+        self.tot_share_amt = (self.no_of_shares * 10) + 10
         self.share_customer_name = self.customer_name
         self.acc_name = self.customer_name
         #self.saving_current_ac_no = self.ac_no
@@ -167,6 +168,14 @@ def get_branch_checkin_details(branch):
         as_dict=True,
     )
 
+    check_branch_day_end = frappe.db.sql(
+        f"""SELECT log_type FROM `tabDay Management Checkin`
+            WHERE DATE(log_time) = %s AND branch = %s AND log_type = 'End'
+            LIMIT 1""",
+        (today_datetime.date(), branch),
+        as_dict=True,
+    )
+
     # HTML string for the table
     html_table = "<table border='1'>"
 
@@ -189,8 +198,10 @@ def get_branch_checkin_details(branch):
     # Check if both check_ho_day_start and check_branch_day_start have 'Start' log_type values
     if check_ho_day_start and check_branch_day_start:
         flag = "Day Start"
+        if check_branch_day_end:
+            flag = "Branch Day Ended"  
     elif check_ho_day_start:
-        flag = "Branch Day Not Started"
+        flag = "Branch Day Not Started"  
     else:
         flag = "Branch and HO Day Not Started"
 
