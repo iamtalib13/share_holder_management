@@ -54,6 +54,7 @@ class ShareApplication(Document):
       
 
     def before_save(self):
+        
         self.base_share_amount = self.no_of_shares * 10  
         self.tot_share_amt = (self.no_of_shares * 10) + 10
         self.share_customer_name = self.customer_name

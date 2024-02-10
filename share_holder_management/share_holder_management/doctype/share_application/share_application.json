@@ -128,8 +128,7 @@
   {
    "fieldname": "customer_name",
    "fieldtype": "Data",
-   "label": "Customer Name",
-   "reqd": 1
+   "label": "Customer Name"
   },
   {
    "default": "Individual",
@@ -142,8 +141,7 @@
    "fieldname": "salutation",
    "fieldtype": "Link",
    "label": "Salutation",
-   "options": "Salutation",
-   "reqd": 1
+   "options": "Salutation"
   },
   {
    "fieldname": "column_break_sb8h",
@@ -164,33 +162,28 @@
   {
    "fieldname": "date_of_birth",
    "fieldtype": "Date",
-   "label": "Birth Date",
-   "reqd": 1
+   "label": "Birth Date"
   },
   {
    "fieldname": "address",
    "fieldtype": "Small Text",
    "label": "Landmark",
-   "max_height": "180px",
-   "reqd": 1
+   "max_height": "180px"
   },
   {
    "fieldname": "taluka",
    "fieldtype": "Data",
-   "label": "Taluka / Tahshil",
-   "reqd": 1
+   "label": "Taluka / Tahshil"
   },
   {
    "fieldname": "city",
    "fieldtype": "Data",
-   "label": "City/District",
-   "reqd": 1
+   "label": "City/District"
   },
   {
    "fieldname": "mobile",
    "fieldtype": "Data",
-   "label": "Mobile",
-   "reqd": 1
+   "label": "Mobile"
   },
   {
    "fieldname": "age",
@@ -213,15 +206,13 @@
    "fieldtype": "Data",
    "in_list_view": 1,
    "in_standard_filter": 1,
-   "label": "Customer ID",
-   "reqd": 1
+   "label": "Customer ID"
   },
   {
    "fieldname": "occupation",
    "fieldtype": "Select",
    "label": "Occupation",
-   "options": "\nFarmer\nBusiness\nTeacher\nAdvocate\nGovt Employee\nPrivate Employee\nDoctor",
-   "reqd": 1
+   "options": "\nFarmer\nBusiness\nTeacher\nAdvocate\nGovt Employee\nPrivate Employee\nDoctor"
   },
   {
    "default": "Regular",
@@ -233,8 +224,7 @@
   {
    "fieldname": "membership_form",
    "fieldtype": "Attach",
-   "label": "Membership form",
-   "reqd": 1
+   "label": "Membership form"
   },
   {
    "fieldname": "column_break_lhcd",
@@ -243,8 +233,7 @@
   {
    "fieldname": "payment_receipt",
    "fieldtype": "Attach",
-   "label": "Payment Receipt",
-   "reqd": 1
+   "label": "Payment Receipt"
   },
   {
    "fieldname": "column_break_kxcr",
@@ -253,8 +242,7 @@
   {
    "fieldname": "kyc",
    "fieldtype": "Attach",
-   "label": "KYC ( Adhar / PAN / Voter ID )",
-   "reqd": 1
+   "label": "KYC ( Adhar / PAN / Voter ID )"
   },
   {
    "fieldname": "column_break_nrre",
@@ -281,8 +269,7 @@
    "fieldname": "ac_type",
    "fieldtype": "Data",
    "label": "Account Type",
-   "read_only": 1,
-   "reqd": 1
+   "read_only": 1
   },
   {
    "fieldname": "ac_no",
@@ -308,14 +295,12 @@
    "fieldname": "saving_current_gl_code",
    "fieldtype": "Link",
    "label": "Account GL Code",
-   "options": "Account GL Code",
-   "reqd": 1
+   "options": "Account GL Code"
   },
   {
    "fieldname": "saving_current_ac_no",
    "fieldtype": "Data",
-   "label": "Account No.",
-   "reqd": 1
+   "label": "Account No."
   },
   {
    "fetch_from": "branch_gl.ac_type",
@@ -356,8 +341,7 @@
    "fieldname": "no_of_shares",
    "fieldtype": "Int",
    "label": "No. of Shares",
-   "non_negative": 1,
-   "reqd": 1
+   "non_negative": 1
   },
   {
    "fieldname": "column_break_iwul",
@@ -446,14 +430,13 @@
   {
    "fieldname": "tot_share_amt",
    "fieldtype": "Currency",
-   "label": "Share Application Amount",
+   "label": "Total Share Amount",
    "read_only": 1
   },
   {
    "fieldname": "aadhaar_number",
    "fieldtype": "Data",
-   "label": "Aadhaar Number",
-   "reqd": 1
+   "label": "Aadhaar Number"
   },
   {
    "default": "Indian",
@@ -467,15 +450,13 @@
    "fieldname": "account_type",
    "fieldtype": "Select",
    "label": "Account Type",
-   "options": "\nSAVING\nCURRENT\nLIABILITY\nLOAN",
-   "reqd": 1
+   "options": "\nSAVING\nCURRENT\nLIABILITY\nLOAN"
   },
   {
    "fieldname": "gender",
    "fieldtype": "Select",
    "label": "Gender",
-   "options": "\nMale\nFemale\nR\nFirm\nTransgender",
-   "reqd": 1
+   "options": "\nMale\nFemale\nR\nFirm\nTransgender"
   },
   {
    "bold": 1,
@@ -628,7 +609,7 @@
  "hide_toolbar": 1,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-02-08 16:57:45.461421",
+ "modified": "2024-02-09 17:21:29.671146",
  "modified_by": "Administrator",
  "module": "Share Holder Management",
  "name": "Share Application",
@@ -683,7 +664,7 @@
    "title": "Pending From HO"
   },
   {
-   "color": "Green",
+   "color": "Cyan",
    "title": "Submitted"
   },
   {
