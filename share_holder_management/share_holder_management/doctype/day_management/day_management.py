@@ -2,6 +2,9 @@
 # For license information, please see license.txt
 import frappe
 from frappe.model.document import Document
+from frappe.utils import now
+from datetime import datetime
+from frappe import _
 
 
 class DayManagement(Document):
@@ -10,6 +13,67 @@ class DayManagement(Document):
 @frappe.whitelist()
 def get_server_datetime():
     return frappe.utils.now_datetime()
+
+@frappe.whitelist()
+def start_branch_day(branch, userId,employeeName):
+    try:
+        # Import the now function from frappe.utils
+        from frappe.utils import now
+        
+        # Create a new document
+        doc = frappe.new_doc('Day Management Checkin')
+        doc.log_type = 'Start'
+        doc.branch = branch
+        doc.log_time = now()
+        doc.employee = userId
+        doc.emp_name=employeeName
+
+        try:
+            doc.insert()
+            # Log success to the console
+            print(f"Branch day started successfully for {branch} by user {userId}, Employee Name: {doc.emp_name}")
+            return True
+        
+        except frappe.DuplicateEntryError:
+            print(f"Document for {branch} by user {userId} already exists")
+            return False
+
+
+    except Exception as e:
+        # Log error to the console
+        print(f"Error starting branch day for {branch} by user {userId}: {str(e)}")
+        frappe.throw(str(e))
+
+
+@frappe.whitelist()
+def end_branch_day(branch, userId, employeeName):
+    try:
+        
+
+        # Create a new document
+        doc = frappe.new_doc('Day Management Checkin')
+        doc.log_type = 'End'
+        doc.branch = branch
+        doc.log_time = now()
+        doc.employee = userId
+        doc.emp_name = employeeName
+
+        try:
+            doc.insert()
+            # Log success to the console
+            print(f"Branch day ended successfully for {branch} by user {userId}, Employee Name: {doc.emp_name}")
+            return True
+
+        except frappe.DuplicateEntryError:
+            print(f"Document for {branch} by user {userId} already exists")
+            return False
+
+
+    except Exception as e:
+        # Log error to the console
+        print(f"Error ending branch day for {branch} by user {userId}: {str(e)}")
+        frappe.throw(str(e))
+
 
 @frappe.whitelist()
 def show_branch_logs():
@@ -21,7 +85,7 @@ def show_branch_logs():
         MAX(CASE WHEN d.log_type = 'start' THEN 'start' END) AS start_log_type,
         MAX(CASE WHEN d.log_type = 'end' THEN d.log_time END) AS end_time,
         MAX(CASE WHEN d.log_type = 'end' THEN 'end' END) AS end_log_type,
-        MAX(CASE WHEN d.log_type = 'start' THEN d.employee_name END) AS Day_Start_by,
+        MAX(CASE WHEN d.log_type = 'start' THEN d.employee END) AS Day_Start_by,
         MAX(CASE WHEN d.log_type = 'end' THEN d.employee_name END) AS Day_End_by
     FROM (
        SELECT DISTINCT branch
@@ -114,3 +178,30 @@ def show_ho_logs():
         response["total_branch_count"] = branches_result[0].get("total_branch_count", 0)
 
     return response
+
+# Add these functions to your Python code
+
+# @frappe.whitelist()
+# def start_branch_day(branch, userId):
+#     try:
+#         # Create a new document
+#         doc = frappe.new_doc('Day Management Checkin')
+#         doc.log_type = 'Start'
+#         doc.branch = branch
+#         doc.log_time = now()
+#         doc.employee_id = userId  # Include the userId in the document
+        
+#         try:
+#             doc.insert()
+#             # Log success to the console
+#             print(f"Branch day started successfully for {branch} by user {userId}")
+#         except frappe.DuplicateEntryError:
+#             print()
+
+#         return True
+
+#     except Exception as e:
+#         # Log error to the console
+#         print(f"Error starting branch day for {branch} by user {userId}: {str(e)}")
+#         frappe.throw(str(e))
+

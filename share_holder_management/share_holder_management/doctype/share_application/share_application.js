@@ -4,6 +4,20 @@
 frappe.ui.form.on("Share Application", {
   validate: function (frm) {},
   refresh(frm) {
+    if (frm.doc.status == "Sanctioned") {
+      console.log("Sanctioned");
+
+      // Generate the barcode SVG
+      const barcode_svg = `<svg data-barcode-value="${frm.doc.application_sr_no}" height="80"></svg>`;
+
+      // Update the barcode field with the generated SVG
+      frm.set_value("application_sr_no_barcode", barcode_svg);
+      frm.refresh_field("application_sr_no_barcode");
+
+      // Save the form
+      frm.save();
+    }
+
     frm.trigger("section_colors");
 
     frm.trigger("child_table_controls");
@@ -1266,6 +1280,9 @@ frappe.ui.form.on("Share Application", {
 
   share_certificate_print(frm) {
     frm.add_custom_button(__("Certificate"), function () {
+      var apk_sr_no = frm.doc.application_sr_no;
+      frm.set_value("application_sr_no_barcode", apk_sr_no);
+
       frappe.call({
         method:
           "share_holder_management.share_holder_management.doctype.share_application.share_application.share_certificate_template",

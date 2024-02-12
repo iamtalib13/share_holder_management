@@ -212,8 +212,8 @@ frappe.ui.form.on("Day Management Checkin", {
 
       //Successfully logged the start of the day at Gondia HO.
 
-      frm.disable_form();
-      frm.disable_save();
+      //frm.disable_form();
+      //frm.disable_save();
     }
   },
 
@@ -222,4 +222,10 @@ frappe.ui.form.on("Day Management Checkin", {
       frappe.set_route("/app/day-management");
     }
   },
+
+  // before_save: function (frm) {
+  //   let endlog = frm.doc.log_type;
+  //   console.log("End Logtype:", endlog);
+
+  // },
 });

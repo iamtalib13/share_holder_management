@@ -4,7 +4,7 @@
 frappe.ui.form.on("Day Management", {
   refresh: function (frm) {
     frm.trigger("populate_ho_log_html");
-    frm.trigger("populate_branch_log_html");
+    // frm.trigger("populate_branch_log_html");
 
     //frm.trigger("day_intro");
     if (!frm.doc.day_start) {
@@ -79,292 +79,6 @@ frappe.ui.form.on("Day Management", {
   day_intro: function (frm) {
     frm.set_intro("<b>Day Start : </b>" + frm.doc.day_start, "green");
     frm.set_intro("<b>Day End : </b>" + frm.doc.day_end, "green");
-  },
-
-  async populate_branch_log_html(frm) {
-    // Fetch the data from the backend (check above for sample response)
-    frm.call({
-      method: "show_branch_logs",
-      args: {
-        self: frm.doc.name,
-      },
-      callback: function (r) {
-        if (!r.exc) {
-          const data = r.message;
-          console.log(data);
-          frm.call({
-            method: "get_server_datetime",
-            callback: function (r) {
-              const serverDateTime = r.message;
-              console.log(serverDateTime);
-
-              // Convert the server datetime to a JavaScript Date object
-              const dateObject = new Date(serverDateTime);
-
-              // Extract individual components (year, month, day)
-              const year = dateObject.getFullYear();
-              const month = (dateObject.getMonth() + 1)
-                .toString()
-                .padStart(2, "0"); // Months are zero-based
-              const day = dateObject.getDate().toString().padStart(2, "0");
-
-              // Form the desired date string
-              const formattedDate = `${day}-${month}-${year}`;
-
-              // Generate HTML directly in JavaScript
-              let html = `<html lang="en">
-              <head>
-                  <meta charset="UTF-8">
-                  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                  <title>Branch Log Information</title>
-                  <style>
-                      body {
-                          margin: 0; /* Remove default body margin */
-                          padding: 0; /* Remove default body padding */
-                      }
-              
-                      table {
-                          border-collapse: collapse;
-                          width: 100%;
-                          margin-top: 20px;
-                          overflow: hidden;
-                      }
-              
-                      .branch-th {
-                          background-color: #c2d7df;
-                          height: 60px;
-                          text-align: center;
-                          font-size: 15px;
-                      }
-              
-                      .branch-td {
-                          border: none;
-                          padding: 8px;
-                          text-align: center;
-                      }
-              
-                      thead {
-                          position: sticky;
-                          top: 0;
-                          z-index: 100;
-                      }
-              
-                      .branch-row_border {
-                          border-bottom: 1px solid #D9D9D9;
-                          height: 60px;
-                      }
-              
-                      .branch-row_border:hover {
-                          background-color: #c2d7df;
-                          cursor: pointer;
-                      }
-              
-                      .start-time {
-                        color: green;
-                        border: 2px solid green;
-                        padding: 3px 10px;
-                        border-radius: 2rem;
-                        font-weight: 600;
-                      }
-              
-                      .end-time {
-                          color: red;
-                          border: 2px solid red;
-                          padding: 3px 10px;
-                          border-radius: 2rem;
-                          font-weight: 600;
-                      }
-              
-                      .branch_heading {
-                          display: flex;
-                          justify-content: space-between;
-                          align-items: start;
-                        
-                      }
-              
-                     
-              
-                      label {
-                        margin-right: 5px;
-                        margin-bottom: 0;
-                        font-weight: bold;
-                        color: black;
-
-                      }
-              
-                      select {
-                          width: 150px;
-                          padding: 5px; /* Add padding for styling */
-                      }
-                      #totalRows{
-                        text-align:right;
-                        
-                      }
-                  </style>
-              </head>
-              <body>
-                  <div class="branch_heading">
-                      <div class="heading_left">
-                          <h3>Branch Log Information</h3>
-                      </div>
-                      <div class="heading_right">
-                      <label for="branchSearch">Search:</label>
-                      <input type="text" id="branchSearch" placeholder="Search by Branch">
-
-                          <!-- Add the filter select dropdown -->
-                          <label for="filter">Sort By:</label>
-                          <select id="filter">
-                              <option value="all">All</option>
-                              <option value="started"> Started</option>
-                              <option value="ended"> Ended </option>
-                              <option value="notStarted">Not Started</option>
-                              <option value="notEnded">Not Ended</option>
-                          </select>
-                      </div>
-                  </div>
-                  <!-- Show Total Row count -->
-                  <div><h5 id="totalRows"></h5></div>
-                  
-                  <table class="branch_log_html_table">
-                      <thead>
-                          <tr>
-                              <th class="branch-th">Sr. No.</th>
-                              <th class="branch-th">Branch</th>
-                              <th class="branch-th">Start Date and Time</th>
-                              <th class="branch-th">Day Start By</th>
-                              <th class="branch-th">End Date and Time</th>
-                              <th class="branch-th">Day End By</th>
-                          </tr>
-                      </thead>
-                      <tbody>
-                          ${data.result
-                            .map(
-                              (row, index) => `<tr class="branch-row_border">
-                                      <td class="branch-td">${index + 1}</td>
-                                      <td class="branch-td">${row.branch}</td>
-                                      <td class="branch-td">${
-                                        row.start_time
-                                          ? `${
-                                              row.start_log_type
-                                                ? "<span class='start-time'>Started </span>"
-                                                : ""
-                                            }<br>${new Date(
-                                              row.start_time
-                                            ).toLocaleString("en-GB", {
-                                              day: "numeric",
-                                              month: "numeric",
-                                              year: "numeric",
-                                              hour: "2-digit",
-                                              minute: "2-digit",
-                                              hour12: true,
-                                            })}`
-                                          : ""
-                                      }</td>
-                                      <td class="branch-td">${
-                                        row.Day_Start_by || ""
-                                      }</td>
-                                      <td class="branch-td">${
-                                        row.end_time
-                                          ? `${
-                                              row.end_log_type
-                                                ? "<span class='end-time'>Ended </span>"
-                                                : ""
-                                            }<br>${new Date(
-                                              row.end_time
-                                            ).toLocaleString("en-GB", {
-                                              day: "numeric",
-                                              month: "numeric",
-                                              year: "numeric",
-                                              hour: "2-digit",
-                                              minute: "2-digit",
-                                              hour12: true,
-                                            })}`
-                                          : ""
-                                      }</td>
-                                      <td class="branch-td">${
-                                        row.Day_End_by || " "
-                                      }</td>
-                                  </tr>`
-                            )
-                            .join("")}
-                      </tbody>
-                  </table>
-              </body>
-              </html>
-              `;
-
-              // Set the above `html` as Summary HTML
-              frm.set_df_property("branch_log_html", "options", html);
-
-              const filterDropdown = document.getElementById("filter");
-              const branchSearchInput = document.getElementById("branchSearch");
-              const branchSearchLabel = document.querySelector(
-                'label[for="branchSearch"]'
-              );
-              const totalRowsElement = document.getElementById("totalRows");
-
-              // Function to filter rows based on both filters
-              function applyFilters() {
-                const filterValue = filterDropdown.value;
-                const searchValue = branchSearchInput.value
-                  .trim()
-                  .toLowerCase();
-
-                const rows = document.querySelectorAll(".branch-row_border");
-                let visibleRowIndex = 1;
-
-                rows.forEach((row) => {
-                  const started = row.querySelector(".start-time");
-                  const ended = row.querySelector(".end-time");
-                  const branch = row
-                    .querySelector(".branch-td:nth-child(2)")
-                    .textContent.toLowerCase();
-
-                  const matchesFilter =
-                    filterValue === "all" ||
-                    (filterValue === "started" && started) ||
-                    (filterValue === "ended" && ended) ||
-                    (filterValue === "notStarted" && !started) ||
-                    (filterValue === "notEnded" && !ended);
-
-                  const matchesBranchSearch = branch.includes(searchValue);
-
-                  if (matchesFilter && matchesBranchSearch) {
-                    row.style.display = "";
-                  } else {
-                    row.style.display = "none";
-                  }
-
-                  // Update serial number only for visible rows
-                  if (row.style.display !== "none") {
-                    row.querySelector(".branch-td:first-child").textContent =
-                      visibleRowIndex++;
-                  }
-                });
-
-                // Update and display the total number of visible rows
-                totalRowsElement.textContent = `Total records ${
-                  visibleRowIndex - 1
-                }`;
-              }
-
-              // Add event listener for filter changes
-              filterDropdown.addEventListener("change", applyFilters);
-
-              // Add event listener for branch search changes
-              branchSearchInput.addEventListener("input", applyFilters);
-
-              // Set initial styling for branch search label
-              branchSearchLabel.style.marginRight = "5px";
-              branchSearchLabel.style.fontWeight = "bold";
-              branchSearchLabel.style.color = "black";
-            },
-          });
-        } else {
-          frappe.msgprint("Error fetching details");
-        }
-      },
-    });
   },
 
   async populate_ho_log_html(frm) {
@@ -596,7 +310,6 @@ frappe.ui.form.on("Day Management", {
                 }
               </style>
               <script>
-            
                 // Function to start the HO Day
                 function startHO() {
                   // Redirect to another page (replace 'YOUR_URL' with the actual URL)
@@ -693,6 +406,461 @@ frappe.ui.form.on("Day Management", {
 
               // Set the above `html` as Summary HTML
               frm.set_df_property("ho_log_html", "options", html);
+
+              // Check if HO day is started before triggering the branch log function
+              if (startDetails.log_type === "Start") {
+                frm.trigger("populate_branch_log_html");
+              }
+            },
+          });
+        } else {
+          frappe.msgprint("Error fetching details");
+        }
+      },
+    });
+  },
+
+  async populate_branch_log_html(frm) {
+    // Fetch the data from the backend (check above for sample response)
+    frm.call({
+      method: "show_branch_logs",
+      args: {
+        self: frm.doc.name,
+      },
+      callback: function (r) {
+        if (!r.exc) {
+          const data = r.message;
+          console.log(data);
+          frm.call({
+            method: "get_server_datetime",
+            callback: function (r) {
+              const serverDateTime = r.message;
+              console.log(serverDateTime);
+
+              // Convert the server datetime to a JavaScript Date object
+              const dateObject = new Date(serverDateTime);
+
+              // Extract individual components (year, month, day)
+              const year = dateObject.getFullYear();
+              const month = (dateObject.getMonth() + 1)
+                .toString()
+                .padStart(2, "0"); // Months are zero-based
+              const day = dateObject.getDate().toString().padStart(2, "0");
+
+              // Form the desired date string
+              const formattedDate = `${day}-${month}-${year}`;
+
+              // Generate HTML directly in JavaScript
+              let html = `<html lang="en">
+              <head>
+                  <meta charset="UTF-8">
+                  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                  <title>Branch Log Information</title>
+                  <style>
+                      body {
+                          margin: 0; /* Remove default body margin */
+                          padding: 0; /* Remove default body padding */
+                      }
+              
+                      table {
+                          border-collapse: collapse;
+                          width: 100%;
+                          margin-top: 20px;
+                          overflow: hidden;
+                      }
+              
+                      .branch-th {
+                          background-color: #c2d7df;
+                          height: 60px;
+                          text-align: center;
+                          font-size: 15px;
+                      }
+              
+                      .branch-td {
+                          border: none;
+                          padding: 8px;
+                          text-align: center;
+                      }
+              
+                      thead {
+                          position: sticky;
+                          top: 0;
+                          z-index: 100;
+                      }
+              
+                      .branch-row_border {
+                          border-bottom: 1px solid #D9D9D9;
+                          height: 60px;
+                      }
+              
+                      .branch-row_border:hover {
+                          background-color: #c2d7df;
+                          cursor: pointer;
+                      }
+              
+                      .start-time {
+                        color: green;
+                        border: 2px solid green;
+                        padding: 3px 10px;
+                        border-radius: 2rem;
+                        font-weight: 600;
+                      }
+              
+                      .end-time {
+                          color: red;
+                          border: 2px solid red;
+                          padding: 3px 10px;
+                          border-radius: 2rem;
+                          font-weight: 600;
+                      }
+              
+                      .branch_heading {
+                          display: flex;
+                          justify-content: space-between;
+                          align-items: start;
+                        
+                      }
+
+                      .startbtn{
+                        background-color: green;
+                        padding: 3px 10px;
+                        border-radius: 1rem;
+                        font-weight: 600;
+                        color: white;
+                        border: none;
+                      }
+              
+                      .startbtn:focus{
+                        outline:none;
+                      }
+                      .endbtn{
+                        background-color: red;
+                        padding: 3px 10px;
+                        border-radius: 1rem;
+                        font-weight: 600;
+                        color: white;
+                        border: none;
+                      }
+                      .endbtn:focus{
+                        outline:none;
+                      }
+                      label {
+                        margin-right: 5px;
+                        margin-bottom: 0;
+                        font-weight: bold;
+                        color: black;
+
+                      }
+              
+                      select {
+                          width: 150px;
+                          padding: 5px; /* Add padding for styling */
+                      }
+                      #totalRows{
+                        text-align:right;
+                        
+                      }
+                  </style>
+                  <script>
+                  function startButton(branchName) {
+                    console.log("Button click");
+                    
+                    const branch = branchName;
+                    console.log("Branch Name:", branch);
+
+                    // Get the current user
+                    const currentUser = frappe.session.user;
+                    console.log("Current User:", currentUser);
+
+                    // Extract user ID from the email address
+                    const userId = currentUser.split('@')[0];
+                    console.log("User ID:", userId);
+
+                    // Fetch logged-in employee details
+                    frappe.call({
+                      method: "frappe.client.get_value",
+                      args: {
+                        doctype: "Employee",
+                        filters: { user_id: currentUser },
+                        fieldname: ["employee_name"]
+                      },
+                      callback: function(employeeResponse) {
+                        if (!employeeResponse.exc) { 
+                          const employeeName = employeeResponse.message.employee_name;
+                          console.log("Employee name", employeeName);
+
+                          // Add any additional logic or actions you want to perform
+                          frappe.call({
+                            method: "share_holder_management.share_holder_management.doctype.day_management.day_management.start_branch_day",
+                            args: {
+                              branch: branch,
+                              userId: userId,
+                              employeeName: employeeName
+                          },
+                          callback: function(response) {
+                            // Callback function to handle the server's response
+                            if (!response.exc) {
+                              const data = response.message;
+                              console.log("Response", data);
+                              // Check if emp_name is present in the response
+                              console.log("Employee Name:", data.emp_name);
+
+                              frappe.show_alert({
+                                message: __(branch + ' Branch started Successfully'),
+                                indicator: 'green'
+                              }, 5);
+                            
+                              // Delay the page reload by 2 seconds (adjust as needed)
+                              setTimeout(function() {
+                                // Refresh the page after the alert is shown
+                                location.reload();
+                              }, 1000);
+                                
+                            } else {
+                                // Handle errors
+                                console.error("Error:", response.exc);
+                            }
+                        }
+                    });
+                    } else {
+                    // Handle errors fetching employee details
+                      console.error("Error fetching employee details:", employeeResponse.exc);
+                    }
+                  }
+                });
+              }
+
+
+              function endButton(branchName) {
+                console.log("End Button click");
+            
+                const branch = branchName;
+                console.log("Branch Name:", branch);
+            
+                // Get the current user
+                const currentUser = frappe.session.user;
+                console.log("Current User:", currentUser);
+            
+                // Extract user ID from the email address
+                const userId = currentUser.split('@')[0];
+                console.log("User ID:", userId);
+            
+                // Fetch logged-in employee details
+                frappe.call({
+                  method: "frappe.client.get_value",
+                  args: {
+                    doctype: "Employee",
+                    filters: { user_id: currentUser },
+                    fieldname: ["employee_name"]
+                  },
+                  callback: function (employeeResponse) {
+                    if (!employeeResponse.exc) {
+                      const employeeName = employeeResponse.message.employee_name;
+                      console.log("Employee name", employeeName);
+            
+                      // Add any additional logic or actions you want to perform
+                      frappe.call({
+                        method: "share_holder_management.share_holder_management.doctype.day_management.day_management.end_branch_day",
+                        args: {
+                          branch: branch,
+                          userId: userId,
+                          employeeName: employeeName
+                        },
+                        callback: function (response) {
+                          // Callback function to handle the server's response
+                          if (!response.exc) {
+                            const data = response.message;
+                            console.log("Response", data);
+                            // Check if emp_name is present in the response
+                            console.log("Employee Name:", data.emp_name);
+            
+                            frappe.show_alert({
+                              message: __(branch + ' Branch ended Successfully'),
+                              indicator: 'green'
+                            }, 5);
+            
+                            // Delay the page reload by 2 seconds (adjust as needed)
+                            setTimeout(function () {
+                              // Refresh the page after the alert is shown
+                              location.reload();
+                            }, 1000);
+            
+                          } else {
+                            // Handle errors
+                            console.error("Error:", response.exc);
+                          }
+                        }
+                      });
+                    } else {
+                      // Handle errors fetching employee details
+                      console.error("Error fetching employee details:", employeeResponse.exc);
+                    }
+                  }
+                });
+              }
+              </script>
+
+              
+              </head>
+              <body>
+                  <div class="branch_heading">
+                      <div class="heading_left">
+                          <h3>Branch Log Information</h3>
+                      </div>
+                      <div class="heading_right">
+                      <label for="branchSearch">Search:</label>
+                      <input type="text" id="branchSearch" placeholder="Search by Branch">
+
+                          <!-- Add the filter select dropdown -->
+                          <label for="filter">Sort By:</label>
+                          <select id="filter">
+                              <option value="all">All</option>
+                              <option value="started"> Started</option>
+                              <option value="ended"> Ended </option>
+                              <option value="notStarted">Not Started</option>
+                              <option value="notEnded">Not Ended</option>
+                          </select>
+                      </div>
+                  </div>
+                  <!-- Show Total Row count -->
+                  <div><h5 id="totalRows"></h5></div>
+                  
+                  <table class="branch_log_html_table">
+                      <thead>
+                          <tr>
+                              <th class="branch-th">Sr. No.</th>
+                              <th class="branch-th">Branch</th>
+                              <th class="branch-th">Start Date and Time</th>
+                              <th class="branch-th">Day Start By</th>
+                              <th class="branch-th">End Date and Time</th>
+                              <th class="branch-th">Day End By</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          ${data.result
+                            .map(
+                              (row, index) => `<tr class="branch-row_border">
+                                      <td class="branch-td">${index + 1}</td>
+                                      <td class="branch-td">${row.branch}</td>
+                                      <td class="branch-td">${
+                                        row.start_time
+                                          ? `${
+                                              row.start_log_type
+                                                ? "<span class='start-time'>Started </span>"
+                                                : ""
+                                            }<br>${new Date(
+                                              row.start_time
+                                            ).toLocaleString("en-GB", {
+                                              day: "numeric",
+                                              month: "numeric",
+                                              year: "numeric",
+                                              hour: "2-digit",
+                                              minute: "2-digit",
+                                              hour12: true,
+                                            })}`
+                                          : `<button class="startbtn" onclick="startButton('${row.branch}')">Start</button>`
+                                      }</td>
+                                      <td class="branch-td">${
+                                        row.Day_Start_by || ""
+                                      }</td>
+                                      <td class="branch-td">${
+                                        row.end_time
+                                          ? `${
+                                              row.end_log_type
+                                                ? "<span class='end-time'>Ended </span>"
+                                                : ""
+                                            }<br>${new Date(
+                                              row.end_time
+                                            ).toLocaleString("en-GB", {
+                                              day: "numeric",
+                                              month: "numeric",
+                                              year: "numeric",
+                                              hour: "2-digit",
+                                              minute: "2-digit",
+                                              hour12: true,
+                                            })}`
+                                          : `<button class="endbtn" onclick="endButton('${row.branch}')">End</button>`
+                                      }</td>
+                                    
+                                      <td class="branch-td">${
+                                        row.Day_End_by || " "
+                                      }</td>
+                                      
+                                  </tr>`
+                            )
+                            .join("")}
+                      </tbody>
+                  </table>
+              </body>
+              </html>
+              
+              `;
+
+              // Set the above `html` as Summary HTML
+              frm.set_df_property("branch_log_html", "options", html);
+
+              const filterDropdown = document.getElementById("filter");
+              const branchSearchInput = document.getElementById("branchSearch");
+              const branchSearchLabel = document.querySelector(
+                'label[for="branchSearch"]'
+              );
+              const totalRowsElement = document.getElementById("totalRows");
+
+              // Function to filter rows based on both filters
+              function applyFilters() {
+                const filterValue = filterDropdown.value;
+                const searchValue = branchSearchInput.value
+                  .trim()
+                  .toLowerCase();
+
+                const rows = document.querySelectorAll(".branch-row_border");
+                let visibleRowIndex = 1;
+
+                rows.forEach((row) => {
+                  const started = row.querySelector(".start-time");
+                  const ended = row.querySelector(".end-time");
+                  const branch = row
+                    .querySelector(".branch-td:nth-child(2)")
+                    .textContent.toLowerCase();
+
+                  const matchesFilter =
+                    filterValue === "all" ||
+                    (filterValue === "started" && started) ||
+                    (filterValue === "ended" && ended) ||
+                    (filterValue === "notStarted" && !started) ||
+                    (filterValue === "notEnded" && !ended);
+
+                  const matchesBranchSearch = branch.includes(searchValue);
+
+                  if (matchesFilter && matchesBranchSearch) {
+                    row.style.display = "";
+                  } else {
+                    row.style.display = "none";
+                  }
+
+                  // Update serial number only for visible rows
+                  if (row.style.display !== "none") {
+                    row.querySelector(".branch-td:first-child").textContent =
+                      visibleRowIndex++;
+                  }
+                });
+
+                // Update and display the total number of visible rows
+                totalRowsElement.textContent = `Total records ${
+                  visibleRowIndex - 1
+                }`;
+              }
+
+              // Add event listener for filter changes
+              filterDropdown.addEventListener("change", applyFilters);
+
+              // Add event listener for branch search changes
+              branchSearchInput.addEventListener("input", applyFilters);
+
+              // Set initial styling for branch search label
+              branchSearchLabel.style.marginRight = "5px";
+              branchSearchLabel.style.fontWeight = "bold";
+              branchSearchLabel.style.color = "black";
             },
           });
         } else {

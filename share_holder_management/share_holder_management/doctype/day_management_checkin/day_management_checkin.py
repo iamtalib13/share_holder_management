@@ -7,6 +7,18 @@ from frappe.model.document import Document
 class DayManagementCheckin(Document):
 	pass
 
+def before_validate(self):
+    
+        # Retrieve employee_name from the "Employee" doctype
+        emp_id = 1034
+        emp_name = frappe.db.get_value("Employee", {"employee": emp_id}, "employee_name")
+        if emp_name:
+            # Set the employee_name attribute of the current object
+            self.emp_name = emp_name
+            frappe.throw("setting emp name")
+        else:
+            frappe.throw("Employee not found with ID: {0}".format(self.employee))
+
 
 @frappe.whitelist()
 def get_branch_checkin_details(branch):

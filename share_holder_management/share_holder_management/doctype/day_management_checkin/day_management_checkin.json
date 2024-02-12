@@ -17,16 +17,14 @@
   "branch_code",
   "column_break_ating",
   "employee",
-  "employee_name"
+  "emp_name"
  ],
  "fields": [
   {
    "fieldname": "employee",
-   "fieldtype": "Link",
-   "hidden": 1,
+   "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Employee",
-   "options": "Employee"
+   "label": "Employee"
   },
   {
    "fetch_from": "employee.branch",
@@ -77,17 +75,14 @@
    "fieldtype": "Column Break"
   },
   {
-   "fetch_from": "employee.employee_name",
-   "fieldname": "employee_name",
+   "fieldname": "emp_name",
    "fieldtype": "Data",
-   "hidden": 1,
-   "label": "Employee Name",
-   "read_only": 1
+   "label": "Employee Name"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-02-01 15:57:58.870581",
+ "modified": "2024-02-12 12:11:44.984437",
  "modified_by": "Administrator",
  "module": "Share Holder Management",
  "name": "Day Management Checkin",

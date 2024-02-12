@@ -106,10 +106,6 @@ def branches():
     else:
         print("\nNo branches found.")
 
-
-
-
-
 def day_end():
     try:
         # Fetch distinct branches from the database
@@ -142,43 +138,6 @@ def day_end():
 
     except Exception as e:
         print(f"Error: {e}")
-        
-        
-        
+         
 def update_barcode():
-    batch_size = 50000  # Adjust the batch size as needed
-    total_records = 362962
-    processed_records = 0
-
-    while processed_records < total_records:
-        tickets = frappe.get_all(
-            "Share Application",
-            filters={"status": "Sanctioned"},
-            fields=["name", "status", "application_sr_no", "application_sr_no_barcode"],
-            start=processed_records,
-            limit=batch_size,
-        )
-
-        if not tickets:
-            break  # No more records
-
-        for ticket in tickets:
-            id = ticket.name
-
-            try:
-                # Convert application_sr_no to string before updating application_sr_no_barcode
-                application_sr_no_str = str(ticket.application_sr_no)
-                
-                # Cast to string explicitly for application_sr_no_barcode
-                application_sr_no_barcode_str = str(frappe.utils.strip_html(application_sr_no_str))
-
-                # Update field application_sr_no to application_sr_no_barcode
-                frappe.db.set_value("Share Application", id, "application_sr_no_barcode", application_sr_no_barcode_str, update_modified=False)
-                print(f"Updated record {id}")
-            except Exception as e:
-                print(f"Error updating record {id}: {e}")
-
-        frappe.db.commit()  # Commit changes after updating each batch
-        processed_records += batch_size
-
-    print("\n\nUpdated field application_sr_no to application_sr_no_barcode for records with status 'Sanctioned'\n\n")
+    print("barcode updated")
