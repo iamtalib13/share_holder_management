@@ -45,7 +45,7 @@ def get_end_branch_details(proceeding_date):
     if ho_end_records:
         return "Show Log"
     else:
-        return "Ho not Ended"
+        frappe.throw("Ho not Ended")
   
 @frappe.whitelist()
 def show_proceeding_logs(proceeding_date):

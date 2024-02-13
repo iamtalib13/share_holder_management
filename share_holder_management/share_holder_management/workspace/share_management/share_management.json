@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"pqUprAS_RL\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h1\\\"><b>Share Management</b></span>\",\"col\":12}},{\"id\":\"BQ1uiZMiKm\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Create\",\"col\":3}},{\"id\":\"n-7njW8hzy\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Share Holders\",\"col\":3}},{\"id\":\"lhJWhkoqm8\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Status - Wise</b></span>\",\"col\":12}},{\"id\":\"kLAj6JIVQG\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Draft\",\"col\":3}},{\"id\":\"zCV3GGV7m6\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Pending\",\"col\":3}},{\"id\":\"dmMtlPotUj\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Sanctioned\",\"col\":3}},{\"id\":\"_83jtb7Dcw\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Rejected\",\"col\":3}},{\"id\":\"5rWhdTUUkv\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Return To Branch\",\"col\":3}},{\"id\":\"3LsYU7_EkA\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Day Management Checkin</b></span>\",\"col\":12}},{\"id\":\"W-n20dNCU9\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Day Checkin\",\"col\":3}},{\"id\":\"JBqHldTcNE\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Day Checkin History\",\"col\":3}}]",
+ "content": "[{\"id\":\"pqUprAS_RL\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h1\\\"><b>Share Management</b></span>\",\"col\":12}},{\"id\":\"BQ1uiZMiKm\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Create\",\"col\":3}},{\"id\":\"n-7njW8hzy\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Share Holders\",\"col\":3}},{\"id\":\"lhJWhkoqm8\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Status - Wise</b></span>\",\"col\":12}},{\"id\":\"kLAj6JIVQG\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Draft\",\"col\":3}},{\"id\":\"zCV3GGV7m6\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Submitted to HO\",\"col\":3}},{\"id\":\"fesS2sa9TU\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Received in HO\",\"col\":3}},{\"id\":\"dmMtlPotUj\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Sanctioned\",\"col\":3}},{\"id\":\"_83jtb7Dcw\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Rejected\",\"col\":3}},{\"id\":\"5rWhdTUUkv\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Return To Branch\",\"col\":3}},{\"id\":\"3LsYU7_EkA\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Day Management Checkin</b></span>\",\"col\":12}},{\"id\":\"W-n20dNCU9\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Day Checkin\",\"col\":3}},{\"id\":\"JBqHldTcNE\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Day Checkin History\",\"col\":3}}]",
  "creation": "2024-01-09 10:53:34.815001",
  "custom_blocks": [],
  "docstatus": 0,
@@ -12,7 +12,7 @@
  "is_hidden": 0,
  "label": "Share Management",
  "links": [],
- "modified": "2024-02-07 16:13:56.985775",
+ "modified": "2024-02-13 17:08:35.821259",
  "modified_by": "Administrator",
  "module": "Share Holder Management",
  "name": "Share Management",
@@ -29,6 +29,15 @@
  "sequence_id": 5.0,
  "shortcuts": [
   {
+   "color": "Cyan",
+   "doc_view": "List",
+   "format": "{}",
+   "label": "Received in HO",
+   "link_to": "Share Application",
+   "stats_filter": "[[\"Share Application\",\"status\",\"=\",\"Received\",false]]",
+   "type": "DocType"
+  },
+  {
    "color": "Grey",
    "doc_view": "New",
    "label": "Create",
@@ -37,12 +46,12 @@
    "type": "DocType"
   },
   {
-   "color": "Orange",
+   "color": "Blue",
    "doc_view": "List",
    "format": "{}",
-   "label": "Pending",
+   "label": "Submitted to HO",
    "link_to": "Share Application",
-   "stats_filter": "[[\"Share Application\",\"status\",\"in\",[\"Received\",\"Submitted\",null],false]]",
+   "stats_filter": "[[\"Share Application\",\"status\",\"=\",\"Submitted\",false]]",
    "type": "DocType"
   },
   {

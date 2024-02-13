@@ -17,7 +17,8 @@
   "branch_code",
   "column_break_ating",
   "employee",
-  "emp_name"
+  "emp_name",
+  "refresh"
  ],
  "fields": [
   {
@@ -78,11 +79,19 @@
    "fieldname": "emp_name",
    "fieldtype": "Data",
    "label": "Employee Name"
+  },
+  {
+   "default": "false",
+   "fieldname": "refresh",
+   "fieldtype": "Select",
+   "hidden": 1,
+   "label": "Refresh",
+   "options": "\nfalse\ntrue"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-02-12 12:11:44.984437",
+ "modified": "2024-02-13 16:52:35.486585",
  "modified_by": "Administrator",
  "module": "Share Holder Management",
  "name": "Day Management Checkin",

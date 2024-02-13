@@ -37,6 +37,7 @@
   {
    "fieldname": "response",
    "fieldtype": "Select",
+   "hidden": 1,
    "label": "response",
    "options": "\nTrue\nFalse"
   }
@@ -45,7 +46,7 @@
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2024-02-06 13:59:53.217770",
+ "modified": "2024-02-12 23:00:16.141324",
  "modified_by": "Administrator",
  "module": "Share Holder Management",
  "name": "Share Proceeding",

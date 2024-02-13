@@ -3,6 +3,16 @@
 
 frappe.ui.form.on("Share Proceeding", {
   refresh: function (frm) {
+    if (frm.doc.response === "True") {
+      // Split the proceeding date string by '-' to get year, month, and day
+      var parts = frm.doc.proceeding_date.split("-");
+
+      // Format the date as "DD-MM-YYYY"
+      var formattedDate = parts[2] + "-" + parts[1] + "-" + parts[0];
+
+      // Set the intro message with the formatted date
+      frm.set_intro("Showing records for date - " + formattedDate, "green");
+    }
     // Your refresh code here
 
     console.log("proceeding Date :", frm.doc.proceeding_date);

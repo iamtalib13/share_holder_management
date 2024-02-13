@@ -3,82 +3,34 @@
 
 frappe.ui.form.on("Day Management", {
   refresh: function (frm) {
+    frm.trigger("header_links");
     frm.trigger("populate_ho_log_html");
     // frm.trigger("populate_branch_log_html");
-
-    //frm.trigger("day_intro");
-    if (!frm.doc.day_start) {
-      // frm
-      //   .add_custom_button(__("Day Start"), function () {
-      //     frappe.confirm(
-      //       "Are you sure ?",
-      //       () => {
-      //         frm.call({
-      //           method: "get_server_datetime",
-      //           callback: function (r) {
-      //             if (!r.exc && r.message) {
-      //               frm.set_value("day_start", r.message);
-      //               frm.refresh_field("day_start");
-      //               frm.save();
-      //             } else {
-      //               // Handle the case where there is an error or no response
-      //               console.error(
-      //                 "SERVER INTERNET ERROR ",
-      //                 r.exc || "No response"
-      //               );
-      //             }
-      //           },
-      //         });
-      //       },
-      //       () => {
-      //         // action to perform if No is selected
-      //       }
-      //     );
-      //   })
-      //   .css({
-      //     "background-color": "#28a745", // Set green color
-      //     color: "#ffffff", // Set font color to white
-      //   });
-    }
-
-    if (!frm.doc.day_end) {
-      // frm
-      //   .add_custom_button(__("Day End"), function () {
-      //     frappe.confirm(
-      //       "Are you sure ?",
-      //       () => {
-      //         frm.call({
-      //           method: "get_server_datetime",
-      //           callback: function (r) {
-      //             if (!r.exc && r.message) {
-      //               frm.set_value("day_end", r.message);
-      //               frm.refresh_field("day_end");
-      //               frm.save();
-      //             } else {
-      //               // Handle the case where there is an error or no response
-      //               console.error(
-      //                 "SERVER INTERNET ERROR ",
-      //                 r.exc || "No response"
-      //               );
-      //             }
-      //           },
-      //         });
-      //       },
-      //       () => {
-      //         // action to perform if No is selected
-      //       }
-      //     );
-      //   })
-      //   .css({
-      //     "background-color": "#28a745", // Set green color
-      //     color: "#ffffff", // Set font color to white
-      //   });
-    }
   },
 
   day_intro: function (frm) {
     frm.set_intro("<b>Day Start : </b>" + frm.doc.day_start, "green");
     frm.set_intro("<b>Day End : </b>" + frm.doc.day_end, "green");
+  },
+  async header_links(frm) {
+    // Customize the navbar
+    // Intercept the click event for "Share Management" link
+    $("#navbar-breadcrumbs a[href='/app/share-management']").on(
+      "click",
+      function (event) {
+        // Redirect to the home page
+        window.location.href = "/app";
+        event.preventDefault();
+      }
+    );
+    $("#navbar-breadcrumbs a[href='/app/Executive']").on(
+      "click",
+      function (event) {
+        // Redirect to the home page
+        window.location.href = "/app";
+        event.preventDefault();
+      }
+    );
   },
 
   async populate_ho_log_html(frm) {
@@ -868,5 +820,9 @@ frappe.ui.form.on("Day Management", {
         }
       },
     });
+  },
+  onload: function (frm) {
+    frm.trigger("header_links");
+    console.log("Onload");
   },
 });

@@ -2,7 +2,14 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on("Share Application", {
-  validate: function (frm) {},
+  validate: function (frm) {
+    // Check if the child table is empty
+    if (!frm.doc.nominee_details || frm.doc.nominee_details.length === 0) {
+      frappe.throw("Please Add at Least One Nominee");
+    } else {
+      //frappe.msgprint("The child table is not empty.");
+    }
+  },
   refresh(frm) {
     if (frm.doc.status == "Sanctioned") {
       console.log("Sanctioned");
@@ -115,19 +122,6 @@ frappe.ui.form.on("Share Application", {
                         "red" // Change the color as needed
                       );
 
-                      // // Custom buttons
-                      // frm.add_custom_button("Click Here to Start", () => {
-                      //   frappe.new_doc(
-                      //     "Day Management Checkin",
-                      //     function (doc) {
-                      //       frappe.set_route(
-                      //         "Form",
-                      //         "Day Management Checkin",
-                      //         doc.name
-                      //       );
-                      //     }
-                      //   );
-                      // });
                       // Message to be displayed in the dialog
                       var message =
                         "Branch Day Not Started. Do you want to start?";
@@ -146,6 +140,7 @@ frappe.ui.form.on("Share Application", {
                           frappe.new_doc(
                             "Day Management Checkin",
                             function (doc) {
+                              console.log("New document created:", doc);
                               frappe.set_route(
                                 "Form",
                                 "Day Management Checkin",
@@ -153,6 +148,7 @@ frappe.ui.form.on("Share Application", {
                               );
                             }
                           );
+
                           dialog.hide();
                         },
                         primary_action_label: __("Yes"),
@@ -1093,6 +1089,146 @@ frappe.ui.form.on("Share Application", {
         }
       }
     );
+    frm.fields_dict["customer_id"].$input.on("keydown", function (event) {
+      var key = event.key;
+
+      // Validate that only numbers, right arrow, and left arrow are allowed
+      var regex = /^[0-9]+$/;
+
+      // Allow only numeric keys (0-9), Right Arrow, Left Arrow, and Backspace
+      if (
+        !(
+          (key >= "0" && key <= "9") ||
+          key === "ArrowRight" ||
+          key === "ArrowLeft" ||
+          key === "Backspace"
+        )
+      ) {
+        event.preventDefault();
+      }
+    });
+
+    frm.fields_dict["mobile"].$input.on("keydown", function (event) {
+      var key = event.key;
+
+      // Validate that only numbers, right arrow, and left arrow are allowed
+      var regex = /^[0-9]+$/;
+
+      // Allow only numeric keys (0-9), Right Arrow, Left Arrow, and Backspace
+      if (
+        !(
+          (key >= "0" && key <= "9") ||
+          key === "ArrowRight" ||
+          key === "ArrowLeft" ||
+          key === "Backspace"
+        )
+      ) {
+        event.preventDefault();
+      }
+    });
+    frm.fields_dict["customer_name"].$input.on("keydown", function (event) {
+      var key = event.key;
+
+      // Validate that only alphabets, space, right arrow, and left arrow are allowed
+      var regex = /^[a-zA-Z\s]+$/;
+
+      // Allow only alphabet keys (a-z, A-Z), space, Right Arrow, Left Arrow, and Backspace
+      if (
+        !(
+          (key >= "a" && key <= "z") ||
+          (key >= "A" && key <= "Z") ||
+          key === " " ||
+          key === "ArrowRight" ||
+          key === "ArrowLeft" ||
+          key === "Backspace"
+        )
+      ) {
+        event.preventDefault();
+      }
+    });
+
+    frm.fields_dict["nominee_fullname"].$input.on("keydown", function (event) {
+      var key = event.key;
+
+      // Validate that only alphabets, space, right arrow, and left arrow are allowed
+      var regex = /^[a-zA-Z\s]+$/;
+
+      // Allow only alphabet keys (a-z, A-Z), space, Right Arrow, Left Arrow, and Backspace
+      if (
+        !(
+          (key >= "a" && key <= "z") ||
+          (key >= "A" && key <= "Z") ||
+          key === " " ||
+          key === "ArrowRight" ||
+          key === "ArrowLeft" ||
+          key === "Backspace"
+        )
+      ) {
+        event.preventDefault();
+      }
+    });
+    frm.fields_dict["taluka"].$input.on("keydown", function (event) {
+      var key = event.key;
+
+      // Validate that only alphabets, space, right arrow, and left arrow are allowed
+      var regex = /^[a-zA-Z\s]+$/;
+
+      // Allow only alphabet keys (a-z, A-Z), space, Right Arrow, Left Arrow, and Backspace
+      if (
+        !(
+          (key >= "a" && key <= "z") ||
+          (key >= "A" && key <= "Z") ||
+          key === " " ||
+          key === "ArrowRight" ||
+          key === "ArrowLeft" ||
+          key === "Backspace"
+        )
+      ) {
+        event.preventDefault();
+      }
+    });
+    frm.fields_dict["city"].$input.on("keydown", function (event) {
+      var key = event.key;
+
+      // Validate that only alphabets, space, right arrow, and left arrow are allowed
+      var regex = /^[a-zA-Z\s]+$/;
+
+      // Allow only alphabet keys (a-z, A-Z), space, Right Arrow, Left Arrow, and Backspace
+      if (
+        !(
+          (key >= "a" && key <= "z") ||
+          (key >= "A" && key <= "Z") ||
+          key === " " ||
+          key === "ArrowRight" ||
+          key === "ArrowLeft" ||
+          key === "Backspace"
+        )
+      ) {
+        event.preventDefault();
+      }
+    });
+
+    frm.fields_dict["saving_current_ac_no"].$input.on(
+      "keydown",
+      function (event) {
+        var key = event.key;
+
+        // Validate that only numbers, right arrow, and left arrow are allowed
+        var regex = /^[0-9]+$/;
+
+        // Allow only numeric keys (0-9), Right Arrow, Left Arrow, and Backspace
+        if (
+          !(
+            (key >= "0" && key <= "9") ||
+            key === "ArrowRight" ||
+            key === "ArrowLeft" ||
+            key === "Backspace"
+          )
+        ) {
+          event.preventDefault();
+        }
+      }
+    );
   },
 
   // set_base_share_amount(frm) {
@@ -1127,37 +1263,77 @@ frappe.ui.form.on("Share Application", {
       !nominee_age
     ) {
       frappe.throw("Please fill in all required fields.");
-    } else if (nominee_age < 18 && !nominee_guardian_name) {
-      frappe.throw("Please fill Guardian Name");
+    } else if (nominee_share > 100) {
+      frappe.throw("Share Percentage cannot be more than 100%");
     } else {
-      if (nominee_age < 18) {
-        nominee_minor = 1; // Assuming you want to set nominee_minor to 1 if nominee_age is less than 18
-      } else {
-        nominee_minor = 0; // Assuming you want to set nominee_minor to 0 if nominee_age is 18 or above
-      }
-
-      let row = frm.add_child("nominee_details", {
-        nominee_name: nominee_fullname,
-        nominee_address: nominee_address,
-        nominee_relation: nominee_relation,
-        nominee_mobile_number: nominee_contact,
-        nominee_share_percentage: nominee_share,
-        nominee_age: nominee_age,
-        minor: nominee_minor,
-        nominee_guardian_name: nominee_guardian_name,
+      let totalPercentage = 0;
+      // Calculate the total percentage in the child table
+      frm.doc.nominee_details.forEach(function (row) {
+        totalPercentage += row.nominee_share_percentage;
       });
 
-      frm.refresh_field("nominee_details");
-      frm.set_value("nominee_fullname", "");
-      frm.set_value("nominee_guardian_name", "");
-      frm.set_value("nominee_address", "");
-      frm.set_value("nominee_relation", "");
-      frm.set_value("nominee_mobile_number", "");
-      frm.set_value("nominee_share_percentage", "");
-      frm.set_value("nominee_age", "");
-      frm.set_value("minor", 0); // Assuming you want to set nominee_minor to 0 after adding to child table
+      let remainingPercentage = 100 - totalPercentage;
 
-      frm.save();
+      if (remainingPercentage <= 0) {
+        frappe.throw("You have already added share percentage to 100 %");
+      } else if (nominee_share > remainingPercentage) {
+        frappe.throw(`You can add ${remainingPercentage}% only.`);
+      } else {
+        if (nominee_age < 18) {
+          nominee_minor = 1; // Assuming you want to set nominee_minor to 1 if nominee_age is less than 18
+        } else {
+          nominee_minor = 0; // Assuming you want to set nominee_minor to 0 if nominee_age is 18 or above
+        }
+
+        let row = frm.add_child("nominee_details", {
+          nominee_name: nominee_fullname,
+          nominee_address: nominee_address,
+          nominee_relation: nominee_relation,
+          nominee_mobile_number: nominee_contact,
+          nominee_share_percentage: nominee_share,
+          nominee_age: nominee_age,
+          minor: nominee_minor,
+          nominee_guardian_name: nominee_guardian_name,
+        });
+
+        frm.refresh_field("nominee_details");
+        frm.set_value("nominee_fullname", "");
+        frm.set_value("nominee_guardian_name", "");
+        frm.set_value("nominee_address", "");
+        frm.set_value("nominee_relation", "");
+        frm.set_value("nominee_mobile_number", "");
+        frm.set_value("nominee_share_percentage", "");
+        frm.set_value("nominee_age", "");
+        frm.set_value("minor", 0); // Assuming you want to set nominee_minor to 0 after adding to child table
+        if (!frm.is_new()) {
+          frm.save();
+        }
+      }
+    }
+  },
+
+  check_table: function (frm) {
+    // Check if the child table is empty
+    if (!frm.doc.nominee_details || frm.doc.nominee_details.length === 0) {
+      frappe.msgprint("The child table is empty.");
+    } else {
+      let totalPercentage = 0;
+
+      // Iterate through the child table to calculate the total percentage
+      frm.doc.nominee_details.forEach(function (row) {
+        totalPercentage += row.nominee_share_percentage;
+      });
+
+      // Check if total percentage is greater than 100
+      if (totalPercentage > 100) {
+        frappe.msgprint(
+          "Total Nominee Share Percentage cannot be greater than 100."
+        );
+      } else {
+        // Print the total percentage to the console and in msgprint
+        console.log("Total Nominee Share Percentage:", totalPercentage);
+        frappe.msgprint("Total Nominee Share Percentage: " + totalPercentage);
+      }
     }
   },
 });
@@ -1272,7 +1448,14 @@ frappe.ui.form.on("Share Application", {
           "&print_format=Share Marathi Form" +
           "&letterhead=Share Head Marathi"
       );
-      var newWindow = window.open(printUrl);
+
+      // Open a new window with specific window features to hide the address bar
+      var newWindow = window.open(
+        printUrl,
+        "_blank",
+        "toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=800,height=600"
+      );
+
       console.log(printUrl); // Log the URL to the console
       // Additional logic if needed
     });

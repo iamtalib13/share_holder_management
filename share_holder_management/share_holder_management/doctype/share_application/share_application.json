@@ -83,6 +83,7 @@
   "nominee_mobile_number",
   "nominee_address",
   "add_to_child",
+  "check_table",
   "column_break_xcnzm",
   "nominee_share_percentage",
   "nominee_guardian_name",
@@ -375,7 +376,6 @@
    "options": "\nTRF\nCASH"
   },
   {
-   "depends_on": "eval:doc.share_ac_no",
    "fieldname": "after_sanction_share_ac_information_section",
    "fieldtype": "Section Break",
    "label": "After Sanction Share A/C Information"
@@ -393,8 +393,7 @@
   {
    "fieldname": "share_ac_no",
    "fieldtype": "Data",
-   "label": "Share A/C No",
-   "read_only": 1
+   "label": "Share A/C No"
   },
   {
    "fieldname": "section_break_eqr0",
@@ -543,8 +542,9 @@
   },
   {
    "fieldname": "nominee_age",
-   "fieldtype": "Data",
-   "label": "Age"
+   "fieldtype": "Select",
+   "label": "Age",
+   "options": "\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20"
   },
   {
    "fieldname": "nominee_address",
@@ -600,15 +600,21 @@
    "fieldtype": "Section Break"
   },
   {
+   "depends_on": "eval:frappe.user.has_role('System Manager')",
    "fieldname": "application_sr_no_barcode",
    "fieldtype": "Barcode",
    "label": "Barcode"
+  },
+  {
+   "fieldname": "check_table",
+   "fieldtype": "Button",
+   "label": "check table"
   }
  ],
  "hide_toolbar": 1,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-02-12 10:54:59.238697",
+ "modified": "2024-02-13 17:13:42.225702",
  "modified_by": "Administrator",
  "module": "Share Holder Management",
  "name": "Share Application",
