@@ -5,6 +5,8 @@ from frappe.model.document import Document
 from frappe.utils import now
 from datetime import datetime
 from frappe import _
+from datetime import timedelta
+
 
 
 class DayManagement(Document):
@@ -75,26 +77,57 @@ def end_branch_day(branch, userId, employeeName):
         frappe.throw(str(e))
 
 
+#original code for fetching details of branches log
+# @frappe.whitelist()
+# def show_branch_logs():
+#     # Fetch data using Frappe database query
+#     query = """
+#         SELECT
+#         u.branch,
+#         MAX(CASE WHEN d.log_type = 'start' THEN d.log_time END) AS start_time,
+#         MAX(CASE WHEN d.log_type = 'start' THEN 'start' END) AS start_log_type,
+#         MAX(CASE WHEN d.log_type = 'end' THEN d.log_time END) AS end_time,
+#         MAX(CASE WHEN d.log_type = 'end' THEN 'end' END) AS end_log_type,
+#         MAX(CASE WHEN d.log_type = 'start' THEN d.employee END) AS Day_Start_by,
+#         MAX(CASE WHEN d.log_type = 'end' THEN d.employee_name END) AS Day_End_by
+#     FROM (
+#        SELECT DISTINCT branch
+#        FROM `tabUser`
+#        WHERE role_profile_name = 'Share User Employee'
+#     ) u
+#     LEFT JOIN `tabDay Management Checkin` d ON u.branch = d.branch AND DATE(d.log_time) = CURDATE()
+#     GROUP BY u.branch
+#     ORDER BY start_log_type DESC;
+#     """
+
+#     result = frappe.db.sql(query, as_dict=True)
+
+#     return {
+#         "result": result
+#     }
+
+#modified code for detching employee data
 @frappe.whitelist()
 def show_branch_logs():
     # Fetch data using Frappe database query
     query = """
         SELECT
-        u.branch,
-        MAX(CASE WHEN d.log_type = 'start' THEN d.log_time END) AS start_time,
-        MAX(CASE WHEN d.log_type = 'start' THEN 'start' END) AS start_log_type,
-        MAX(CASE WHEN d.log_type = 'end' THEN d.log_time END) AS end_time,
-        MAX(CASE WHEN d.log_type = 'end' THEN 'end' END) AS end_log_type,
-        MAX(CASE WHEN d.log_type = 'start' THEN d.employee END) AS Day_Start_by,
-        MAX(CASE WHEN d.log_type = 'end' THEN d.employee_name END) AS Day_End_by
-    FROM (
-       SELECT DISTINCT branch
-       FROM `tabUser`
-       WHERE role_profile_name = 'Share User Employee'
-    ) u
-    LEFT JOIN `tabDay Management Checkin` d ON u.branch = d.branch AND DATE(d.log_time) = CURDATE()
-    GROUP BY u.branch
-    ORDER BY start_log_type DESC;
+            u.branch,
+            MAX(CASE WHEN d.log_type = 'start' THEN d.log_time END) AS start_time,
+            MAX(CASE WHEN d.log_type = 'start' THEN 'start' END) AS start_log_type,
+            MAX(CASE WHEN d.log_type = 'end' THEN d.log_time END) AS end_time,
+            MAX(CASE WHEN d.log_type = 'end' THEN 'end' END) AS end_log_type,
+            MAX(CASE WHEN d.log_type = 'start' THEN e.employee_name END) AS Day_Start_by,
+            MAX(CASE WHEN d.log_type = 'end' THEN e.employee_name END) AS Day_End_by
+        FROM (
+           SELECT DISTINCT branch
+           FROM `tabUser`
+           WHERE role_profile_name = 'Share User Employee'
+        ) u
+        LEFT JOIN `tabDay Management Checkin` d ON u.branch = d.branch AND DATE(d.log_time) = CURDATE()
+        LEFT JOIN `tabEmployee` e ON d.employee = e.name
+        GROUP BY u.branch
+        ORDER BY start_log_type DESC;
     """
 
     result = frappe.db.sql(query, as_dict=True)
@@ -179,29 +212,4 @@ def show_ho_logs():
 
     return response
 
-# Add these functions to your Python code
-
-# @frappe.whitelist()
-# def start_branch_day(branch, userId):
-#     try:
-#         # Create a new document
-#         doc = frappe.new_doc('Day Management Checkin')
-#         doc.log_type = 'Start'
-#         doc.branch = branch
-#         doc.log_time = now()
-#         doc.employee_id = userId  # Include the userId in the document
-        
-#         try:
-#             doc.insert()
-#             # Log success to the console
-#             print(f"Branch day started successfully for {branch} by user {userId}")
-#         except frappe.DuplicateEntryError:
-#             print()
-
-#         return True
-
-#     except Exception as e:
-#         # Log error to the console
-#         print(f"Error starting branch day for {branch} by user {userId}: {str(e)}")
-#         frappe.throw(str(e))
 

@@ -2,29 +2,23 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on("Share Application", {
+  before_save: function (frm) {},
+
   validate: function (frm) {
-    // Check if the child table is empty
-    if (!frm.doc.nominee_details || frm.doc.nominee_details.length === 0) {
-      frappe.throw("Please Add at Least One Nominee");
-    } else {
-      //frappe.msgprint("The child table is not empty.");
+    // Check if the sanction date is blank or before 1/02/2024
+    if (
+      frm.doc.sanction_date &&
+      frappe.datetime.str_to_obj(frm.doc.sanction_date) >
+        frappe.datetime.str_to_obj("2024-02-01")
+    ) {
+      // Check if the child table is empty
+      if (!frm.doc.nominee_details || frm.doc.nominee_details.length === 0) {
+        frappe.throw("Please Add at Least One Nominee.");
+      }
     }
   },
+
   refresh(frm) {
-    if (frm.doc.status == "Sanctioned") {
-      console.log("Sanctioned");
-
-      // Generate the barcode SVG
-      const barcode_svg = `<svg data-barcode-value="${frm.doc.application_sr_no}" height="80"></svg>`;
-
-      // Update the barcode field with the generated SVG
-      frm.set_value("application_sr_no_barcode", barcode_svg);
-      frm.refresh_field("application_sr_no_barcode");
-
-      // Save the form
-      frm.save();
-    }
-
     frm.trigger("section_colors");
 
     frm.trigger("child_table_controls");
@@ -39,10 +33,8 @@ frappe.ui.form.on("Share Application", {
             if (r.message) {
               var barcodeValue = String(r.message);
               frm.set_value("application_sr_no", r.message);
-              frm.set_value("application_sr_no_barcode", barcodeValue);
 
               frm.refresh_field("application_sr_no");
-              frm.refresh_field("application_sr_no_barcode");
 
               // Do something else with the response, if needed
             } else {
@@ -113,7 +105,7 @@ frappe.ui.form.on("Share Application", {
                       frm.disable_save();
                       frm.disable_form();
                       frm.set_intro(
-                        "<b>Day Not Started from <b>" +
+                        " <u><a href='/app'> <- Go Back</a></u> <b>Day Not Started from <b>" +
                           branch +
                           "</b>" +
                           " for " +
@@ -122,44 +114,44 @@ frappe.ui.form.on("Share Application", {
                         "red" // Change the color as needed
                       );
 
-                      // Message to be displayed in the dialog
-                      var message =
-                        "Branch Day Not Started. Do you want to start?";
+                      // // Message to be displayed in the dialog
+                      // var message =
+                      //   "Branch Day Not Started. Do you want to start?";
 
-                      // Create a Frappe dialog
-                      var dialog = new frappe.ui.Dialog({
-                        title: "Start Branch Day",
-                        fields: [
-                          {
-                            fieldtype: "HTML",
-                            options: message,
-                          },
-                        ],
-                        primary_action: function () {
-                          // Redirect to the Day Management Checkin form
-                          frappe.new_doc(
-                            "Day Management Checkin",
-                            function (doc) {
-                              console.log("New document created:", doc);
-                              frappe.set_route(
-                                "Form",
-                                "Day Management Checkin",
-                                doc.name
-                              );
-                            }
-                          );
+                      // // Create a Frappe dialog
+                      // var dialog = new frappe.ui.Dialog({
+                      //   title: "Start Branch Day",
+                      //   fields: [
+                      //     {
+                      //       fieldtype: "HTML",
+                      //       options: message,
+                      //     },
+                      //   ],
+                      //   primary_action: function () {
+                      //     // Redirect to the Day Management Checkin form
+                      //     frappe.new_doc(
+                      //       "Day Management Checkin",
+                      //       function (doc) {
+                      //         console.log("New document created:", doc);
+                      //         frappe.set_route(
+                      //           "Form",
+                      //           "Day Management Checkin",
+                      //           doc.name
+                      //         );
+                      //       }
+                      //     );
 
-                          dialog.hide();
-                        },
-                        primary_action_label: __("Yes"),
-                        secondary_action_label: __("No"),
-                        secondary_action: function () {
-                          dialog.hide();
-                        },
-                      });
+                      //     dialog.hide();
+                      //   },
+                      //   primary_action_label: __("Yes"),
+                      //   secondary_action_label: __("No"),
+                      //   secondary_action: function () {
+                      //     dialog.hide();
+                      //   },
+                      // });
 
-                      // Show the dialog
-                      dialog.show();
+                      // // Show the dialog
+                      // dialog.show();
 
                       frm.disable_save();
                       frm.disable_form();
@@ -169,18 +161,18 @@ frappe.ui.form.on("Share Application", {
                       frm.disable_save();
                       frm.disable_form();
                       frm.set_intro(
-                        "<b>Day Not Started from <b>" +
+                        " <u><a href='/app'> <- Go Back</a></u> <b>Day Not Started from <b>" +
                           "Gondia HO & " +
                           branch +
                           "</b>" +
                           " for " +
                           "<b>" +
-                          "Today",
+                          "Today ",
                         "red" // Change the color as needed
                       );
-                      frappe.msgprint(
-                        "Gondia HO not started. Please Contact HO"
-                      );
+                      // frappe.msgprint(
+                      //   "Gondia HO not started. Please Contact HO"
+                      // );
 
                       frm.disable_save();
                       frm.disable_form();
@@ -1263,6 +1255,8 @@ frappe.ui.form.on("Share Application", {
       !nominee_age
     ) {
       frappe.throw("Please fill in all required fields.");
+    } else if (nominee_contact.length !== 10) {
+      frappe.throw("Nominee Contact Number must be 10 digits");
     } else if (nominee_share > 100) {
       frappe.throw("Share Percentage cannot be more than 100%");
     } else {
@@ -1463,9 +1457,11 @@ frappe.ui.form.on("Share Application", {
 
   share_certificate_print(frm) {
     frm.add_custom_button(__("Certificate"), function () {
-      var apk_sr_no = frm.doc.application_sr_no;
-      frm.set_value("application_sr_no_barcode", apk_sr_no);
-
+      if (frm.doc.application_sr_no_barcode) {
+        console.log("barcode");
+      } else {
+        console.log("blank barcode");
+      }
       frappe.call({
         method:
           "share_holder_management.share_holder_management.doctype.share_application.share_application.share_certificate_template",

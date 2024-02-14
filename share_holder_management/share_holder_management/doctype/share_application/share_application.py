@@ -9,7 +9,7 @@ class ShareApplication(frappe.model.document.Document):
         self._validate_aadhaar_number()
         self._validate_mobile_number()
         self._validate_pan_number()
-        self._validate_no_of_shares()
+        #self._validate_no_of_shares()
 
     def _validate_aadhaar_number(self):
         if self.aadhaar_number and len(str(self.aadhaar_number)) != 12:

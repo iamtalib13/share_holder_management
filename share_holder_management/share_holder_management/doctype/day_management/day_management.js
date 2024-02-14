@@ -33,10 +33,13 @@ frappe.ui.form.on("Day Management", {
     );
   },
 
+  //Showing HO logs details as html
   async populate_ho_log_html(frm) {
     // Fetch the data from backend
     frm.call({
       method: "show_ho_logs",
+      freeze: true, // Set to true to freeze the UI
+      freeze_message: "Please wait, processing data...",
       args: {
         self: frm.doc.name,
       },
@@ -152,209 +155,208 @@ frappe.ui.form.on("Day Management", {
 
               // Generate HTML dynamically based on the fetched data
               let html = `<!DOCTYPE html>
-          <html lang="en">
-            <head>
-              <meta charset="UTF-8" />
-              <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-              <title>Share Application Day Management </title>
-              <style>
-                body {
-                  font-family: sans-serif;
-                  margin: 0;
-                  padding: 20px;
-                }
-          
-                .ho_container {
-                  background-color: #f5f5f5;
-                  border-radius: 5px;
-                  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-                  padding: 20px;
-                }
-          
-                .ho_header {
-                  display: flex;
-                  justify-content: space-between;
-                  align-items: center;
-                  margin-bottom: 20px;
-                }
-          
-                .ho_title {
-                  font-size: 20px;
-                  font-weight: bold;
-                }
-          
-                .ho_mql {
-                  color: #ccc;
-                  font-size: 14px;
-                }
-          
-                .ho_metrics {
-                  display: grid;
-                  grid-template-columns: repeat(2, 1fr);
-                  gap: 20px;
-                }
-          
-                .ho_metric {
-                  background-color: #fff;
-                  border-radius: 5px;
-                  padding: 15px;
-                  text-align: center;
-                  border-radius: 15px;
-                }
-          
-                .ho_label {
-                  font-size: 16px;
-                  font-weight: bold;
-                  margin-bottom: 5px;
-                }
-          
-                .ho_value {
-                  align-items: center;
-                  color: green;
-                }
-          
-                .ho_delta,
-                .ho_label-secondary {
-                  font-size: 12px;
-                  color: #ccc;
-                  
-                }
-          
-                .ho_metric-grid {
-                  display: flex;
-                  justify-content: space-between;
-                }
-                .ho_progress-container {
-                  display: flex;
-                  align-items: center;
-                  width: 100%;
-                  height: 14px;
-                  background-color: #D9D9D9;
-                  border-radius: 20px;
-                  overflow: hidden; /* Hide overflow to round the corners */
-                }
+              <html lang="en">
+                <head>
+                  <meta charset="UTF-8" />
+                  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                  <title>Share Application Day Management </title>
+                  <style>
+                    body {
+                      font-family: sans-serif;
+                      margin: 0;
+                      padding: 20px;
+                    }
 
-                .ho_progress-bar {
-                  height: 100%;
-                  background-color: #50c878; /* Green color */
-                  border-radius: 20px;
-                  transition: width 0.3s ease; /* Add transition for smooth width changes */
-                }
+                    .ho_container {
+                      background-color: #f5f5f5;
+                      border-radius: 5px;
+                      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+                      padding: 20px;
+                    }
 
-          
-                /* Button style */
-                .ho_button {
-                  background-color: #4caf50;
-                  border: none;
-                  color: white;
-                  padding: 8px 20px;
-                  text-align: center;
-                  text-decoration: none;
-                  display: inline-block;
-                  font-size: 16px;
-                  cursor: pointer;
-                  border-radius: 21px;
-                  margin-top: 15px;
-                }
-          
-                button.ho_button:focus {
-                  outline: none !important;
-                }
-              </style>
-              <script>
-                // Function to start the HO Day
-                function startHO() {
-                  // Redirect to another page (replace 'YOUR_URL' with the actual URL)
-                  // route in parts
-                  frappe.new_doc("Day Management Checkin", function (doc) {
-                    frappe.set_route("Form", "Day Management Checkin", doc.name);
-                  });
-                }
-              </script>
-            </head>
-          
-            <body>
-            
-              <div class="ho_container">
-              
-                <div class="ho_header">
-                  <div class="ho_title">Share Application Day Management ${formattedDate}</div>
-                  <div class="ho_mql">Developed by - Talib Sheikh</div>
-                </div>
-                <div class="ho_metrics">
-                  <div class="ho_metric">
-                    <div class="ho_label">${hoDayStartLabel}</div>
-                    <div class="ho_value">${hoDayStartInfo}</div>
-                    <!-- Display the start button HTML conditionally -->
-                    ${startButtonHtml}
-                  </div>
-                  <div class="ho_metric">
-                    <div class="ho_label">${hoDayEndLabel}</div>
-                    <div class="ho_value">${hoDayEndInfo}</div>
-                    <!-- Display the End button HTML conditionally -->
-                    ${endButtonHtml}
-                  </div>
-                  <div class="ho_metric">
-                    <div class="ho_metric-grid">
-                      <div class="ho_label">Branch Day Start</div>
-                      <div class="ho_value">
-                      <span
-                          style="color: #948C8C;  font-size: 14px; font-weight: 600;"
-                          class="ho_label-secondary"
-                          >BRANCHES</span
-                        >
-                        <span class="ho_value-text" style="font-size: 14px;"
-                          >${
-                            totalStart > 0
-                              ? String(totalStart).padStart(2, "0")
-                              : totalStart
-                          }/${String(totalBranch).padStart(2, "0")}</span
-                        >
-                        
+                    .ho_header {
+                      display: flex;
+                      justify-content: space-between;
+                      align-items: center;
+                      margin-bottom: 20px;
+                    }
+
+                    .ho_title {
+                      font-size: 20px;
+                      font-weight: bold;
+                    }
+
+                    .ho_mql {
+                      color: #ccc;
+                      font-size: 14px;
+                    }
+
+                    .ho_metrics {
+                      display: grid;
+                      grid-template-columns: repeat(2, 1fr);
+                      gap: 20px;
+                    }
+
+                    .ho_metric {
+                      background-color: #fff;
+                      border-radius: 5px;
+                      padding: 15px;
+                      text-align: center;
+                      border-radius: 15px;
+                    }
+
+                    .ho_label {
+                      font-size: 16px;
+                      font-weight: bold;
+                      margin-bottom: 5px;
+                    }
+
+                    .ho_value {
+                      align-items: center;
+                      color: green;
+                    }
+
+                    .ho_delta,
+                    .ho_label-secondary {
+                      font-size: 12px;
+                      color: #ccc;
+
+                    }
+
+                    .ho_metric-grid {
+                      display: flex;
+                      justify-content: space-between;
+                    }
+                    .ho_progress-container {
+                      display: flex;
+                      align-items: center;
+                      width: 100%;
+                      height: 14px;
+                      background-color: #D9D9D9;
+                      border-radius: 20px;
+                      overflow: hidden; /* Hide overflow to round the corners */
+                    }
+
+                    .ho_progress-bar {
+                      height: 100%;
+                      background-color: #50c878; /* Green color */
+                      border-radius: 20px;
+                      transition: width 0.3s ease; /* Add transition for smooth width changes */
+                    }
+
+                    /* Button style */
+                    .ho_button {
+                      background-color: #4caf50;
+                      border: none;
+                      color: white;
+                      padding: 8px 20px;
+                      text-align: center;
+                      text-decoration: none;
+                      display: inline-block;
+                      font-size: 16px;
+                      cursor: pointer;
+                      border-radius: 21px;
+                      margin-top: 15px;
+                    }
+
+                    button.ho_button:focus {
+                      outline: none !important;
+                    }
+                  </style>
+                  <script>
+                    // Function to start the HO Day
+                    function startHO() {
+                      // Redirect to another page (replace 'YOUR_URL' with the actual URL)
+                      // route in parts
+                      frappe.new_doc("Day Management Checkin", function (doc) {
+                        frappe.set_route("Form", "Day Management Checkin", doc.name);
+                      });
+                    }
+                  </script>
+                </head>
+
+                <body>
+
+                  <div class="ho_container">
+
+                    <div class="ho_header">
+                      <div class="ho_title">Share Application Day Management ${formattedDate}</div>
+                      <div class="ho_mql">Developed by - Talib Sheikh</div>
+                    </div>
+                    <div class="ho_metrics">
+                      <div class="ho_metric">
+                        <div class="ho_label">${hoDayStartLabel}</div>
+                        <div class="ho_value">${hoDayStartInfo}</div>
+                        <!-- Display the start button HTML conditionally -->
+                        ${startButtonHtml}
                       </div>
-                    </div>
-          
-                    <br />
-                    <div class="ho_progress-container">
-                      <div
-                        class="ho_progress-bar"
-                        style="width: ${branchStartProgressPercentage}%;"
-                      ></div>
+                      <div class="ho_metric">
+                        <div class="ho_label">${hoDayEndLabel}</div>
+                        <div class="ho_value">${hoDayEndInfo}</div>
+                        <!-- Display the End button HTML conditionally -->
+                        ${endButtonHtml}
+                      </div>
+                      <div class="ho_metric">
+                        <div class="ho_metric-grid">
+                          <div class="ho_label">Branch Day Start</div>
+                          <div class="ho_value">
+                          <span
+                              style="color: #948C8C;  font-size: 14px; font-weight: 600;"
+                              class="ho_label-secondary"
+                              >BRANCHES</span
+                            >
+                            <span class="ho_value-text" style="font-size: 14px;"
+                              >${
+                                totalStart > 0
+                                  ? String(totalStart).padStart(2, "0")
+                                  : totalStart
+                              }/${String(totalBranch).padStart(2, "0")}</span
+                            >
+
+                          </div>
+                        </div>
+
+                        <br />
+                        <div class="ho_progress-container">
+                          <div
+                            class="ho_progress-bar"
+                            style="width: ${branchStartProgressPercentage}%;"
+                          ></div>
+                        </div>
+                      </div>
+                      <div class="ho_metric">
+                      <div class="ho_metric-grid">
+                        <div class="ho_label">Branch Day End</div>
+                        <div class="ho_value">
+                        <span
+                              style="color: #948C8C;  font-size: 14px; font-weight: 600;"
+                              class="ho_label-secondary"
+                              >BRANCHES</span
+                            >
+                          <span class="ho_value-text" style="font-size: 14px;"
+                            >${
+                              totalEnd > 0
+                                ? String(totalEnd).padStart(2, "0")
+                                : totalEnd
+                            }/${String(totalBranch).padStart(2, "0")}</span
+                          >
+
+                        </div>
+                        </div>
+                        <br />
+                        <div class="ho_progress-container">
+                          <div
+                            class="ho_progress-bar"
+                            style="width: ${branchEndProgressPercentage}%;"
+                          ></div>
+                        </div>
+                      </div>
+                      <!-- Add more metrics here -->
                     </div>
                   </div>
-                  <div class="ho_metric">
-                  <div class="ho_metric-grid">
-                    <div class="ho_label">Branch Day End</div>
-                    <div class="ho_value">
-                    <span
-                          style="color: #948C8C;  font-size: 14px; font-weight: 600;"
-                          class="ho_label-secondary"
-                          >BRANCHES</span
-                        >
-                      <span class="ho_value-text" style="font-size: 14px;"
-                        >${
-                          totalEnd > 0
-                            ? String(totalEnd).padStart(2, "0")
-                            : totalEnd
-                        }/${String(totalBranch).padStart(2, "0")}</span
-                      >
-          
-                    </div>
-                    </div>
-                    <br />
-                    <div class="ho_progress-container">
-                      <div
-                        class="ho_progress-bar"
-                        style="width: ${branchEndProgressPercentage}%;"
-                      ></div>
-                    </div>
-                  </div>
-                  <!-- Add more metrics here -->
-                </div>
-              </div>
-            </body>
-          </html>
-          `;
+                </body>
+              </html>
+              `;
 
               // Set the above `html` as Summary HTML
               frm.set_df_property("ho_log_html", "options", html);
@@ -372,10 +374,13 @@ frappe.ui.form.on("Day Management", {
     });
   },
 
+  //Showing Branch logs details as html
   async populate_branch_log_html(frm) {
-    // Fetch the data from the backend (check above for sample response)
+    // Fetch the data from the backend
     frm.call({
       method: "show_branch_logs",
+      freeze: true, // Set to true to freeze the UI
+      freeze_message: "Please wait, processing data...",
       args: {
         self: frm.doc.name,
       },
@@ -413,43 +418,43 @@ frappe.ui.form.on("Day Management", {
                           margin: 0; /* Remove default body margin */
                           padding: 0; /* Remove default body padding */
                       }
-              
+
                       table {
                           border-collapse: collapse;
                           width: 100%;
                           margin-top: 20px;
                           overflow: hidden;
                       }
-              
+
                       .branch-th {
                           background-color: #c2d7df;
                           height: 60px;
                           text-align: center;
                           font-size: 15px;
                       }
-              
+
                       .branch-td {
                           border: none;
                           padding: 8px;
                           text-align: center;
                       }
-              
+
                       thead {
                           position: sticky;
                           top: 0;
                           z-index: 100;
                       }
-              
+
                       .branch-row_border {
                           border-bottom: 1px solid #D9D9D9;
                           height: 60px;
                       }
-              
+
                       .branch-row_border:hover {
                           background-color: #c2d7df;
                           cursor: pointer;
                       }
-              
+
                       .start-time {
                         color: green;
                         border: 2px solid green;
@@ -457,7 +462,7 @@ frappe.ui.form.on("Day Management", {
                         border-radius: 2rem;
                         font-weight: 600;
                       }
-              
+
                       .end-time {
                           color: red;
                           border: 2px solid red;
@@ -465,12 +470,12 @@ frappe.ui.form.on("Day Management", {
                           border-radius: 2rem;
                           font-weight: 600;
                       }
-              
+
                       .branch_heading {
                           display: flex;
                           justify-content: space-between;
                           align-items: start;
-                        
+
                       }
 
                       .startbtn{
@@ -481,7 +486,7 @@ frappe.ui.form.on("Day Management", {
                         color: white;
                         border: none;
                       }
-              
+
                       .startbtn:focus{
                         outline:none;
                       }
@@ -503,20 +508,20 @@ frappe.ui.form.on("Day Management", {
                         color: black;
 
                       }
-              
+
                       select {
                           width: 150px;
                           padding: 5px; /* Add padding for styling */
                       }
                       #totalRows{
                         text-align:right;
-                        
+
                       }
                   </style>
                   <script>
                   function startButton(branchName) {
                     console.log("Button click");
-                    
+
                     const branch = branchName;
                     console.log("Branch Name:", branch);
 
@@ -537,13 +542,14 @@ frappe.ui.form.on("Day Management", {
                         fieldname: ["employee_name"]
                       },
                       callback: function(employeeResponse) {
-                        if (!employeeResponse.exc) { 
+                        if (!employeeResponse.exc) {
                           const employeeName = employeeResponse.message.employee_name;
                           console.log("Employee name", employeeName);
 
                           // Add any additional logic or actions you want to perform
                           frappe.call({
                             method: "share_holder_management.share_holder_management.doctype.day_management.day_management.start_branch_day",
+
                             args: {
                               branch: branch,
                               userId: userId,
@@ -561,13 +567,13 @@ frappe.ui.form.on("Day Management", {
                                 message: __(branch + ' Branch started Successfully'),
                                 indicator: 'green'
                               }, 5);
-                            
+
                               // Delay the page reload by 2 seconds (adjust as needed)
                               setTimeout(function() {
                                 // Refresh the page after the alert is shown
                                 location.reload();
                               }, 1000);
-                                
+
                             } else {
                                 // Handle errors
                                 console.error("Error:", response.exc);
@@ -582,21 +588,20 @@ frappe.ui.form.on("Day Management", {
                 });
               }
 
-
               function endButton(branchName) {
                 console.log("End Button click");
-            
+
                 const branch = branchName;
                 console.log("Branch Name:", branch);
-            
+
                 // Get the current user
                 const currentUser = frappe.session.user;
                 console.log("Current User:", currentUser);
-            
+
                 // Extract user ID from the email address
                 const userId = currentUser.split('@')[0];
                 console.log("User ID:", userId);
-            
+
                 // Fetch logged-in employee details
                 frappe.call({
                   method: "frappe.client.get_value",
@@ -609,7 +614,7 @@ frappe.ui.form.on("Day Management", {
                     if (!employeeResponse.exc) {
                       const employeeName = employeeResponse.message.employee_name;
                       console.log("Employee name", employeeName);
-            
+
                       // Add any additional logic or actions you want to perform
                       frappe.call({
                         method: "share_holder_management.share_holder_management.doctype.day_management.day_management.end_branch_day",
@@ -625,18 +630,18 @@ frappe.ui.form.on("Day Management", {
                             console.log("Response", data);
                             // Check if emp_name is present in the response
                             console.log("Employee Name:", data.emp_name);
-            
+
                             frappe.show_alert({
                               message: __(branch + ' Branch ended Successfully'),
                               indicator: 'green'
                             }, 5);
-            
+
                             // Delay the page reload by 2 seconds (adjust as needed)
                             setTimeout(function () {
                               // Refresh the page after the alert is shown
                               location.reload();
                             }, 1000);
-            
+
                           } else {
                             // Handle errors
                             console.error("Error:", response.exc);
@@ -652,7 +657,6 @@ frappe.ui.form.on("Day Management", {
               }
               </script>
 
-              
               </head>
               <body>
                   <div class="branch_heading">
@@ -676,7 +680,7 @@ frappe.ui.form.on("Day Management", {
                   </div>
                   <!-- Show Total Row count -->
                   <div><h5 id="totalRows"></h5></div>
-                  
+
                   <table class="branch_log_html_table">
                       <thead>
                           <tr>
@@ -733,11 +737,11 @@ frappe.ui.form.on("Day Management", {
                                             })}`
                                           : `<button class="endbtn" onclick="endButton('${row.branch}')">End</button>`
                                       }</td>
-                                    
+
                                       <td class="branch-td">${
                                         row.Day_End_by || " "
                                       }</td>
-                                      
+
                                   </tr>`
                             )
                             .join("")}
@@ -745,7 +749,7 @@ frappe.ui.form.on("Day Management", {
                   </table>
               </body>
               </html>
-              
+
               `;
 
               // Set the above `html` as Summary HTML
@@ -821,6 +825,9 @@ frappe.ui.form.on("Day Management", {
       },
     });
   },
+
+  // Modified code for date validation
+
   onload: function (frm) {
     frm.trigger("header_links");
     console.log("Onload");

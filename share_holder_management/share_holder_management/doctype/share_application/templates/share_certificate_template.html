@@ -1,4 +1,4 @@
-<!-- custom_report_template.html -->
+
 <html>
   <head>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -166,7 +166,7 @@
     padding: 10px;
     gap: 70px;
     font-weight: bold;
-    margin-top: 73px;
+    margin-top: 72px;
     margin-bottom: -46px;
   }
 
@@ -215,15 +215,15 @@
     font-size: 11px;
     font-family: "Inter", sans-serif;
     padding: 3px;
-    margin-bottom: -45px;
-    margin-top: -5px;
+    margin-bottom: -39px;
+    margin-top: 10px;
       }
       .certificate-70-start{
         display: flex;
     justify-content: space-between;
     font-family: "Inter", sans-serif;
     font-size: 13px;
-    margin-bottom: -35px;
+    margin-bottom: -15px;
       }
       .certificate-30-footer {
         position: absolute;
@@ -251,16 +251,30 @@
 
 .barcode-value-70 {
   font-size: 13px;
-    width: 100px;
+    width: 80px;
     height: auto;
-    margin-top: -30px;
+    margin-top: -10px;
+}
+.barcode-value-70 img{
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
 }
 .barcode-value-30
 {
   font-size: 13px;
-    width: 100px;
+    width: 80px;
     height: auto;
-    margin-top: -30px;
+    margin-top: -10px;
+}
+
+.barcode-value-30 img
+{
+  width: 100%;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
 }
 g text{
   display:none;
@@ -308,14 +322,14 @@ g text{
         </div>
         <div class="certificate-30-start">
           <div>Account No &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {{doc.saving_current_ac_no}} <br> Share Certificate No : {{doc.name}}</div>
-          <div class="barcode-value-30">{{ doc.application_sr_no_barcode }}</div>
+          <div class="barcode-value-30"><img alt='' src='https://barcode.tec-it.com/barcode.ashx?data={{ doc.application_sr_no }}&code=Code128&translate-esc=on&imagetype=Png&eclevel=L&dmsize=Default' /></div>
         </div>
         <hr />
         <div class="content-30">
           <p>This is to certify that,</p>
-          <p>Shri/Smt.<b>{{ doc.customer_name if doc.customer_name else '.....................' }}</b></p>
+          <p>Shri/Smt. <b> {{ doc.customer_name if doc.customer_name else '.....................' }}</b></p>
           <p>R/o. <b>{{ doc.address + ',  ' if doc.address else '' }}{{ doc.taluka + ',  ' if doc.taluka else '' }} {{ doc.city if doc.city else '' }}</b></p>
-          <p>has been alloted <b>{{ doc.no_of_shares if doc.no_of_shares else '.....................' }} </b> shares Sr.no</p>
+          <p>has been alloted <b>{{ doc.no_of_shares if doc.no_of_shares else '.....................' }} </b> shares, Sr.no</p>
           <p>From {{start_no_share}} to {{end_no_share}}</p>
           <p>having Face Value of  ₹10/- per share and aggregating</p>
           <p> ₹<b>{{ doc.tot_share_amt if doc.tot_share_amt else '.....................' }} </b>
@@ -369,12 +383,12 @@ g text{
           <div class="certificate-70-start">
             <div>Account No. {{doc.saving_current_ac_no}}</div>
             <div>Share Certificate No. {{doc.name}}</div>
-            <div class="barcode-value-70">{{ doc.application_sr_no_barcode }}</div>
+            <div class="barcode-value-70"><img alt='' src='https://barcode.tec-it.com/barcode.ashx?data={{ doc.application_sr_no }}&code=Code128&translate-esc=on&imagetype=Png&eclevel=L&dmsize=Default' /></div>
           </div>
           <p>This is to certify that,</p>
-          <p>Shri/Smt.<b>{{ doc.customer_name if doc.customer_name else '....................' }}</b></p>
+          <p>Shri/Smt. <b> {{ doc.customer_name if doc.customer_name else '....................' }}</b></p>
           <p>R/o. <b>{{ doc.address + ',  ' if doc.address else '' }}{{ doc.taluka + ',  ' if doc.taluka else '' }} {{ doc.city if doc.city else '' }}</b></p>
-          <p>has been alloted <b>{{ doc.no_of_shares if doc.no_of_shares else '..................' }} </b> shares Sr.no From {{start_no_share}} to {{end_no_share}}</p>
+          <p>has been alloted <b>{{ doc.no_of_shares if doc.no_of_shares else '..................' }} </b> shares, Sr.no From {{start_no_share}} to {{end_no_share}}</p>
           <p>having Face Value of  ₹10/- per share and aggregating  ₹<b>{{ doc.tot_share_amt if doc.tot_share_amt else '....................' }} </b></p>
           <p>as per the provisions of the By Laws of the <b>Sahayog Multi State Credit Co-operative</b></p>
           <p><b>Society Limited</b>(Registered under Multi State Co-operative Societies Act 2002 and as</p>

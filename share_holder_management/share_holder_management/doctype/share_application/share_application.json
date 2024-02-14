@@ -10,7 +10,6 @@
   "personal_details_tab",
   "acc_section_details",
   "application_sr_no",
-  "application_sr_no_barcode",
   "customer_id",
   "account_type",
   "column_break_hdes",
@@ -393,7 +392,8 @@
   {
    "fieldname": "share_ac_no",
    "fieldtype": "Data",
-   "label": "Share A/C No"
+   "label": "Share A/C No",
+   "read_only": 1
   },
   {
    "fieldname": "section_break_eqr0",
@@ -600,12 +600,6 @@
    "fieldtype": "Section Break"
   },
   {
-   "depends_on": "eval:frappe.user.has_role('System Manager')",
-   "fieldname": "application_sr_no_barcode",
-   "fieldtype": "Barcode",
-   "label": "Barcode"
-  },
-  {
    "fieldname": "check_table",
    "fieldtype": "Button",
    "label": "check table"
@@ -614,7 +608,7 @@
  "hide_toolbar": 1,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-02-13 17:13:42.225702",
+ "modified": "2024-02-14 16:52:13.051455",
  "modified_by": "Administrator",
  "module": "Share Holder Management",
  "name": "Share Application",

@@ -1,6 +1,7 @@
 import frappe
 from frappe.utils import now
 
+
 def cron():
     tickets = frappe.get_all(
         "Share Application",
