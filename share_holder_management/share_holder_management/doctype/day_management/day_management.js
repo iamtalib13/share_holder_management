@@ -720,23 +720,26 @@ frappe.ui.form.on("Day Management", {
                                         row.Day_Start_by || ""
                                       }</td>
                                       <td class="branch-td">${
-                                        row.end_time
-                                          ? `${
-                                              row.end_log_type
-                                                ? "<span class='end-time'>Ended </span>"
-                                                : ""
-                                            }<br>${new Date(
-                                              row.end_time
-                                            ).toLocaleString("en-GB", {
-                                              day: "numeric",
-                                              month: "numeric",
-                                              year: "numeric",
-                                              hour: "2-digit",
-                                              minute: "2-digit",
-                                              hour12: true,
-                                            })}`
-                                          : `<button class="endbtn" onclick="endButton('${row.branch}')">End</button>`
+                                        row.start_time
+                                          ? row.end_time
+                                            ? `${
+                                                row.end_log_type
+                                                  ? "<span class='end-time'>Ended </span>"
+                                                  : ""
+                                              }<br>${new Date(
+                                                row.end_time
+                                              ).toLocaleString("en-GB", {
+                                                day: "numeric",
+                                                month: "numeric",
+                                                year: "numeric",
+                                                hour: "2-digit",
+                                                minute: "2-digit",
+                                                hour12: true,
+                                              })}`
+                                            : `<button class="endbtn" onclick="endButton('${row.branch}')">End</button>`
+                                          : ""
                                       }</td>
+                                    
 
                                       <td class="branch-td">${
                                         row.Day_End_by || " "

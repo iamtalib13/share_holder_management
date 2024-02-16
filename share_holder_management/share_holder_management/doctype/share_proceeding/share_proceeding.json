@@ -8,6 +8,8 @@
  "field_order": [
   "proceeding_date",
   "find_btn",
+  "column_break_rct0f",
+  "reso_no",
   "section_break_uiqqm",
   "proceeding_members",
   "response"
@@ -23,7 +25,8 @@
    "fieldname": "proceeding_members",
    "fieldtype": "Table",
    "label": "Proceeding Members",
-   "options": "Proceeding Records"
+   "options": "Proceeding Records",
+   "read_only": 1
   },
   {
    "fieldname": "section_break_uiqqm",
@@ -40,13 +43,23 @@
    "hidden": 1,
    "label": "response",
    "options": "\nTrue\nFalse"
+  },
+  {
+   "fieldname": "column_break_rct0f",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "reso_no",
+   "fieldtype": "Select",
+   "label": "\u0920\u0930\u093e\u0935 \u0915\u094d\u0930. ",
+   "options": "\n1\n2\n3\n4\n5"
   }
  ],
  "hide_toolbar": 1,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2024-02-12 23:00:16.141324",
+ "modified": "2024-02-16 10:48:17.540708",
  "modified_by": "Administrator",
  "module": "Share Holder Management",
  "name": "Share Proceeding",

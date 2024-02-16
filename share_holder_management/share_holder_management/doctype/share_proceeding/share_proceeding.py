@@ -24,7 +24,7 @@ def get_logs(proceeding_date):
         FROM
             `tabShare Application`
         WHERE
-            application_date = %s;
+            sanction_date = %s;
     """
 
     result = frappe.db.sql(query, (proceeding_date,), as_dict=True)

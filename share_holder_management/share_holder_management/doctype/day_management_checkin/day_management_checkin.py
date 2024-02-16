@@ -7,6 +7,8 @@ from frappe.model.document import Document
 class DayManagementCheckin(Document):
 	pass
 
+
+
 def before_validate(self):
     
         # Retrieve employee_name from the "Employee" doctype
@@ -18,6 +20,33 @@ def before_validate(self):
             frappe.throw("setting emp name")
         else:
             frappe.throw("Employee not found with ID: {0}".format(self.employee))
+
+
+#modified code on 15 Feb
+# @frappe.whitelist()
+# def get_log_details_previous():
+#     previous_day = (datetime.now() - timedelta(days=1)).date()
+
+#     # Check if 'Start' record exists for the specified conditions on the previous day
+#     start_record_exists = frappe.db.exists({
+#         "doctype": "Day Management Checkin",
+#         "branch": branch,
+#         "log_type": log_type,
+#         "log_time": ["like", f"{previous_day}%"]
+#     })
+
+#     if start_record_exists:
+#         # 'Start' record exists, now check for 'End' record
+#         end_record_exists = frappe.db.exists({
+#             "doctype": "Day Management Checkin",
+#             "branch": branch,
+#             "log_type": "End",
+#             "log_time": ["like", f"{previous_day}%"]
+#         })
+
+#         return end_record_exists
+
+#     return False
 
 
 @frappe.whitelist()

@@ -3,6 +3,7 @@
 
 frappe.ui.form.on("Day Management Checkin", {
   refresh: function (frm) {
+    //frm.trigger()
     if (frm.is_new()) {
       //employee id set on new form
 

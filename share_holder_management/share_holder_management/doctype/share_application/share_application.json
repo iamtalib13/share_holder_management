@@ -106,7 +106,8 @@
    "fieldname": "application_sr_no",
    "fieldtype": "Int",
    "label": "Application Sr. No.",
-   "read_only": 1
+   "read_only": 1,
+   "reqd": 1
   },
   {
    "fieldname": "column_break_hdes",
@@ -128,20 +129,23 @@
   {
    "fieldname": "customer_name",
    "fieldtype": "Data",
-   "label": "Customer Name"
+   "label": "Customer Name",
+   "reqd": 1
   },
   {
    "default": "Individual",
    "fieldname": "category",
    "fieldtype": "Select",
    "label": "Category",
-   "options": "Individual\nGroup"
+   "options": "Individual\nGroup",
+   "reqd": 1
   },
   {
    "fieldname": "salutation",
    "fieldtype": "Link",
    "label": "Salutation",
-   "options": "Salutation"
+   "options": "Salutation",
+   "reqd": 1
   },
   {
    "fieldname": "column_break_sb8h",
@@ -162,28 +166,33 @@
   {
    "fieldname": "date_of_birth",
    "fieldtype": "Date",
-   "label": "Birth Date"
+   "label": "Birth Date",
+   "reqd": 1
   },
   {
    "fieldname": "address",
    "fieldtype": "Small Text",
    "label": "Landmark",
-   "max_height": "180px"
+   "max_height": "180px",
+   "reqd": 1
   },
   {
    "fieldname": "taluka",
    "fieldtype": "Data",
-   "label": "Taluka / Tahshil"
+   "label": "Taluka / Tahshil",
+   "reqd": 1
   },
   {
    "fieldname": "city",
    "fieldtype": "Data",
-   "label": "City/District"
+   "label": "City/District",
+   "reqd": 1
   },
   {
    "fieldname": "mobile",
    "fieldtype": "Data",
-   "label": "Mobile"
+   "label": "Mobile",
+   "reqd": 1
   },
   {
    "fieldname": "age",
@@ -206,13 +215,15 @@
    "fieldtype": "Data",
    "in_list_view": 1,
    "in_standard_filter": 1,
-   "label": "Customer ID"
+   "label": "Customer ID",
+   "reqd": 1
   },
   {
    "fieldname": "occupation",
    "fieldtype": "Select",
    "label": "Occupation",
-   "options": "\nFarmer\nBusiness\nTeacher\nAdvocate\nGovt Employee\nPrivate Employee\nDoctor"
+   "options": "\nFarmer\nBusiness\nTeacher\nAdvocate\nGovt Employee\nPrivate Employee\nDoctor",
+   "reqd": 1
   },
   {
    "default": "Regular",
@@ -224,7 +235,8 @@
   {
    "fieldname": "membership_form",
    "fieldtype": "Attach",
-   "label": "Membership form"
+   "label": "Membership form",
+   "reqd": 1
   },
   {
    "fieldname": "column_break_lhcd",
@@ -233,7 +245,8 @@
   {
    "fieldname": "payment_receipt",
    "fieldtype": "Attach",
-   "label": "Payment Receipt"
+   "label": "Payment Receipt",
+   "reqd": 1
   },
   {
    "fieldname": "column_break_kxcr",
@@ -242,7 +255,8 @@
   {
    "fieldname": "kyc",
    "fieldtype": "Attach",
-   "label": "KYC ( Adhar / PAN / Voter ID )"
+   "label": "KYC ( Adhar / PAN / Voter ID )",
+   "reqd": 1
   },
   {
    "fieldname": "column_break_nrre",
@@ -295,12 +309,14 @@
    "fieldname": "saving_current_gl_code",
    "fieldtype": "Link",
    "label": "Account GL Code",
-   "options": "Account GL Code"
+   "options": "Account GL Code",
+   "reqd": 1
   },
   {
    "fieldname": "saving_current_ac_no",
    "fieldtype": "Data",
-   "label": "Account No."
+   "label": "Account No.",
+   "reqd": 1
   },
   {
    "fetch_from": "branch_gl.ac_type",
@@ -341,7 +357,8 @@
    "fieldname": "no_of_shares",
    "fieldtype": "Int",
    "label": "No. of Shares",
-   "non_negative": 1
+   "non_negative": 1,
+   "reqd": 1
   },
   {
    "fieldname": "column_break_iwul",
@@ -372,7 +389,8 @@
    "fieldtype": "Select",
    "label": "Amount Received By",
    "mandatory_depends_on": "//eval:doc.no_of_shares",
-   "options": "\nTRF\nCASH"
+   "options": "\nTRF\nCASH",
+   "reqd": 1
   },
   {
    "fieldname": "after_sanction_share_ac_information_section",
@@ -424,7 +442,8 @@
    "fieldname": "nominee_details",
    "fieldtype": "Table",
    "label": "Nominee Details",
-   "options": "Nominee"
+   "options": "Nominee",
+   "reqd": 1
   },
   {
    "fieldname": "tot_share_amt",
@@ -435,7 +454,8 @@
   {
    "fieldname": "aadhaar_number",
    "fieldtype": "Data",
-   "label": "Aadhaar Number"
+   "label": "Aadhaar Number",
+   "reqd": 1
   },
   {
    "default": "Indian",
@@ -449,13 +469,15 @@
    "fieldname": "account_type",
    "fieldtype": "Select",
    "label": "Account Type",
-   "options": "\nSAVING\nCURRENT\nLIABILITY\nLOAN"
+   "options": "\nSAVING\nCURRENT\nLIABILITY\nLOAN",
+   "reqd": 1
   },
   {
    "fieldname": "gender",
    "fieldtype": "Select",
    "label": "Gender",
-   "options": "\nMale\nFemale\nR\nFirm\nTransgender"
+   "options": "\nMale\nFemale\nR\nFirm\nTransgender",
+   "reqd": 1
   },
   {
    "bold": 1,
@@ -608,7 +630,7 @@
  "hide_toolbar": 1,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-02-14 16:52:13.051455",
+ "modified": "2024-02-16 11:08:20.287596",
  "modified_by": "Administrator",
  "module": "Share Holder Management",
  "name": "Share Application",

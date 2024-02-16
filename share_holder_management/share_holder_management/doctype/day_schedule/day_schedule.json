@@ -5,9 +5,12 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "status",
   "date",
-  "day_start",
-  "day_end"
+  "ho_day_start",
+  "all_branch_day_start",
+  "all_branch_day_end",
+  "ho_day_end"
  ],
  "fields": [
   {
@@ -17,22 +20,38 @@
    "label": "Date"
   },
   {
-   "fieldname": "day_start",
-   "fieldtype": "Datetime",
-   "in_list_view": 1,
-   "label": "Day Start"
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "\nPrevious-Day\nCurrent-Day\nNext-Day"
   },
   {
-   "fieldname": "day_end",
-   "fieldtype": "Datetime",
+   "fieldname": "ho_day_start",
+   "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Day End"
+   "label": "Ho Day Start"
+  },
+  {
+   "fieldname": "all_branch_day_start",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "All Branch Day Start"
+  },
+  {
+   "fieldname": "all_branch_day_end",
+   "fieldtype": "Data",
+   "label": "All Branch Day End"
+  },
+  {
+   "fieldname": "ho_day_end",
+   "fieldtype": "Data",
+   "label": "Ho Day End"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2024-01-12 13:20:09.089617",
+ "modified": "2024-02-16 12:07:29.734011",
  "modified_by": "Administrator",
  "module": "Share Holder Management",
  "name": "Day Schedule",

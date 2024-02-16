@@ -6,6 +6,7 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
+  "day_management_status",
   "ho_log_html",
   "schedule_section",
   "branch_log_html"
@@ -23,13 +24,20 @@
   {
    "fieldname": "ho_log_html",
    "fieldtype": "HTML"
+  },
+  {
+   "depends_on": "eval:frappe.user.has_role('System Manager')",
+   "fieldname": "day_management_status",
+   "fieldtype": "Table",
+   "label": "Day Management Status",
+   "options": "Day Schedule"
   }
  ],
  "hide_toolbar": 1,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2024-02-01 13:28:29.702047",
+ "modified": "2024-02-16 12:11:16.716607",
  "modified_by": "Administrator",
  "module": "Share Holder Management",
  "name": "Day Management",
