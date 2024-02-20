@@ -28,16 +28,15 @@
   {
    "depends_on": "eval:frappe.user.has_role('System Manager')",
    "fieldname": "day_management_status",
-   "fieldtype": "Table",
-   "label": "Day Management Status",
-   "options": "Day Schedule"
+   "fieldtype": "HTML",
+   "label": "Day Management Status"
   }
  ],
  "hide_toolbar": 1,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2024-02-16 12:11:16.716607",
+ "modified": "2024-02-16 12:31:18.360357",
  "modified_by": "Administrator",
  "module": "Share Holder Management",
  "name": "Day Management",

@@ -9,6 +9,7 @@
  "field_order": [
   "share_application_no",
   "no_of_shares",
+  "total_share_amount",
   "start_range",
   "end_range",
   "status",
@@ -51,11 +52,16 @@
    "fieldname": "barcode",
    "fieldtype": "Barcode",
    "label": "barcode"
+  },
+  {
+   "fieldname": "total_share_amount",
+   "fieldtype": "Currency",
+   "label": "Total Share Amount"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-02-06 22:35:57.501569",
+ "modified": "2024-02-16 17:51:21.441521",
  "modified_by": "Administrator",
  "module": "Share Holder Management",
  "name": "Share Test",

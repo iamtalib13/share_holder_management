@@ -139,6 +139,40 @@ def day_end():
 
     except Exception as e:
         print(f"Error: {e}")
+        
+        
+def day_start():
+    try:
+        # Fetch distinct branches from the database
+        result_branches = frappe.db.sql("""
+            SELECT DISTINCT branch
+            FROM `tabUser`
+            WHERE role_profile_name = 'Share User Employee'
+        """, as_dict=True)
+
+        if result_branches:
+            print("\nCreating Day End Documents:")
+
+            # Loop through each branch and create a Day Management Checkin document
+            for branch in result_branches:
+                # create a new document
+                doc = frappe.new_doc('Day Management Checkin')
+                doc.branch = branch.get('branch')
+                doc.status = "Sanctioned"
+                doc.log_type = "Start"
+                doc.log_time = now()
+
+                try:
+                    doc.insert()
+                    print(f"Created Day Start Document for Branch {branch.get('branch')}")
+                except frappe.DuplicateEntryError:
+                    print(f"Day Start for Branch {branch.get('branch')} already exists.")
+
+        else:
+            print("\nNo branches found for day Start")
+
+    except Exception as e:
+        print(f"Error: {e}")        
          
 def update_barcode():
     print("barcode updated")

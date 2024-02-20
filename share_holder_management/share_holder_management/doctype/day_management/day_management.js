@@ -5,7 +5,123 @@ frappe.ui.form.on("Day Management", {
   refresh: function (frm) {
     frm.trigger("header_links");
     frm.trigger("populate_ho_log_html");
+    frm.trigger("day_management_status");
     // frm.trigger("populate_branch_log_html");
+  },
+
+  async day_management_status(frm) {
+    // Make an asynchronous call to the Python function to fetch data
+    frm.call({
+      method: "check_conditions",
+      callback: function (data) {
+        // Log the response in the console
+        console.log("Python Function Response:", data);
+
+        // Handle the data received from the Python function
+        let results = data.message;
+
+        // Generate HTML dynamically based on the fetched data
+        let html = `<!DOCTYPE html>
+                <html lang="en">
+                    <head>
+                        <meta charset="UTF-8" />
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                        <title>Share Application Day Management </title>
+                        <style>
+                        body {
+                          margin: 0; /* Remove default body margin */
+                          padding: 0; /* Remove default body padding */
+                      }
+
+                      table {
+                          border-collapse: collapse;
+                          width: 100%;
+                          margin-top: 20px;
+                          overflow: hidden;
+                      }
+
+                      .branch-th {
+                          background-color: #c2d7df;
+                          height: 60px;
+                          text-align: center;
+                          font-size: 15px;
+                      }
+
+                      .branch-td {
+                          border: none;
+                          padding: 8px;
+                          text-align: center;
+                      }
+
+                      thead {
+                          position: sticky;
+                          top: 0;
+                          z-index: 100;
+                      }
+
+                      .branch-row_border {
+                          border-bottom: 1px solid #D9D9D9;
+                          height: 60px;
+                      }
+
+                      .branch-row_border:hover {
+                          background-color: #c2d7df;
+                          cursor: pointer;
+                      }
+                        </style>
+                    </head>
+
+                    <body>
+                        <h3>Day Management Status</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th class="branch-th">Status</th>
+                                    <th class="branch-th">Date</th>
+                                    <th class="branch-th">HO Day Start</th>
+                                    <th class="branch-th">All Branch Day Start</th>
+                                    <th class="branch-th">All Branch Day End</th>
+                                    <th class="branch-th">HO Day End</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            ${results
+                              .map(
+                                (result) => `
+                                <tr>
+                                <td class="branch-td">${result.Status}</td>
+                              
+                                    <td class="branch-td">${result.Date}</td>
+                                    
+                                    <td class="branch-td">${
+                                      result["HO Day Start"] ? "True" : "False"
+                                    }</td>
+                                    <td class="branch-td">${
+                                      result["All Branch Day Start"]
+                                        ? "True"
+                                        : "False"
+                                    }</td>
+                                    <td class="branch-td">${
+                                      result["All Branch Day End"]
+                                        ? "True"
+                                        : "False"
+                                    }</td>
+                                    <td class="branch-td">${
+                                      result["HO Day End"] ? "True" : "False"
+                                    }</td>
+                                </tr>
+                            `
+                              )
+                              .join("")}
+                        </tbody>
+                        </table>
+                    </body>
+                </html>`;
+
+        // Set the above `html` as Summary HTML
+        frm.set_df_property("day_management_status", "options", html);
+      },
+    });
   },
 
   day_intro: function (frm) {

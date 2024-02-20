@@ -10,6 +10,8 @@
   "find_btn",
   "column_break_rct0f",
   "reso_no",
+  "column_break_z0leb",
+  "sub_no",
   "section_break_uiqqm",
   "proceeding_members",
   "response"
@@ -53,13 +55,23 @@
    "fieldtype": "Select",
    "label": "\u0920\u0930\u093e\u0935 \u0915\u094d\u0930. ",
    "options": "\n1\n2\n3\n4\n5"
+  },
+  {
+   "fieldname": "sub_no",
+   "fieldtype": "Select",
+   "label": "\u0935\u093f\u0937\u092f \u0915\u094d\u0930.",
+   "options": "\n1\n2\n3\n4\n5"
+  },
+  {
+   "fieldname": "column_break_z0leb",
+   "fieldtype": "Column Break"
   }
  ],
  "hide_toolbar": 1,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2024-02-16 10:48:17.540708",
+ "modified": "2024-02-17 12:52:19.674546",
  "modified_by": "Administrator",
  "module": "Share Holder Management",
  "name": "Share Proceeding",
