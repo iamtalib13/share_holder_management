@@ -20,7 +20,11 @@ def get_logs(proceeding_date):
             application_sr_no,
             sanction_date,
             branch,
-            customer_name
+            customer_name,
+            status,
+            address,
+            taluka,
+            city
         FROM
             `tabShare Application`
         WHERE

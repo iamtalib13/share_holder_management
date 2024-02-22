@@ -15,10 +15,24 @@ frappe.ui.form.on("Day Management", {
       method: "check_conditions",
       callback: function (data) {
         // Log the response in the console
-        console.log("Python Function Response:", data);
+        console.log("status response:", data);
 
         // Handle the data received from the Python function
         let results = data.message;
+
+        // Assuming results[0].Date is a valid date string
+        const originalDate = new Date(results[0].Date);
+        console.log("original date:", originalDate);
+
+        // Extract day, month, and year
+        const day = originalDate.getDate().toString().padStart(2, "0");
+        const month = (originalDate.getMonth() + 1).toString().padStart(2, "0"); // Months are zero-based
+        const year = originalDate.getFullYear();
+
+        // Format the date as dd-mm-yyyy
+        const formattedDate = `${day}-${month}-${year}`;
+
+        console.log("Formatted Date:", formattedDate);
 
         // Generate HTML dynamically based on the fetched data
         let html = `<!DOCTYPE html>
@@ -68,7 +82,19 @@ frappe.ui.form.on("Day Management", {
                           background-color: #c2d7df;
                           cursor: pointer;
                       }
-                        </style>
+
+                      /* Add custom styles for the true and false symbols */
+                      .checkmark {
+                          color: green; /* Change color for true symbol */
+                          font-size: x-large;
+                      }
+                    
+                      .crossmark {
+                          color: red; /* Change color for false symbol */
+                          font-size: x-large;
+                      }
+
+                      </style>
                     </head>
 
                     <body>
@@ -90,26 +116,52 @@ frappe.ui.form.on("Day Management", {
                                 (result) => `
                                 <tr>
                                 <td class="branch-td">${result.Status}</td>
-                              
-                                    <td class="branch-td">${result.Date}</td>
-                                    
-                                    <td class="branch-td">${
-                                      result["HO Day Start"] ? "True" : "False"
-                                    }</td>
-                                    <td class="branch-td">${
+                                <td class="branch-td">${formattedDate}</td>
+                                <td class="branch-td ${
+                                  result["HO Day Start"]
+                                    ? "checkmark"
+                                    : "crossmark"
+                                }">
+                                    ${
+                                      result["HO Day Start"]
+                                        ? "&#10004;"
+                                        : "&#10008;"
+                                    }
+                                </td>
+                                <td class="branch-td ${
+                                  result["All Branch Day Start"]
+                                    ? "checkmark"
+                                    : "crossmark"
+                                }">
+                                    ${
                                       result["All Branch Day Start"]
-                                        ? "True"
-                                        : "False"
-                                    }</td>
-                                    <td class="branch-td">${
+                                        ? "&#10004;"
+                                        : "&#10008;"
+                                    }
+                                </td>
+                                <td class="branch-td ${
+                                  result["All Branch Day End"]
+                                    ? "checkmark"
+                                    : "crossmark"
+                                }">
+                                    ${
                                       result["All Branch Day End"]
-                                        ? "True"
-                                        : "False"
-                                    }</td>
-                                    <td class="branch-td">${
-                                      result["HO Day End"] ? "True" : "False"
-                                    }</td>
-                                </tr>
+                                        ? "&#10004;"
+                                        : "&#10008;"
+                                    }
+                                </td>
+                                <td class="branch-td ${
+                                  result["HO Day End"]
+                                    ? "checkmark"
+                                    : "crossmark"
+                                }">
+                                    ${
+                                      result["HO Day End"]
+                                        ? "&#10004;"
+                                        : "&#10008;"
+                                    }
+                                </td>
+                              </tr>
                             `
                               )
                               .join("")}
@@ -151,126 +203,125 @@ frappe.ui.form.on("Day Management", {
 
   //Showing HO logs details as html
   async populate_ho_log_html(frm) {
-    // Fetch the data from backend
+    // checking previous data record first
     frm.call({
-      method: "show_ho_logs",
+      method: "check_conditions",
       freeze: true, // Set to true to freeze the UI
       freeze_message: "Please wait, processing data...",
-      args: {
-        self: frm.doc.name,
-      },
       callback: function (r) {
         if (!r.exc) {
           const data = r.message;
           console.log("Response", r.message);
+          console.log("data", data);
 
+          // Assuming results[0].Date is a valid date string
+          const currentDate = new Date(data[0].Date);
+          console.log("original date:", currentDate);
+
+          // Extract day, month, and year
+          const day = currentDate.getDate().toString().padStart(2, "0");
+          const month = (currentDate.getMonth() + 1)
+            .toString()
+            .padStart(2, "0"); // Months are zero-based
+          const year = currentDate.getFullYear();
+
+          // Format the date as dd-mm-yyyy
+          const formattedDate = `${year}-${month}-${day}`;
+
+          // Format the date as dd-mm-yyyy
+          const showDate = `${day}-${month}-${year}`;
+
+          // getting ho log records of passing date
           frm.call({
-            method: "get_server_datetime",
+            method: "show_ho_logs",
+            freeze: true, // Set to true to freeze the UI
+            freeze_message: "Please wait, processing data...",
+            args: {
+              self: frm.doc.name,
+              date: formattedDate, // Pass the formatted date to show_ho_logs
+            },
             callback: function (r) {
-              const serverDateTime = r.message;
-              console.log(serverDateTime);
+              if (!r.exc) {
+                const data = r.message;
+                console.log("Response", r.message);
 
-              // Convert the server datetime to a JavaScript Date object
-              const dateObject = new Date(serverDateTime);
+                // // Check if HO day is ended
+                // const hoDayEnded = totalEnd === totalBranch;
 
-              // Extract individual components (year, month, day)
-              const year = dateObject.getFullYear();
-              const month = (dateObject.getMonth() + 1)
-                .toString()
-                .padStart(2, "0"); // Months are zero-based
-              const day = dateObject.getDate().toString().padStart(2, "0");
+                //start deatils response
+                const startDetails = data.start_details || {};
+                console.log("start details : ", startDetails);
 
-              // Form the desired date string
-              const formattedDate = `${day}-${month}-${year}`;
+                //end details response
+                const endDetails = data.end_details || {};
 
-              // // Check if HO day is ended
-              // const hoDayEnded = totalEnd === totalBranch;
+                console.log("end details", endDetails);
 
-              // // If HO day has ended, calculate the next day's date
-              // if (hoDayEnded) {
-              //   // Increment the current date by one day
-              //   dateObject.setDate(dateObject.getDate() + 1);
+                // total start branches response
+                const totalStart = data.total_start_count;
+                console.log("Total Number of start : ", totalStart);
 
-              //   // Extract components of the next day's date
-              //   year = dateObject.getFullYear();
-              //   month = (dateObject.getMonth() + 1).toString().padStart(2, "0");
-              //   day = dateObject.getDate().toString().padStart(2, "0");
-              // }
+                // total start branches response
+                const totalEnd = data.total_end_count;
+                console.log("Total Number of end : ", totalEnd);
 
-              // // Form the updated date string
-              // const updatedFormattedDate = `${day}-${month}-${year}`;
+                //total branches response
+                const totalBranch = data.total_branch_count || {};
+                console.log("Total Number of Branches : ", totalBranch);
 
-              //start deatils response
-              const startDetails = data.start_details || {};
-              console.log("start details : ", startDetails);
-
-              //end details response
-              const endDetails = data.end_details || {};
-
-              console.log("end details", endDetails);
-
-              // total start branches response
-              const totalStart = data.total_start_count;
-              console.log("Total Number of start : ", totalStart);
-
-              // total start branches response
-              const totalEnd = data.total_end_count;
-              console.log("Total Number of end : ", totalEnd);
-
-              //total branches response
-              const totalBranch = data.total_branch_count || {};
-              console.log("Total Number of Branches : ", totalBranch);
-
-              // Check if HO day is not started to display the start button
-              const startButtonHtml = !startDetails.log_type
-                ? `<button class="ho_button"  onclick="startHO()">Start HO Day</button>`
-                : "";
-
-              // Check if log_type is "Start" to set ho_day_start to true
-              const hoDayStartLabel =
-                startDetails.log_type === "Start"
-                  ? `<span style="color: green;">HO Day Start</span>`
-                  : `<span style="color: red;">HO Day Not Started Yet</span>`;
-
-              const hoDayStartInfo =
-                startDetails.log_type === "Start"
-                  ? `${startDetails.ho_start_time} - ${startDetails.ho_start_date}`
+                // Check if HO day is not started to display the start button
+                const startButtonHtml = !startDetails.log_type
+                  ? `<button class="ho_button"  onclick="startHO()">Start HO Day</button>`
                   : "";
 
-              // Check if HO day is not ended to display the end button
-              const endButtonHtml =
-                totalEnd === totalBranch
+                // Check if log_type is "Start" to set ho_day_start to true
+                const hoDayStartLabel =
+                  startDetails.log_type === "Start"
+                    ? `<span style="color: green;">HO Day Started</span>`
+                    : `<span style="color: red;">HO Day Not Started Yet</span>`;
+
+                const hoDayStartInfo =
+                  startDetails.log_type === "Start"
+                    ? `${startDetails.ho_start_time} - ${startDetails.ho_start_date}`
+                    : "";
+
+                // Check if end details is not present and all branches have ended to decide whether to show the "End HO Day" button
+                const showEndButton =
+                  !endDetails.log_type && totalEnd === totalBranch;
+
+                // Display the "End HO Day" button only if end details are not present and all branches have ended
+                const endButtonHtml = showEndButton
                   ? `<button class="ho_button" onclick="startHO()">End HO Day</button>`
                   : "";
 
-              // Check if log_type is "End" to set ho_day_end to true
-              const hoDayEndLabel =
-                endDetails.log_type === "End"
-                  ? `<span style="color: green;">HO Day End</span>`
-                  : `<span style="color: red;">HO Day will end when all branches day Ended</span>`;
+                // Check if log_type is "End" to set ho_day_end to true
+                const hoDayEndLabel =
+                  endDetails.log_type === "End"
+                    ? `<span style="color: green;">HO Day Ended</span>`
+                    : `<span style="color: red;">HO Day will end when all branches day Ended</span>`;
 
-              const hoDayEndInfo =
-                endDetails.log_type === "End"
-                  ? `${endDetails.ho_end_time} - ${endDetails.ho_end_date}`
-                  : "";
+                const hoDayEndInfo =
+                  endDetails.log_type === "End"
+                    ? `${endDetails.ho_end_time} - ${endDetails.ho_end_date}`
+                    : "";
 
-              // Calculate the progress percentage based on the number of branches started
-              const branchStartProgressPercentage =
-                (totalStart / totalBranch) * 100;
+                // Calculate the progress percentage based on the number of branches started
+                const branchStartProgressPercentage =
+                  (totalStart / totalBranch) * 100;
 
-              // Calculate the progress percentage based on the number of branches ended
-              const branchEndProgressPercentage =
-                (totalEnd / totalBranch) * 100;
+                // Calculate the progress percentage based on the number of branches ended
+                const branchEndProgressPercentage =
+                  (totalEnd / totalBranch) * 100;
 
-              // Check if the HO day has ended
-              const checkhoDayEnded = totalEnd === totalBranch;
+                // Check if the HO day has ended
+                const checkhoDayEnded = totalEnd === totalBranch;
 
-              // Set the flag based on the condition
-              const dayEndedFlag = checkhoDayEnded ? "true" : "false";
-              console.log("Branch ended", dayEndedFlag);
+                // Set the flag based on the condition
+                const dayEndedFlag = checkhoDayEnded ? "true" : "false";
+                console.log("Branch ended", dayEndedFlag);
 
-              // Generate HTML dynamically based on the fetched data
-              let html = `<!DOCTYPE html>
+                // Generate HTML dynamically based on the fetched data
+                let html = `<!DOCTYPE html>
               <html lang="en">
                 <head>
                   <meta charset="UTF-8" />
@@ -396,7 +447,7 @@ frappe.ui.form.on("Day Management", {
                   <div class="ho_container">
 
                     <div class="ho_header">
-                      <div class="ho_title">Share Application Day Management ${formattedDate}</div>
+                      <div class="ho_title">Share Application Day Management ${showDate}</div>
                       <div class="ho_mql">Developed by - Talib Sheikh</div>
                     </div>
                     <div class="ho_metrics">
@@ -474,17 +525,18 @@ frappe.ui.form.on("Day Management", {
               </html>
               `;
 
-              // Set the above `html` as Summary HTML
-              frm.set_df_property("ho_log_html", "options", html);
+                // Set the above `html` as Summary HTML
+                frm.set_df_property("ho_log_html", "options", html);
 
-              // Check if HO day is started before triggering the branch log function
-              if (startDetails.log_type === "Start") {
-                frm.trigger("populate_branch_log_html");
+                // Check if HO day is started before triggering the branch log function
+                if (startDetails.log_type === "Start") {
+                  frm.trigger("populate_branch_log_html");
+                }
+              } else {
+                frappe.msgprint("Error fetching details");
               }
             },
           });
-        } else {
-          frappe.msgprint("Error fetching details");
         }
       },
     });
@@ -493,38 +545,59 @@ frappe.ui.form.on("Day Management", {
   //Showing Branch logs details as html
   async populate_branch_log_html(frm) {
     // Fetch the data from the backend
+    // checking previous data record first
     frm.call({
-      method: "show_branch_logs",
+      method: "check_conditions",
       freeze: true, // Set to true to freeze the UI
       freeze_message: "Please wait, processing data...",
-      args: {
-        self: frm.doc.name,
-      },
       callback: function (r) {
         if (!r.exc) {
           const data = r.message;
-          console.log(data);
+          console.log("Response", r.message);
+          console.log("data", data);
+
+          const currentDate = new Date(data[0].Date);
+          console.log("original date:", currentDate);
+
+          // Extract day, month, and year
+          const day = currentDate.getDate().toString().padStart(2, "0");
+          const month = (currentDate.getMonth() + 1)
+            .toString()
+            .padStart(2, "0"); // Months are zero-based
+          const year = currentDate.getFullYear();
+
+          const formatcurrentDate = `${year}-${month}-${day}`;
+          console.log("formatcurrentDate", formatcurrentDate);
+
+          const formattedDate = currentDate.toLocaleDateString("en-GB", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+          });
+
+          const formattedTime = currentDate.toLocaleTimeString("en-GB", {
+            hour: "2-digit",
+            minute: "2-digit",
+          });
+
+          const formattedDateTime = `${formattedDate} ${formattedTime}`;
+          console.log("formatted date:", formattedDateTime);
+
           frm.call({
-            method: "get_server_datetime",
+            method: "show_branch_logs",
+            freeze: true, // Set to true to freeze the UI
+            freeze_message: "Please wait, processing data...",
+            args: {
+              self: frm.doc.name,
+              date: formatcurrentDate,
+            },
             callback: function (r) {
-              const serverDateTime = r.message;
-              console.log(serverDateTime);
+              if (!r.exc) {
+                const data = r.message;
+                console.log(data);
 
-              // Convert the server datetime to a JavaScript Date object
-              const dateObject = new Date(serverDateTime);
-
-              // Extract individual components (year, month, day)
-              const year = dateObject.getFullYear();
-              const month = (dateObject.getMonth() + 1)
-                .toString()
-                .padStart(2, "0"); // Months are zero-based
-              const day = dateObject.getDate().toString().padStart(2, "0");
-
-              // Form the desired date string
-              const formattedDate = `${day}-${month}-${year}`;
-
-              // Generate HTML directly in JavaScript
-              let html = `<html lang="en">
+                // Generate HTML directly in JavaScript
+                let html = `<html lang="en">
               <head>
                   <meta charset="UTF-8">
                   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -637,18 +710,18 @@ frappe.ui.form.on("Day Management", {
                   <script>
                   function startButton(branchName) {
                     console.log("Button click");
-
+                
                     const branch = branchName;
                     console.log("Branch Name:", branch);
-
+                
                     // Get the current user
                     const currentUser = frappe.session.user;
                     console.log("Current User:", currentUser);
-
+                
                     // Extract user ID from the email address
                     const userId = currentUser.split('@')[0];
                     console.log("User ID:", userId);
-
+                
                     // Fetch logged-in employee details
                     frappe.call({
                       method: "frappe.client.get_value",
@@ -657,120 +730,197 @@ frappe.ui.form.on("Day Management", {
                         filters: { user_id: currentUser },
                         fieldname: ["employee_name"]
                       },
-                      callback: function(employeeResponse) {
+                      callback: function (employeeResponse) {
                         if (!employeeResponse.exc) {
                           const employeeName = employeeResponse.message.employee_name;
                           console.log("Employee name", employeeName);
-
-                          // Add any additional logic or actions you want to perform
+                
+                          // Check conditions before making the start_branch_day call
                           frappe.call({
-                            method: "share_holder_management.share_holder_management.doctype.day_management.day_management.start_branch_day",
+                            method: "share_holder_management.share_holder_management.doctype.day_management.day_management.check_conditions",
+                            callback: function (response) {
+                              // Callback function to handle the server's response
+                              if (!response.exc) {
+                                const data = response.message;
+                                console.log("Response", data);
+                                console.log("data", data);
+                
+                                const originalDate = data[0].Date;
+                                console.log("inside script original date:", originalDate);
 
-                            args: {
-                              branch: branch,
-                              userId: userId,
-                              employeeName: employeeName
-                          },
-                          callback: function(response) {
-                            // Callback function to handle the server's response
-                            if (!response.exc) {
-                              const data = response.message;
-                              console.log("Response", data);
-                              // Check if emp_name is present in the response
-                              console.log("Employee Name:", data.emp_name);
+                                const originalDateParts = originalDate.split('-');
+                                // Reformat the date as dd/mm/yyyy
+                                const formattedOriginalDate = originalDateParts[2] +'/'+  originalDateParts[1] +'/'+ originalDateParts[0];
 
-                              frappe.show_alert({
-                                message: __(branch + ' Branch started Successfully'),
-                                indicator: 'green'
-                              }, 5);
+                                const currentDateTime = new Date();
+                                const currentHour = currentDateTime.getHours().toString().padStart(2, '0');
+                                const currentMinute = currentDateTime.getMinutes().toString().padStart(2, '0');
 
-                              // Delay the page reload by 2 seconds (adjust as needed)
-                              setTimeout(function() {
-                                // Refresh the page after the alert is shown
-                                location.reload();
-                              }, 1000);
+                                const currentTime = currentHour + ':' + currentMinute;
+                                console.log("current time format:",currentTime)
 
+                                const formattedDateTime = originalDate +','+ currentTime;
+                                console.log("formatted date and time:", formattedDateTime);
+
+                                // Combine the original date and current time
+                                const modifiedDate = formattedOriginalDate +','+ currentTime;
+
+                                console.log("final formatted date time:", modifiedDate);
+
+                                // calling start branch day server function
+                                frappe.call({
+                                  method: "share_holder_management.share_holder_management.doctype.day_management.day_management.start_branch_day",
+                                  args: {
+                                    branch: branch,
+                                    userId: userId,
+                                    employeeName: employeeName,
+                                    datetime_str:modifiedDate,
+                                  },
+                                  callback: function (response) {
+                                    // Callback function to handle the server's response
+                                    if (!response.exc) {
+                                      const data = response.message;
+                                      console.log("Response", data);
+                                      // Check if emp_name is present in the response
+                                      console.log("Employee Name:", data.emp_name);
+                
+                                      frappe.show_alert({
+                                        message: __(branch + ' Branch started Successfully'),
+                                        indicator: 'green'
+                                      }, 5);
+                
+                                      // Delay the page reload by 2 seconds (adjust as needed)
+                                      setTimeout(function () {
+                                        // Refresh the page after the alert is shown
+                                        location.reload();
+                                      }, 1000);
+                
+                                    } else {
+                                      // Handle errors
+                                      console.error("Error:", response.exc);
+                                    }
+                                  }
+                                });
+                              } else {
+                                // Handle errors or conditions not met
+                                console.error("Error or conditions not met:", response.exc);
+                              }
+                            }
+                          });
+                        } else {
+                          // Handle errors fetching employee details
+                          console.error("Error fetching employee details:", employeeResponse.exc);
+                        }
+                      }
+                    });
+                  }
+
+                  function endButton(branchName) {
+                    console.log("End Button click");
+                
+                    const branch = branchName;
+                    console.log("Branch Name:", branch);
+                
+                    // Get the current user
+                    const currentUser = frappe.session.user;
+                    console.log("Current User:", currentUser);
+                
+                    // Extract user ID from the email address
+                    const userId = currentUser.split('@')[0];
+                    console.log("User ID:", userId);
+                
+                    // Fetch logged-in employee details
+                    frappe.call({
+                        method: "frappe.client.get_value",
+                        args: {
+                            doctype: "Employee",
+                            filters: { user_id: currentUser },
+                            fieldname: ["employee_name"]
+                        },
+                        callback: function (employeeResponse) {
+                            if (!employeeResponse.exc) {
+                                const employeeName = employeeResponse.message.employee_name;
+                                console.log("Employee name", employeeName);
+                
+                                // Check conditions before making the end_branch_day call
+                                frappe.call({
+                                    method: "share_holder_management.share_holder_management.doctype.day_management.day_management.check_conditions",
+                                    callback: function (response) {
+                                        // Callback function to handle the server's response
+                                        if (!response.exc) {
+                                            const data = response.message;
+                                            console.log("Response", data);
+                                            console.log("data", data);
+                
+                                            const originalDate = data[0].Date;
+                                            console.log("inside script original date:", originalDate);
+                
+                                            const originalDateParts = originalDate.split('-');
+                                            // Reformat the date as dd/mm/yyyy
+                                            const formattedOriginalDate = originalDateParts[2] + '/' + originalDateParts[1] + '/' + originalDateParts[0];
+                
+                                            const currentDateTime = new Date();
+                                            const currentHour = currentDateTime.getHours().toString().padStart(2, '0');
+                                            const currentMinute = currentDateTime.getMinutes().toString().padStart(2, '0');
+                
+                                            const currentTime = currentHour + ':' + currentMinute;
+                                            console.log("current time format:", currentTime);
+                
+                                            const formattedDateTime = originalDate + ',' + currentTime;
+                                            console.log("formatted date and time:", formattedDateTime);
+                
+                                            // Combine the original date and current time
+                                            const modifiedDate = formattedOriginalDate + ',' + currentTime;
+                                            console.log("final formatted date time:", modifiedDate);
+                
+                                            // calling end branch day server function
+                                            frappe.call({
+                                                method: "share_holder_management.share_holder_management.doctype.day_management.day_management.end_branch_day",
+                                                args: {
+                                                    branch: branch,
+                                                    userId: userId,
+                                                    employeeName: employeeName,
+                                                    datetime_str: modifiedDate,  // Use the correct parameter name expected by the server-side function
+                                                },
+                                                callback: function (response) {
+                                                    // Callback function to handle the server's response
+                                                    if (!response.exc) {
+                                                        const data = response.message;
+                                                        console.log("Response", data);
+                                                        // Check if emp_name is present in the response
+                                                        console.log("Employee Name:", data.emp_name);
+                
+                                                        frappe.show_alert({
+                                                            message: __(branch + ' Branch ended Successfully'),
+                                                            indicator: 'green'
+                                                        }, 5);
+                
+                                                        // Delay the page reload by 2 seconds (adjust as needed)
+                                                        setTimeout(function () {
+                                                            // Refresh the page after the alert is shown
+                                                            location.reload();
+                                                        }, 1000);
+                
+                                                    } else {
+                                                        // Handle errors
+                                                        console.error("Error:", response.exc);
+                                                    }
+                                                }
+                                            });
+                                        } else {
+                                            // Handle errors or conditions not met
+                                            console.error("Error or conditions not met:", response.exc);
+                                        }
+                                    }
+                                });
                             } else {
-                                // Handle errors
-                                console.error("Error:", response.exc);
+                                // Handle errors fetching employee details
+                                console.error("Error fetching employee details:", employeeResponse.exc);
                             }
                         }
                     });
-                    } else {
-                    // Handle errors fetching employee details
-                      console.error("Error fetching employee details:", employeeResponse.exc);
-                    }
-                  }
-                });
-              }
-
-              function endButton(branchName) {
-                console.log("End Button click");
-
-                const branch = branchName;
-                console.log("Branch Name:", branch);
-
-                // Get the current user
-                const currentUser = frappe.session.user;
-                console.log("Current User:", currentUser);
-
-                // Extract user ID from the email address
-                const userId = currentUser.split('@')[0];
-                console.log("User ID:", userId);
-
-                // Fetch logged-in employee details
-                frappe.call({
-                  method: "frappe.client.get_value",
-                  args: {
-                    doctype: "Employee",
-                    filters: { user_id: currentUser },
-                    fieldname: ["employee_name"]
-                  },
-                  callback: function (employeeResponse) {
-                    if (!employeeResponse.exc) {
-                      const employeeName = employeeResponse.message.employee_name;
-                      console.log("Employee name", employeeName);
-
-                      // Add any additional logic or actions you want to perform
-                      frappe.call({
-                        method: "share_holder_management.share_holder_management.doctype.day_management.day_management.end_branch_day",
-                        args: {
-                          branch: branch,
-                          userId: userId,
-                          employeeName: employeeName
-                        },
-                        callback: function (response) {
-                          // Callback function to handle the server's response
-                          if (!response.exc) {
-                            const data = response.message;
-                            console.log("Response", data);
-                            // Check if emp_name is present in the response
-                            console.log("Employee Name:", data.emp_name);
-
-                            frappe.show_alert({
-                              message: __(branch + ' Branch ended Successfully'),
-                              indicator: 'green'
-                            }, 5);
-
-                            // Delay the page reload by 2 seconds (adjust as needed)
-                            setTimeout(function () {
-                              // Refresh the page after the alert is shown
-                              location.reload();
-                            }, 1000);
-
-                          } else {
-                            // Handle errors
-                            console.error("Error:", response.exc);
-                          }
-                        }
-                      });
-                    } else {
-                      // Handle errors fetching employee details
-                      console.error("Error fetching employee details:", employeeResponse.exc);
-                    }
-                  }
-                });
-              }
+                }
+                
               </script>
 
               </head>
@@ -871,75 +1021,77 @@ frappe.ui.form.on("Day Management", {
 
               `;
 
-              // Set the above `html` as Summary HTML
-              frm.set_df_property("branch_log_html", "options", html);
+                // Set the above `html` as Summary HTML
+                frm.set_df_property("branch_log_html", "options", html);
 
-              const filterDropdown = document.getElementById("filter");
-              const branchSearchInput = document.getElementById("branchSearch");
-              const branchSearchLabel = document.querySelector(
-                'label[for="branchSearch"]'
-              );
-              const totalRowsElement = document.getElementById("totalRows");
+                const filterDropdown = document.getElementById("filter");
+                const branchSearchInput =
+                  document.getElementById("branchSearch");
+                const branchSearchLabel = document.querySelector(
+                  'label[for="branchSearch"]'
+                );
+                const totalRowsElement = document.getElementById("totalRows");
 
-              // Function to filter rows based on both filters
-              function applyFilters() {
-                const filterValue = filterDropdown.value;
-                const searchValue = branchSearchInput.value
-                  .trim()
-                  .toLowerCase();
+                // Function to filter rows based on both filters
+                function applyFilters() {
+                  const filterValue = filterDropdown.value;
+                  const searchValue = branchSearchInput.value
+                    .trim()
+                    .toLowerCase();
 
-                const rows = document.querySelectorAll(".branch-row_border");
-                let visibleRowIndex = 1;
+                  const rows = document.querySelectorAll(".branch-row_border");
+                  let visibleRowIndex = 1;
 
-                rows.forEach((row) => {
-                  const started = row.querySelector(".start-time");
-                  const ended = row.querySelector(".end-time");
-                  const branch = row
-                    .querySelector(".branch-td:nth-child(2)")
-                    .textContent.toLowerCase();
+                  rows.forEach((row) => {
+                    const started = row.querySelector(".start-time");
+                    const ended = row.querySelector(".end-time");
+                    const branch = row
+                      .querySelector(".branch-td:nth-child(2)")
+                      .textContent.toLowerCase();
 
-                  const matchesFilter =
-                    filterValue === "all" ||
-                    (filterValue === "started" && started) ||
-                    (filterValue === "ended" && ended) ||
-                    (filterValue === "notStarted" && !started) ||
-                    (filterValue === "notEnded" && !ended);
+                    const matchesFilter =
+                      filterValue === "all" ||
+                      (filterValue === "started" && started) ||
+                      (filterValue === "ended" && ended) ||
+                      (filterValue === "notStarted" && !started) ||
+                      (filterValue === "notEnded" && !ended);
 
-                  const matchesBranchSearch = branch.includes(searchValue);
+                    const matchesBranchSearch = branch.includes(searchValue);
 
-                  if (matchesFilter && matchesBranchSearch) {
-                    row.style.display = "";
-                  } else {
-                    row.style.display = "none";
-                  }
+                    if (matchesFilter && matchesBranchSearch) {
+                      row.style.display = "";
+                    } else {
+                      row.style.display = "none";
+                    }
 
-                  // Update serial number only for visible rows
-                  if (row.style.display !== "none") {
-                    row.querySelector(".branch-td:first-child").textContent =
-                      visibleRowIndex++;
-                  }
-                });
+                    // Update serial number only for visible rows
+                    if (row.style.display !== "none") {
+                      row.querySelector(".branch-td:first-child").textContent =
+                        visibleRowIndex++;
+                    }
+                  });
 
-                // Update and display the total number of visible rows
-                totalRowsElement.textContent = `Total records ${
-                  visibleRowIndex - 1
-                }`;
+                  // Update and display the total number of visible rows
+                  totalRowsElement.textContent = `Total records ${
+                    visibleRowIndex - 1
+                  }`;
+                }
+
+                // Add event listener for filter changes
+                filterDropdown.addEventListener("change", applyFilters);
+
+                // Add event listener for branch search changes
+                branchSearchInput.addEventListener("input", applyFilters);
+
+                // Set initial styling for branch search label
+                branchSearchLabel.style.marginRight = "5px";
+                branchSearchLabel.style.fontWeight = "bold";
+                branchSearchLabel.style.color = "black";
+              } else {
+                frappe.msgprint("Error fetching details");
               }
-
-              // Add event listener for filter changes
-              filterDropdown.addEventListener("change", applyFilters);
-
-              // Add event listener for branch search changes
-              branchSearchInput.addEventListener("input", applyFilters);
-
-              // Set initial styling for branch search label
-              branchSearchLabel.style.marginRight = "5px";
-              branchSearchLabel.style.fontWeight = "bold";
-              branchSearchLabel.style.color = "black";
             },
           });
-        } else {
-          frappe.msgprint("Error fetching details");
         }
       },
     });

@@ -32,6 +32,8 @@ frappe.ui.form.on("Share Proceeding", {
         var newWindow = window.open(printUrl);
         console.log(printUrl); // Log the URL to the console
         // Additional logic if needed
+        console.log(address);
+        console.log(branch);
       },
       __("Print")
     );
@@ -39,6 +41,7 @@ frappe.ui.form.on("Share Proceeding", {
 
   find_btn: function (frm) {
     let date = frm.doc.proceeding_date;
+    console.log("Date: ", date);
 
     if (frm.doc.response === "False") {
       frm.call({
@@ -67,6 +70,10 @@ frappe.ui.form.on("Share Proceeding", {
                   application_sr_no: data.application_sr_no,
                   share_holder_name: data.customer_name,
                   branch: data.branch,
+                  address: data.address,
+                  taluka: data.taluka,
+                  city: data.city,
+                  status: data.status,
                 });
               }
 

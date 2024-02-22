@@ -48,6 +48,7 @@ frappe.ui.form.on("Day Management Checkin", {
               freeze_message: "Please wait, processing data...",
               callback: function (r) {
                 if (!r.exc && r.message) {
+                  console.log("result message:", r.message);
                   frm.set_value("log_time", r.message);
                   frm.refresh_field("log_time");
                   console.log("branch client :", branch);
@@ -65,19 +66,19 @@ frappe.ui.form.on("Day Management Checkin", {
                           // Successful response handling code
                           console.log("Success:", r.message);
 
-                          if (r.message === "Day Completed") {
-                            console.log("Day completed");
-                            frm.set_df_property("log_type", "options", "");
-                            frm.disable_save();
-                            frm.disable_form();
-                          } else if (r.message === "Day Not Ended") {
-                            console.log("Day Not Ended");
-                            frm.set_df_property("log_type", "options", "End");
-                          } else if (r.message === "Day Not Started") {
-                            console.log("Day Not Started");
-                            // Set the options for the `primary_phone` select field
-                            frm.set_df_property("log_type", "options", "Start");
-                          }
+                          // if (r.message === "Day Completed") {
+                          //   console.log("Day completed");
+                          //   frm.set_df_property("log_type", "options", "");
+                          //   frm.disable_save();
+                          //   frm.disable_form();
+                          // } else if (r.message === "Day Not Ended") {
+                          //   console.log("Day Not Ended");
+                          //   frm.set_df_property("log_type", "options", "End");
+                          // } else if (r.message === "Day Not Started") {
+                          //   console.log("Day Not Started");
+                          //   // Set the options for the `primary_phone` select field
+                          //   frm.set_df_property("log_type", "options", "Start");
+                          // }
                         } else {
                           // Error handling code
                           console.log("Error:", r.exc);
@@ -223,32 +224,32 @@ frappe.ui.form.on("Day Management Checkin", {
       frappe.set_route("/app/day-management");
     }
   },
-  before_save: function (frm) {
-    let endlog = frm.doc.log_type;
-    let branch = frm.doc.branch;
+  // before_save: function (frm) {
+  //   let endlog = frm.doc.log_type;
+  //   let branch = frm.doc.branch;
 
-    if (endlog === "End" && branch === "Gondia HO") {
-      frm.call({
-        method: "start_end_details",
-        args: {
-          totalEndCount: 0,
-          totalBranchCount: 0,
-        },
-        callback: function (r) {
-          if (r.message) {
-            let flag = r.flag;
-            if (!flag) {
-              frappe.validated = false;
-              frappe.msgprint(
-                "You cannot End HO until branches are not ended for today."
-              );
-              frm.set_value("log_type", "");
-            }
-          }
-        },
-      });
-    }
-  },
+  //   if (endlog === "End" && branch === "Gondia HO") {
+  //     frm.call({
+  //       method: "start_end_details",
+  //       args: {
+  //         totalEndCount: 0,
+  //         totalBranchCount: 0,
+  //       },
+  //       callback: function (r) {
+  //         if (r.message) {
+  //           let flag = r.flag;
+  //           if (!flag) {
+  //             frappe.validated = false;
+  //             frappe.msgprint(
+  //               "You cannot End HO until branches are not ended for today."
+  //             );
+  //             frm.set_value("log_type", "");
+  //           }
+  //         }
+  //       },
+  //     });
+  //   }
+  // },
 
   // before_save: function (frm) {
   //   let endlog = frm.doc.log_type;

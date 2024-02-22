@@ -836,6 +836,48 @@ frappe.ui.form.on("Share Application", {
     frm.set_intro("<b>Return Remark : </b>" + frm.doc.return_remark, "red");
   },
 
+  // date_of_birth: function (frm) {
+  //   // Get the date of birth from the form
+  //   const dateOfBirth = frm.doc.date_of_birth;
+  //   console.log(dateOfBirth);
+  //   // Check if the date of birth is provided
+  //   if (dateOfBirth) {
+  //     // Convert date string to Date object
+  //     const dob = frappe.datetime.str_to_obj(dateOfBirth);
+
+  //     // Get the current date
+  //     const currentDate = frappe.datetime.str_to_obj(
+  //       frappe.datetime.get_today()
+  //     );
+
+  //     // Calculate the difference in years
+  //     const age = currentDate.getFullYear() - dob.getFullYear();
+
+  //     // Adjust the age if the birthday hasn't occurred yet this year
+  //     if (
+  //       currentDate.getMonth() < dob.getMonth() ||
+  //       (currentDate.getMonth() === dob.getMonth() &&
+  //         currentDate.getDate() < dob.getDate())
+  //     ) {
+  //       // Set the age field value and refresh the field
+  //       frm.set_value("age", age - 1);
+  //       frm.refresh_field("age");
+  //     } else {
+  //       // Set the age field value and refresh the field
+  //       frm.set_value("age", age);
+
+  //       frm.refresh_field("age");
+  //     }
+
+  //     // Refresh the age field in the form
+  //     frm.refresh_field("age");
+  //   } else {
+  //     // Log a message if the date of birth is not provided
+  //     console.log("Date of birth is not provided.");
+  //   }
+  // },
+
+  // arshad changes
   date_of_birth: function (frm) {
     // Get the date of birth from the form
     const dateOfBirth = frm.doc.date_of_birth;
@@ -851,25 +893,51 @@ frappe.ui.form.on("Share Application", {
       );
 
       // Calculate the difference in years
-      const age = currentDate.getFullYear() - dob.getFullYear();
+      let age = currentDate.getFullYear() - dob.getFullYear();
+      console.log("current", currentDate.getFullYear());
+      console.log("dob", dob.getFullYear());
 
-      // Adjust the age if the birthday hasn't occurred yet this year
-      if (
-        currentDate.getMonth() < dob.getMonth() ||
-        (currentDate.getMonth() === dob.getMonth() &&
-          currentDate.getDate() < dob.getDate())
-      ) {
-        // Set the age field value and refresh the field
-        frm.set_value("age", age - 1);
-        frm.refresh_field("age");
-      } else {
-        // Set the age field value and refresh the field
-        frm.set_value("age", age);
-        frm.refresh_field("age");
+      console.log("age is ", age);
+
+      // Check if age is less than 18
+      {
+        // Adjust the age if the birthday hasn't occurred yet this year
+        if (
+          currentDate.getMonth() < dob.getMonth() ||
+          (currentDate.getMonth() === dob.getMonth() &&
+            currentDate.getDate() < dob.getDate())
+        ) {
+          // Set the age field value and refresh the field
+          age = age - 1;
+          if (age < 18) {
+            // Show message for age less than 18
+            frm.set_value("age", "");
+            frm.set_value("date_of_birth", null);
+            frappe.msgprint(__("Age should be 18 or above."));
+            // Clear both age and date_of_birth fields
+            frm.refresh_field("age");
+            frm.refresh_field("date_of_birth");
+          } else {
+            frm.set_value("age", age);
+            frm.refresh_field("age");
+          }
+        } else {
+          // Set the age field value and refresh the field
+          age = age;
+          if (age < 18) {
+            // Show message for age less than 18
+            frm.set_value("age", "");
+            frm.set_value("date_of_birth", null);
+            frappe.msgprint(__("Age should be 18 or above."));
+            // Clear both age and date_of_birth fields
+            frm.refresh_field("age");
+            frm.refresh_field("date_of_birth");
+          } else {
+            frm.set_value("age", age);
+            frm.refresh_field("age");
+          }
+        }
       }
-
-      // Refresh the age field in the form
-      frm.refresh_field("age");
     } else {
       // Log a message if the date of birth is not provided
       console.log("Date of birth is not provided.");

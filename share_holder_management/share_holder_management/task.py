@@ -54,14 +54,14 @@ def test():
     print("\n\nUpdated range '\n\n")
 def update():
     batch_size = 30000  # Adjust the batch size as needed
-    total_records = 333514
+    total_records = 362963
     processed_records = 0
 
     while processed_records < total_records:
         tickets = frappe.get_all(
             "Share Application",
-            filters={"status": "Draft"},
-            fields=["name", "status"],
+            filters={"status": "Sanctioned"},
+            fields=["name", "status"],  
             start=processed_records,
             limit=batch_size,
         )
@@ -176,3 +176,37 @@ def day_start():
          
 def update_barcode():
     print("barcode updated")
+    
+def update_base():
+    batch_size = 30000  # Adjust the batch size as needed
+    total_records = 362963
+    processed_records = 0
+
+    while processed_records < total_records:
+        tickets = frappe.get_all(
+            "Share Application",
+            filters={"status": "Sanctioned"},
+            fields=["name", "status", "no_of_shares", "base_share_amount"],  
+            start=processed_records,
+            limit=batch_size,
+        )
+
+        if not tickets:
+            break  # No more records
+
+        for ticket in tickets:
+            id = ticket.name
+           
+
+            try:
+                # Set base_share_amount to the calculated value
+                frappe.db.set_value("Share Application", id, "share_application_charges", 10, update_modified=False)
+                print(f"Set share appliction charges to 10 for record {id}")
+
+            except Exception as e:
+                print(f"Error updating record {id}: {e}")
+
+        frappe.db.commit()  # Commit changes after updating each batch
+        processed_records += batch_size
+
+    print("\n\nUpdated base_share_amount based on no_of_shares\n\n")
