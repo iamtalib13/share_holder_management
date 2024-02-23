@@ -50,22 +50,22 @@ def before_validate(self):
 
 
 @frappe.whitelist()
-def get_branch_checkin_details(branch):
+def get_branch_checkin_details(branch,date):
     # Get today's date and time
-    today_datetime = frappe.utils.now_datetime()
+    # today_datetime = frappe.utils.now_datetime()
 
     # Query records for the current date, the specified branch, and log types 'Start' and 'End'
     start_checkin = frappe.db.sql(
         f"""SELECT branch, log_type, log_time FROM `tabDay Management Checkin`
             WHERE DATE(log_time) = %s AND branch = %s AND log_type = 'Start'""",
-        (today_datetime.date(), "Gondia HO"),
+        (date, "Gondia HO"),
         as_dict=True,
     )
 
     end_checkin = frappe.db.sql(
         f"""SELECT branch, log_type, log_time FROM `tabDay Management Checkin`
             WHERE DATE(log_time) = %s AND branch = %s AND log_type = 'End'""",
-        (today_datetime.date(), "Gondia HO"),
+        (date, "Gondia HO"),
         as_dict=True,
     )
 
@@ -145,15 +145,15 @@ def get_server_datetime():
 
 
 @frappe.whitelist()
-def ho_day_start_and_end(branch):
+def ho_day_start_and_end(branch,date):
     # Get today's date and time
-    today_datetime = frappe.utils.now_datetime()
+    # today_datetime = frappe.utils.now_datetime()
 
     # Query records for the current date, the specified branch, and log types 'Start' and 'End'
     day = frappe.db.sql(
         f"""SELECT log_type, log_time FROM `tabDay Management Checkin`
             WHERE DATE(log_time) = %s AND branch = %s""",
-        (today_datetime.date(), "Gondia HO"),
+        (date, "Gondia HO"),
         as_dict=True,
     )
 
@@ -192,15 +192,15 @@ def ho_day_start_and_end(branch):
 
 
 @frappe.whitelist()
-def branch_day_start_and_end(branch):
+def branch_day_start_and_end(branch,date):
     # Get today's date and time
-    today_datetime = frappe.utils.now_datetime()
+    # today_datetime = frappe.utils.now_datetime()
 
     # Query records for the current date, the specified branch, and log types 'Start' and 'End'
     day = frappe.db.sql(
         f"""SELECT log_type, log_time FROM `tabDay Management Checkin`
             WHERE DATE(log_time) = %s AND branch = %s""",
-        (today_datetime.date(), branch),
+        (date, branch),
         as_dict=True,
     )
     

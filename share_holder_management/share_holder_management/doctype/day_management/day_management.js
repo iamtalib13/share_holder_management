@@ -735,7 +735,7 @@ frappe.ui.form.on("Day Management", {
                           const employeeName = employeeResponse.message.employee_name;
                           console.log("Employee name", employeeName);
                 
-                          // Check conditions before making the start_branch_day call
+                          // call Check conditions method to check previous days complete and fetch date
                           frappe.call({
                             method: "share_holder_management.share_holder_management.doctype.day_management.day_management.check_conditions",
                             callback: function (response) {
@@ -842,7 +842,7 @@ frappe.ui.form.on("Day Management", {
                                 const employeeName = employeeResponse.message.employee_name;
                                 console.log("Employee name", employeeName);
                 
-                                // Check conditions before making the end_branch_day call
+                                // call Check conditions method to check previous days complete and fetch date
                                 frappe.call({
                                     method: "share_holder_management.share_holder_management.doctype.day_management.day_management.check_conditions",
                                     callback: function (response) {

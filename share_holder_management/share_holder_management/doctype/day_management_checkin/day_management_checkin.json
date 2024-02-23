@@ -50,6 +50,7 @@
    "fieldname": "log_time",
    "fieldtype": "Datetime",
    "label": "Log Time",
+   "read_only": 1,
    "reqd": 1
   },
   {
@@ -90,7 +91,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-02-20 16:46:03.984507",
+ "modified": "2024-02-22 15:10:30.190911",
  "modified_by": "Administrator",
  "module": "Share Holder Management",
  "name": "Day Management Checkin",

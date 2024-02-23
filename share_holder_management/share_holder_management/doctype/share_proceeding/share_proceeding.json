@@ -8,6 +8,7 @@
  "field_order": [
   "proceeding_date",
   "find_btn",
+  "clear",
   "column_break_rct0f",
   "reso_no",
   "column_break_z0leb",
@@ -21,7 +22,7 @@
    "default": "Today",
    "fieldname": "proceeding_date",
    "fieldtype": "Date",
-   "label": "Date"
+   "label": "\u0926\u093f\u0928\u093e\u0902\u0915"
   },
   {
    "fieldname": "proceeding_members",
@@ -65,13 +66,18 @@
   {
    "fieldname": "column_break_z0leb",
    "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "clear",
+   "fieldtype": "Button",
+   "label": "Clear"
   }
  ],
  "hide_toolbar": 1,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2024-02-17 12:52:19.674546",
+ "modified": "2024-02-23 11:38:39.351208",
  "modified_by": "Administrator",
  "module": "Share Holder Management",
  "name": "Share Proceeding",

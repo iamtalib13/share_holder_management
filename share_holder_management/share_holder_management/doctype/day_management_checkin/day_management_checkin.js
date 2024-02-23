@@ -41,15 +41,61 @@ frappe.ui.form.on("Day Management Checkin", {
             // Log the branch value to the console
             console.log("Branch:", frm.doc.branch);
 
-            // Server Date and Time
-            frm.call({
-              method: "get_server_datetime",
+            // calling check_conditions method to fetch date of previous records or current
+            frappe.call({
+              method:
+                "share_holder_management.share_holder_management.doctype.day_management.day_management.check_conditions",
               freeze: true, // Set to true to freeze the UI
               freeze_message: "Please wait, processing data...",
               callback: function (r) {
                 if (!r.exc && r.message) {
-                  console.log("result message:", r.message);
-                  frm.set_value("log_time", r.message);
+                  const data = r.message;
+                  console.log("result message:", data);
+                  const originalDate = data[0].Date;
+                  console.log("Original Date:", originalDate);
+
+                  const originalDateParts = originalDate.split("-");
+                  // Reformat the date as dd/mm/yyyy
+                  const formattedOriginalDate =
+                    originalDateParts[2] +
+                    "/" +
+                    originalDateParts[1] +
+                    "/" +
+                    originalDateParts[0];
+
+                  const currentDateTime = new Date();
+                  const currentHour = currentDateTime
+                    .getHours()
+                    .toString()
+                    .padStart(2, "0");
+                  const currentMinute = currentDateTime
+                    .getMinutes()
+                    .toString()
+                    .padStart(2, "0");
+
+                  const currentTime = currentHour + ":" + currentMinute;
+                  console.log("current time format:", currentTime);
+
+                  const formattedDateTime = originalDate + "," + currentTime;
+                  console.log("formatted date and time:", formattedDateTime);
+
+                  // Combine the original date and current time
+                  const modifiedDate =
+                    formattedOriginalDate + " " + currentTime;
+
+                  console.log("final formatted date time:", modifiedDate);
+
+                  //frm.set_value("log_time", modifiedDate);
+                  // Convert the modified date to ISO 8601 format
+                  const isoFormattedDateTime =
+                    frappe.datetime.user_to_str(modifiedDate);
+
+                  console.log("isoFormattedDateTime:", isoFormattedDateTime);
+
+                  // Set the value of the log_time field
+                  frm.set_value("log_time", isoFormattedDateTime);
+
+                  // Refresh the log_time field
                   frm.refresh_field("log_time");
                   console.log("branch client :", branch);
                   if (branch == "Gondia HO") {
@@ -60,25 +106,26 @@ frappe.ui.form.on("Day Management Checkin", {
                       freeze_message: "Please wait, processing data...",
                       args: {
                         branch: branch, // Only pass the branch filter
+                        date: originalDate,
                       },
                       callback: function (r) {
                         if (!r.exc) {
                           // Successful response handling code
                           console.log("Success:", r.message);
 
-                          // if (r.message === "Day Completed") {
-                          //   console.log("Day completed");
-                          //   frm.set_df_property("log_type", "options", "");
-                          //   frm.disable_save();
-                          //   frm.disable_form();
-                          // } else if (r.message === "Day Not Ended") {
-                          //   console.log("Day Not Ended");
-                          //   frm.set_df_property("log_type", "options", "End");
-                          // } else if (r.message === "Day Not Started") {
-                          //   console.log("Day Not Started");
-                          //   // Set the options for the `primary_phone` select field
-                          //   frm.set_df_property("log_type", "options", "Start");
-                          // }
+                          if (r.message === "Day Completed") {
+                            console.log("Day completed");
+                            frm.set_df_property("log_type", "options", "");
+                            frm.disable_save();
+                            frm.disable_form();
+                          } else if (r.message === "Day Not Ended") {
+                            console.log("Day Not Ended");
+                            frm.set_df_property("log_type", "options", "End");
+                          } else if (r.message === "Day Not Started") {
+                            console.log("Day Not Started");
+                            // Set the options for the `primary_phone` select field
+                            frm.set_df_property("log_type", "options", "Start");
+                          }
                         } else {
                           // Error handling code
                           console.log("Error:", r.exc);
@@ -93,6 +140,7 @@ frappe.ui.form.on("Day Management Checkin", {
                       freeze_message: "Please wait, processing data...",
                       args: {
                         branch: branch, // Only pass the branch filter
+                        date: originalDate, // passing custom date fomat as yyyy-mm-dd
                       },
                       callback: function (r) {
                         if (!r.exc) {
@@ -147,6 +195,7 @@ frappe.ui.form.on("Day Management Checkin", {
                       freeze_message: "Please wait, processing data...",
                       args: {
                         branch: branch, // Only pass the branch filter
+                        date: originalDate,
                       },
                       callback: function (r) {
                         if (!r.exc) {
@@ -224,32 +273,32 @@ frappe.ui.form.on("Day Management Checkin", {
       frappe.set_route("/app/day-management");
     }
   },
-  // before_save: function (frm) {
-  //   let endlog = frm.doc.log_type;
-  //   let branch = frm.doc.branch;
+  before_save: function (frm) {
+    let endlog = frm.doc.log_type;
+    let branch = frm.doc.branch;
 
-  //   if (endlog === "End" && branch === "Gondia HO") {
-  //     frm.call({
-  //       method: "start_end_details",
-  //       args: {
-  //         totalEndCount: 0,
-  //         totalBranchCount: 0,
-  //       },
-  //       callback: function (r) {
-  //         if (r.message) {
-  //           let flag = r.flag;
-  //           if (!flag) {
-  //             frappe.validated = false;
-  //             frappe.msgprint(
-  //               "You cannot End HO until branches are not ended for today."
-  //             );
-  //             frm.set_value("log_type", "");
-  //           }
-  //         }
-  //       },
-  //     });
-  //   }
-  // },
+    if (endlog === "End" && branch === "Gondia HO") {
+      frm.call({
+        method: "start_end_details",
+        args: {
+          totalEndCount: 0,
+          totalBranchCount: 0,
+        },
+        callback: function (r) {
+          if (r.message) {
+            let flag = r.flag;
+            if (!flag) {
+              frappe.validated = false;
+              frappe.msgprint(
+                "You cannot End HO until branches are not ended for the day."
+              );
+              frm.set_value("log_type", "");
+            }
+          }
+        },
+      });
+    }
+  },
 
   // before_save: function (frm) {
   //   let endlog = frm.doc.log_type;

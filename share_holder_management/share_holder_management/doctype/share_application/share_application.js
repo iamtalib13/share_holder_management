@@ -24,6 +24,28 @@ frappe.ui.form.on("Share Application", {
     frm.trigger("child_table_controls");
 
     if (frm.is_new()) {
+      // calling check_conditions method to fetch date of previous records or current
+      frappe.call({
+        method:
+          "share_holder_management.share_holder_management.doctype.day_management.day_management.check_conditions",
+        freeze: true, // Set to true to freeze the UI
+        freeze_message: "Please wait, processing data...",
+        callback: function (r) {
+          if (!r.exc && r.message) {
+            const data = r.message;
+            console.log("result message:", data);
+            const originalDate = data[0].Date;
+            console.log("Original Date:", originalDate);
+
+            frm.set_value("ac_open_dt", originalDate);
+            frm.refresh_field("ac_open_dt");
+
+            frm.set_value("application_date", originalDate);
+            frm.refresh_field("application_date");
+          }
+        },
+      });
+
       if (!frappe.user.has_role("System Manager")) {
         frm.call({
           method: "check_last_application_sr_no",
@@ -44,154 +66,192 @@ frappe.ui.form.on("Share Application", {
           },
         });
         console.log("owner", frm.doc.owner);
-        frm.call({
-          method: "check_branch_and_branch_code",
-          args: {
-            owner: frm.doc.owner, // Pass owner directly instead of wrapping it in self
-          },
+        frappe.call({
+          method:
+            "share_holder_management.share_holder_management.doctype.day_management.day_management.check_conditions",
+          freeze: true, // Set to true to freeze the UI
+          freeze_message: "Please wait, processing data...",
           callback: function (r) {
-            // Check if the message array contains at least one object
-            if (r.message) {
-              frm.set_value("branch", r.message.branch);
-              frm.set_value("branch_code", r.message.branch_code);
+            if (!r.exc && r.message) {
+              const data = r.message;
+              console.log("result message:", data);
+              const originalDate = data[0].Date;
+              console.log("Original Date:", originalDate);
 
-              let branch = r.message.branch;
+              // Split the original date string
+              var parts = originalDate.split("-");
+
+              // Create a new date object using the parts
+              var formattedDate = new Date(parts[0], parts[1] - 1, parts[2]);
+
+              // Format the date as "DD-MM-YYYY"
+              var formattedDateString = formattedDate.toLocaleDateString(
+                "en-GB",
+                {
+                  day: "2-digit",
+                  month: "2-digit",
+                  year: "numeric",
+                }
+              );
+
+              console.log("Formatted Date:", formattedDateString);
+
               frm.call({
-                method: "get_branch_checkin_details",
-                freeze: true, // Set to true to freeze the UI
-                freeze_message: "Please wait, processing data...",
+                method: "check_branch_and_branch_code",
                 args: {
-                  branch: branch, // Only pass the branch filter
+                  owner: frm.doc.owner, // Pass owner directly instead of wrapping it in self
                 },
                 callback: function (r) {
-                  if (!r.exc) {
-                    console.log("response:", r.message);
+                  // Check if the message array contains at least one object
+                  if (r.message) {
+                    frm.set_value("branch", r.message.branch);
+                    frm.set_value("branch_code", r.message.branch_code);
 
-                    // Successful response handling code
-                    if (r.message === "Day Start") {
-                      console.log("day start");
-                      frm.trigger("Intro_messages");
-                    } else if (r.message === "Branch Day Ended") {
-                      console.log("Branch Day Ended");
-                      $(".form-page").css("display", "none");
-                      frm.disable_save();
-                      frm.disable_form();
+                    let branch = r.message.branch;
+                    frm.call({
+                      method: "get_branch_checkin_details",
+                      freeze: true, // Set to true to freeze the UI
+                      freeze_message: "Please wait, processing data...",
+                      args: {
+                        branch: branch, // Only pass the branch filter
+                        date: originalDate, //Date filter
+                      },
+                      callback: function (r) {
+                        if (!r.exc) {
+                          console.log("response:", r.message);
 
-                      frm.set_intro(
-                        "<b>Day Ended from <b>" +
-                          branch +
-                          "</b>" +
-                          " for " +
-                          "<b>" +
-                          "Today",
-                        "red" // Change the color as needed
-                      );
-                      frappe.msgprint({
-                        message:
-                          "Day has been Ended from branch. Please Go to Home page.",
-                        // primary_action: {
-                        //   label: __("OK"),
-                        //   action: function () {
-                        //     frappe.msgprint.hide(); // Hide the message
-                        //   },
-                        // },
-                      });
+                          // Successful response handling code
+                          if (r.message === "Day Start") {
+                            console.log("day start");
+                            frm.trigger("Intro_messages");
+                          } else if (r.message === "Branch Day Ended") {
+                            console.log("Branch Day Ended");
+                            $(".form-page").css("display", "none");
+                            frm.disable_save();
+                            frm.disable_form();
 
-                      frm.disable_save();
-                      frm.disable_form();
-                    } else if (r.message === "Branch Day Not Started") {
-                      console.log("Branch Day Not Started and HO started");
-                      $(".form-page").css("display", "none");
-                      frm.disable_save();
-                      frm.disable_form();
-                      frm.set_intro(
-                        " <u><a href='/app'> <- Go Back</a></u> <b>Day Not Started from <b>" +
-                          branch +
-                          "</b>" +
-                          " for " +
-                          "<b>" +
-                          "Today",
-                        "red" // Change the color as needed
-                      );
+                            frm.set_intro(
+                              "<b>Day Ended from <b>" +
+                                branch +
+                                "</b>" +
+                                " for " +
+                                "<b>" +
+                                formattedDateString,
+                              "red" // Change the color as needed
+                            );
+                            frappe.msgprint({
+                              message:
+                                "Day has been Ended from branch. Please Go to Home page.",
+                              // primary_action: {
+                              //   label: __("OK"),
+                              //   action: function () {
+                              //     frappe.msgprint.hide(); // Hide the message
+                              //   },
+                              // },
+                            });
 
-                      // // Message to be displayed in the dialog
-                      // var message =
-                      //   "Branch Day Not Started. Do you want to start?";
+                            frm.disable_save();
+                            frm.disable_form();
+                          } else if (r.message === "Branch Day Not Started") {
+                            console.log(
+                              "Branch Day Not Started and HO started"
+                            );
+                            $(".form-page").css("display", "none");
+                            frm.disable_save();
+                            frm.disable_form();
+                            frm.set_intro(
+                              " <u><a href='/app'> <- Go Back</a></u> <b>Day Not Started from <b>" +
+                                branch +
+                                "</b>" +
+                                " for " +
+                                "<b>" +
+                                formattedDateString,
+                              "red" // Change the color as needed
+                            );
 
-                      // // Create a Frappe dialog
-                      // var dialog = new frappe.ui.Dialog({
-                      //   title: "Start Branch Day",
-                      //   fields: [
-                      //     {
-                      //       fieldtype: "HTML",
-                      //       options: message,
-                      //     },
-                      //   ],
-                      //   primary_action: function () {
-                      //     // Redirect to the Day Management Checkin form
-                      //     frappe.new_doc(
-                      //       "Day Management Checkin",
-                      //       function (doc) {
-                      //         console.log("New document created:", doc);
-                      //         frappe.set_route(
-                      //           "Form",
-                      //           "Day Management Checkin",
-                      //           doc.name
-                      //         );
-                      //       }
-                      //     );
+                            // // Message to be displayed in the dialog
+                            // var message =
+                            //   "Branch Day Not Started. Do you want to start?";
 
-                      //     dialog.hide();
-                      //   },
-                      //   primary_action_label: __("Yes"),
-                      //   secondary_action_label: __("No"),
-                      //   secondary_action: function () {
-                      //     dialog.hide();
-                      //   },
-                      // });
+                            // // Create a Frappe dialog
+                            // var dialog = new frappe.ui.Dialog({
+                            //   title: "Start Branch Day",
+                            //   fields: [
+                            //     {
+                            //       fieldtype: "HTML",
+                            //       options: message,
+                            //     },
+                            //   ],
+                            //   primary_action: function () {
+                            //     // Redirect to the Day Management Checkin form
+                            //     frappe.new_doc(
+                            //       "Day Management Checkin",
+                            //       function (doc) {
+                            //         console.log("New document created:", doc);
+                            //         frappe.set_route(
+                            //           "Form",
+                            //           "Day Management Checkin",
+                            //           doc.name
+                            //         );
+                            //       }
+                            //     );
 
-                      // // Show the dialog
-                      // dialog.show();
+                            //     dialog.hide();
+                            //   },
+                            //   primary_action_label: __("Yes"),
+                            //   secondary_action_label: __("No"),
+                            //   secondary_action: function () {
+                            //     dialog.hide();
+                            //   },
+                            // });
 
-                      frm.disable_save();
-                      frm.disable_form();
-                    } else if (r.message === "Branch and HO Day Not Started") {
-                      console.log("Branch and HO Day Not Started");
-                      $(".form-page").css("display", "none");
-                      frm.disable_save();
-                      frm.disable_form();
-                      frm.set_intro(
-                        " <u><a href='/app'> <- Go Back</a></u> <b>Day Not Started from <b>" +
-                          "Gondia HO & " +
-                          branch +
-                          "</b>" +
-                          " for " +
-                          "<b>" +
-                          "Today ",
-                        "red" // Change the color as needed
-                      );
-                      // frappe.msgprint(
-                      //   "Gondia HO not started. Please Contact HO"
-                      // );
+                            // // Show the dialog
+                            // dialog.show();
 
-                      frm.disable_save();
-                      frm.disable_form();
-                    }
+                            frm.disable_save();
+                            frm.disable_form();
+                          } else if (
+                            r.message === "Branch and HO Day Not Started"
+                          ) {
+                            console.log("Branch and HO Day Not Started");
+                            $(".form-page").css("display", "none");
+                            frm.disable_save();
+                            frm.disable_form();
+                            frm.set_intro(
+                              " <u><a href='/app'> <- Go Back</a></u> <b>Day Not Started from <b>" +
+                                "Gondia HO & " +
+                                branch +
+                                "</b>" +
+                                " for " +
+                                "<b>" +
+                                formattedDateString,
+                              "red" // Change the color as needed
+                            );
+                            // frappe.msgprint(
+                            //   "Gondia HO not started. Please Contact HO"
+                            // );
+
+                            frm.disable_save();
+                            frm.disable_form();
+                          }
+                        } else {
+                          // Error handling code
+                          frappe.msgprint("Error: " + r.exc);
+                        }
+                      },
+                    });
+
+                    console.log("Client Branch :", branch);
+
+                    frm.refresh_fields(["branch", "branch_code"]); // Refresh the fields
+
+                    // Do something else with the response, if needed
                   } else {
-                    // Error handling code
-                    frappe.msgprint("Error: " + r.exc);
+                    frappe.throw("Server Down . .");
+                    // Handle the case where there is no response
                   }
                 },
               });
-
-              console.log("Client Branch :", branch);
-
-              frm.refresh_fields(["branch", "branch_code"]); // Refresh the fields
-
-              // Do something else with the response, if needed
-            } else {
-              frappe.throw("Server Down . .");
-              // Handle the case where there is no response
             }
           },
         });
@@ -201,8 +261,8 @@ frappe.ui.form.on("Share Application", {
         console.log("System Admin");
       } else if (frappe.user.has_role("Share Admin")) {
         console.log("Share Admin");
-        frm.disable_save();
-        frm.disable_form();
+        //frm.disable_save();
+        //frm.disable_form();
       } else if (frappe.user.has_role("Share User Creator")) {
         console.log("Share Executive & User Creator");
       } else if (frappe.user.has_role("Share Executive")) {
@@ -255,8 +315,8 @@ frappe.ui.form.on("Share Application", {
         console.log("System Admin");
       } else if (frappe.user.has_role("Share Admin")) {
         console.log("Share Admin");
-        frm.disable_save();
-        frm.disable_form();
+        //frm.disable_save();
+        //frm.disable_form();
       } else if (frappe.user.has_role("Share User Creator")) {
         console.log("Share Executive & User Creator");
 
@@ -669,22 +729,36 @@ frappe.ui.form.on("Share Application", {
         if (frm.doc.status == "Draft") {
           frm
             .add_custom_button(__("Submit"), function () {
-              frappe.confirm(
-                "Are you sure you want to submit the form to the Head-Office?",
-                () => {
-                  if (!frm.doc.nominee_details) {
-                    frappe.throw("Please Add Nominee before submit");
-                  } else {
-                    frm.set_value("status", "Submitted");
-                    frm.refresh_field("status");
+              if (
+                !frm.doc.nominee_details ||
+                frm.doc.nominee_details.length === 0
+              ) {
+                frappe.throw("Please Add Nominee before submit");
+              } else {
+                let totalPercentage = 0;
 
-                    frm.save();
-                  }
-                },
-                () => {
-                  // action to perform if No is selected
+                // Iterate through the child table to calculate the total percentage
+                frm.doc.nominee_details.forEach(function (row) {
+                  totalPercentage += row.nominee_share_percentage;
+                });
+
+                // Check if total percentage is greater than 100
+                if (totalPercentage !== 100) {
+                  frappe.throw("Total Nominee Share Percentage must be 100%.");
+                } else {
+                  frappe.confirm(
+                    "Are you sure you want to submit the form to the Head-Office?",
+                    () => {
+                      frm.set_value("status", "Submitted");
+                      frm.refresh_field("status");
+                      frm.save();
+                    },
+                    () => {
+                      // action to perform if No is selected
+                    }
+                  );
                 }
-              );
+              }
             })
             .css({
               "background-color": "#28a745", // Set green color
@@ -695,23 +769,38 @@ frappe.ui.form.on("Share Application", {
 
           frm
             .add_custom_button(__("Submit"), function () {
-              frappe.confirm(
-                "Are you sure you want to submit the form to the Head-Office?",
-                () => {
-                  if (!frm.doc.nominee_details) {
-                    frappe.throw("Please Add Nominee before submit");
-                  } else {
-                    frm.set_value("status", "Submitted");
-                    frm.refresh_field("status");
+              if (
+                !frm.doc.nominee_details ||
+                frm.doc.nominee_details.length === 0
+              ) {
+                frappe.throw("Please Add Nominee before submit");
+              } else {
+                let totalPercentage = 0;
 
-                    frm.save();
-                  }
-                },
-                () => {
-                  // action to perform if No is selected
+                // Iterate through the child table to calculate the total percentage
+                frm.doc.nominee_details.forEach(function (row) {
+                  totalPercentage += row.nominee_share_percentage;
+                });
+
+                // Check if total percentage is greater than 100
+                if (totalPercentage !== 100) {
+                  frappe.throw("Total Nominee Share Percentage must be 100%.");
+                } else {
+                  frappe.confirm(
+                    "Are you sure you want to submit the form to the Head-Office?",
+                    () => {
+                      frm.set_value("status", "Submitted");
+                      frm.refresh_field("status");
+                      frm.save();
+                    },
+                    () => {
+                      // action to perform if No is selected
+                    }
+                  );
                 }
-              );
+              }
             })
+
             .css({
               "background-color": "#28a745", // Set green color
               color: "#ffffff", // Set font color to white
@@ -1378,6 +1467,23 @@ frappe.ui.form.on("Share Application", {
     // Check if the child table is empty
     if (!frm.doc.nominee_details || frm.doc.nominee_details.length === 0) {
       frappe.msgprint("The child table is empty.");
+    } else if (
+      frm.doc.nominee_details ||
+      frm.doc.nominee_details.length !== 0
+    ) {
+      let totalPercentage = 0;
+
+      // Iterate through the child table to calculate the total percentage
+      frm.doc.nominee_details.forEach(function (row) {
+        totalPercentage += row.nominee_share_percentage;
+      });
+
+      // Check if total percentage is greater than 100
+      if (totalPercentage > 100) {
+        frappe.throw(
+          "Total Nominee Share Percentage cannot be greater than 100."
+        );
+      }
     } else {
       let totalPercentage = 0;
 

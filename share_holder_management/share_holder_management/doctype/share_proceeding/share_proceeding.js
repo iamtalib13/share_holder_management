@@ -16,27 +16,32 @@ frappe.ui.form.on("Share Proceeding", {
     // Your refresh code here
 
     console.log("proceeding Date :", frm.doc.proceeding_date);
-
-    frm.add_custom_button(
-      __("Print"),
-      function () {
-        var printUrl = frappe.urllib.get_full_url(
-          "/api/method/frappe.utils.weasyprint.download_pdf?" +
-            "doctype=" +
-            encodeURIComponent("Share Proceeding") +
-            "&name=" +
-            encodeURIComponent("Share Proceeding") +
-            "&print_format=Proceeding Form" +
-            "&letterhead=Proceeding Letter Head"
-        );
-        var newWindow = window.open(printUrl);
-        console.log(printUrl); // Log the URL to the console
-        // Additional logic if needed
-        console.log(address);
-        console.log(branch);
-      },
-      __("Print")
-    );
+    if (
+      frm.doc.proceeding_date &&
+      frm.doc.proceeding_members &&
+      frm.doc.proceeding_members.length !== 0
+    ) {
+      frm.add_custom_button(
+        __("Print"),
+        function () {
+          var printUrl = frappe.urllib.get_full_url(
+            "/api/method/frappe.utils.weasyprint.download_pdf?" +
+              "doctype=" +
+              encodeURIComponent("Share Proceeding") +
+              "&name=" +
+              encodeURIComponent("Share Proceeding") +
+              "&print_format=Proceeding Form" +
+              "&letterhead=Proceeding Letter Head"
+          );
+          var newWindow = window.open(printUrl);
+          console.log(printUrl); // Log the URL to the console
+          // Additional logic if needed
+          console.log(address);
+          console.log(branch);
+        },
+        __("Print")
+      );
+    }
   },
 
   find_btn: function (frm) {
@@ -100,5 +105,10 @@ frappe.ui.form.on("Share Proceeding", {
     cur_frm.refresh_fields();
     frm.set_value("response", "False");
     frm.save();
+  },
+
+  clear: function (frm) {
+    frm.set_value("proceeding_date", "");
+    frm.refresh_field("proceeding_date");
   },
 });

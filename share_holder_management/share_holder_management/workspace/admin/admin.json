@@ -1,8 +1,13 @@
 {
  "charts": [],
- "content": "[{\"id\":\"Zs668BQM2D\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Share Management - Admin</span>\",\"col\":12}},{\"id\":\"_Z9OrWjLOo\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Share Holders\",\"col\":3}},{\"id\":\"EcXtpmKFAt\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"hkhFEsXSKC\",\"type\":\"card\",\"data\":{\"card_name\":\"Share Amount Setting\",\"col\":4}},{\"id\":\"3SPYcd-Qv-\",\"type\":\"card\",\"data\":{\"card_name\":\"Proceeding Management\",\"col\":4}}]",
+ "content": "[{\"id\":\"-WdFgz70zK\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Admin Dashboard\",\"col\":12}},{\"id\":\"EcXtpmKFAt\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"qZrybK3pDG\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Share MIS Report\",\"col\":3}}]",
  "creation": "2024-01-09 12:22:25.089685",
- "custom_blocks": [],
+ "custom_blocks": [
+  {
+   "custom_block_name": "Admin Dashboard",
+   "label": "Admin Dashboard"
+  }
+ ],
  "docstatus": 0,
  "doctype": "Workspace",
  "for_user": "",
@@ -11,47 +16,8 @@
  "idx": 0,
  "is_hidden": 0,
  "label": "Admin",
- "links": [
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Share Amount Setting",
-   "link_count": 1,
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Card Break"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Share Amount Setting",
-   "link_count": 0,
-   "link_to": "Share Amount Setting",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Proceeding Management",
-   "link_count": 1,
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Card Break"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Proceeding Form",
-   "link_count": 0,
-   "link_to": "Share Proceeding",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  }
- ],
- "modified": "2024-02-06 12:04:46.356232",
+ "links": [],
+ "modified": "2024-02-23 17:11:37.016187",
  "modified_by": "Administrator",
  "module": "Share Holder Management",
  "name": "Admin",
@@ -68,13 +34,11 @@
  "sequence_id": 59.0,
  "shortcuts": [
   {
-   "color": "Green",
+   "color": "Grey",
    "doc_view": "List",
-   "format": "{}",
-   "label": "Share Holders",
-   "link_to": "Share Application",
-   "stats_filter": "[]",
-   "type": "DocType"
+   "label": "Share MIS Report",
+   "link_to": "Share MIS Report",
+   "type": "Report"
   }
  ],
  "title": "Admin"

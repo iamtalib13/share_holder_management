@@ -217,7 +217,7 @@ def start_branch_day(branch, datetime_str, userId, employeeName):
 
 #to end branch from HO executive 
 @frappe.whitelist()
-def end_branch_day(branch, userId, employeeName, datetime_str):
+def end_branch_day(branch, datetime_str, userId, employeeName):
     try:
         # Convert datetime string to datetime object
         datetime_obj = datetime.strptime(datetime_str, '%d/%m/%Y,%H:%M')
