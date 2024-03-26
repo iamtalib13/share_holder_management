@@ -848,6 +848,11 @@ frappe.ui.form.on("Share Application", {
     }
   },
   section_colors(frm) {
+    //buttons
+    
+
+
+
     frm.fields_dict["nominee_form_section"].wrapper.css(
       "background-color",
       "antiquewhite"
