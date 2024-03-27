@@ -594,7 +594,7 @@ frappe.ui.form.on("Day Management", {
             callback: function (r) {
               if (!r.exc) {
                 const data = r.message;
-                console.log(data);
+                console.log("response data:", data);
 
                 // Generate HTML directly in JavaScript
                 let html = `<html lang="en">
@@ -690,6 +690,18 @@ frappe.ui.form.on("Day Management", {
                       .endbtn:focus{
                         outline:none;
                       }
+                      .cancelbtn{
+                        background-color: black;
+                        padding: 3px 10px;
+                        border-radius: 1rem;
+                        font-weight: 600;
+                        color: white;
+                        border: none;
+                      }
+                      .cancelbtn:focus{
+                        outline:none;
+                      }
+
                       label {
                         margin-right: 5px;
                         margin-bottom: 0;
@@ -895,7 +907,7 @@ frappe.ui.form.on("Day Management", {
                                                             indicator: 'green'
                                                         }, 5);
                 
-                                                        // Delay the page reload by 2 seconds (adjust as needed)
+                                                        // Delay the page reload by 1 seconds (adjust as needed)
                                                         setTimeout(function () {
                                                             // Refresh the page after the alert is shown
                                                             location.reload();
@@ -921,6 +933,46 @@ frappe.ui.form.on("Day Management", {
                     });
                 }
                 
+               function cancelButton(branchName,endLog,endTime){
+                  console.log("Cancel Button click");
+              
+                  const branch = branchName;
+                  console.log("Branch Name:", branch);
+              
+                  const end=endLog;
+                  console.log("EndLogType:", end);
+                  const endDate =endTime;
+                  console.log("Endtime:", endDate);
+                  // Get the current user
+                  const currentUser = frappe.session.user;
+                  console.log("Current User:", currentUser);
+                  
+                  // Calling delete End details server function to delete record of end
+                  frappe.call({
+                      method: "share_holder_management.share_holder_management.doctype.day_management.day_management.delete_end_record",
+                      args: {
+                          branch: branch,
+                          endLogType: end,
+                          endTime: endDate,
+                          
+                      },
+                      callback: function(response) {
+                        if (response.message) {
+                          // Record was successfully deleted
+                          console.log("Record deleted successfully");
+                          // Delay the page reload by 1 seconds (adjust as needed)
+                          setTimeout(function () {
+                              // Refresh the page after the alert is shown
+                              location.reload();
+                          }, 500);
+                          // You can perform further actions here if needed
+                        } else {
+                          // Record deletion failed
+                          console.log("Record deletion failed");
+                        }
+                      }
+                  });              
+                }
               </script>
 
               </head>
@@ -990,7 +1042,7 @@ frappe.ui.form.on("Day Management", {
                                           ? row.end_time
                                             ? `${
                                                 row.end_log_type
-                                                  ? "<span class='end-time'>Ended </span>"
+                                                  ? "<span class='end-time'>Ended </span> "
                                                   : ""
                                               }<br>${new Date(
                                                 row.end_time
@@ -1001,11 +1053,19 @@ frappe.ui.form.on("Day Management", {
                                                 hour: "2-digit",
                                                 minute: "2-digit",
                                                 hour12: true,
-                                              })}`
+                                              })}<div>
+                                              <button class="cancelbtn" onclick="cancelButton('${
+                                                row.branch
+                                              }', '${row.end_log_type}', '${
+                                                row.end_time
+                                              }')">Cancel X</button>
+                                            </div>
+                                            `
                                             : `<button class="endbtn" onclick="endButton('${row.branch}')">End</button>`
                                           : ""
                                       }</td>
-                                    
+
+
 
                                       <td class="branch-td">${
                                         row.Day_End_by || " "

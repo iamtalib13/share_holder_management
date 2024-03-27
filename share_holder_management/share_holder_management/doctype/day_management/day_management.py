@@ -244,7 +244,38 @@ def end_branch_day(branch, datetime_str, userId, employeeName):
         # Log error to the console
         print(f"Error ending branch day for {branch} by user {userId}: {str(e)}")
         frappe.throw(str(e))
-        
+
+
+@frappe.whitelist()
+def delete_end_record(branch, endLogType, endTime):
+    try:
+        # Find the document by matching branch, endLogType, and endTime
+        doc_name = f"{branch}/{endTime}/{endLogType}"  # Constructing document name
+        doc = frappe.get_doc("Day Management Checkin", doc_name)
+
+        # Check if the document exists
+        if doc:
+            # Delete the document
+            doc.delete()
+
+            # Log success
+            # frappe.msgprint("Record deleted successfully")
+            return True
+        else:
+            # Document not found
+            # frappe.msgprint("No end record found for this branch")
+            return False
+
+    except frappe.DoesNotExistError:
+        # Document not found
+        # frappe.msgprint("No end record found for this branch")
+        return False
+
+    except Exception as e:
+        # Log error
+        frappe.msgprint(f"Error deleting end record: {str(e)}")
+        return False
+
 
 # @frappe.whitelist()
 # def Previous_Day():

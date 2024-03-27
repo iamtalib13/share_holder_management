@@ -1,6 +1,6 @@
 {
  "actions": [],
- "autoname": "{branch}-CKIN-.DD.-.MM.-.YY.-.###",
+ "autoname": "format:{branch}/{log_time}/{log_type}",
  "creation": "2024-01-31 13:40:02.655399",
  "default_view": "List",
  "doctype": "DocType",
@@ -31,6 +31,7 @@
    "fetch_from": "employee.branch",
    "fieldname": "branch",
    "fieldtype": "Data",
+   "in_standard_filter": 1,
    "label": "Branch"
   },
   {
@@ -42,6 +43,7 @@
   {
    "fieldname": "log_type",
    "fieldtype": "Select",
+   "in_standard_filter": 1,
    "label": "Log Type",
    "options": "\nStart\nEnd",
    "reqd": 1
@@ -78,6 +80,7 @@
   {
    "fieldname": "emp_name",
    "fieldtype": "Data",
+   "hidden": 1,
    "label": "Employee Name"
   },
   {
@@ -91,11 +94,11 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-02-22 15:10:30.190911",
+ "modified": "2024-03-27 14:03:14.634124",
  "modified_by": "Administrator",
  "module": "Share Holder Management",
  "name": "Day Management Checkin",
- "naming_rule": "Expression (old style)",
+ "naming_rule": "Expression",
  "owner": "Administrator",
  "permissions": [
   {

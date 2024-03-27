@@ -276,3 +276,38 @@ def start_end_details(totalEndCount, totalBranchCount):
             'totalEndCount': total_end_result[0]['total_end_count'],
             'totalBranchCount': branches_result[0]['total_branch_count'],
         }  
+    
+
+
+
+#getting share application records
+@frappe.whitelist()
+def check_share_records(branch, application_date):
+    try:
+        query = """
+          SELECT 
+            COALESCE(COUNT(application_sr_no), 0) AS total_rows,
+            COALESCE(SUM(CASE WHEN status = 'sanctioned' THEN 1 ELSE 0 END), 0) AS total_sanctioned_rows,
+            COALESCE(SUM(CASE WHEN status = 'rejected' THEN 1 ELSE 0 END), 0) AS total_rejected_rows,
+            CASE 
+                WHEN 
+                    (COALESCE(SUM(CASE WHEN status = 'sanctioned' THEN 1 ELSE 0 END), 0) + COALESCE(SUM(CASE WHEN status = 'rejected' THEN 1 ELSE 0 END), 0)) = COALESCE(COUNT(application_sr_no), 0)
+                THEN 'true'
+                ELSE 'false'
+            END AS is_count_equal
+          FROM 
+            `tabShare Application`
+          WHERE 
+            branch = %s AND application_date = %s
+        """
+
+        # Execute the SQL query
+        result = frappe.db.sql(query, (branch, application_date), as_dict=True)
+
+        # Return the result
+        return result[0] if result else None
+
+    except Exception as e:
+        # Log and handle the exception
+        frappe.log_error(f"Error in check_share_records: {str(e)}")
+        return None

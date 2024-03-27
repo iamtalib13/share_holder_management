@@ -106,7 +106,8 @@
    "fieldname": "application_sr_no",
    "fieldtype": "Int",
    "label": "Application Sr. No.",
-   "read_only": 1
+   "read_only": 1,
+   "reqd": 1
   },
   {
    "fieldname": "column_break_hdes",
@@ -127,20 +128,23 @@
   {
    "fieldname": "customer_name",
    "fieldtype": "Data",
-   "label": "Customer Name"
+   "label": "Customer Name",
+   "reqd": 1
   },
   {
    "default": "Individual",
    "fieldname": "category",
    "fieldtype": "Select",
    "label": "Category",
-   "options": "Individual\nGroup"
+   "options": "Individual\nGroup",
+   "reqd": 1
   },
   {
    "fieldname": "salutation",
    "fieldtype": "Link",
    "label": "Salutation",
-   "options": "Salutation"
+   "options": "Salutation",
+   "reqd": 1
   },
   {
    "fieldname": "column_break_sb8h",
@@ -161,28 +165,33 @@
   {
    "fieldname": "date_of_birth",
    "fieldtype": "Date",
-   "label": "Birth Date"
+   "label": "Birth Date",
+   "reqd": 1
   },
   {
    "fieldname": "address",
    "fieldtype": "Small Text",
    "label": "Landmark",
-   "max_height": "180px"
+   "max_height": "180px",
+   "reqd": 1
   },
   {
    "fieldname": "taluka",
    "fieldtype": "Data",
-   "label": "Taluka / Tahshil"
+   "label": "Taluka / Tahshil",
+   "reqd": 1
   },
   {
    "fieldname": "city",
    "fieldtype": "Data",
-   "label": "City/District"
+   "label": "City/District",
+   "reqd": 1
   },
   {
    "fieldname": "mobile",
    "fieldtype": "Data",
-   "label": "Mobile"
+   "label": "Mobile",
+   "reqd": 1
   },
   {
    "fieldname": "age",
@@ -205,25 +214,29 @@
    "fieldtype": "Data",
    "in_list_view": 1,
    "in_standard_filter": 1,
-   "label": "Customer ID"
+   "label": "Customer ID",
+   "reqd": 1
   },
   {
    "fieldname": "occupation",
    "fieldtype": "Select",
    "label": "Occupation",
-   "options": "\nFarmer\nBusiness\nTeacher\nAdvocate\nGovt Employee\nPrivate Employee\nDoctor"
+   "options": "\nAdvocate\nAgriculture\nBusiness\nDoctor\nFarmer\nGovt Employee\nHouse Wife\nOther\nPrivate Employee\nRetired\nServices\nStudent\nTeacher",
+   "reqd": 1
   },
   {
    "default": "Regular",
    "fieldname": "sh_category",
    "fieldtype": "Select",
    "label": "Share Category",
-   "options": "Regular\nNominal"
+   "options": "Regular",
+   "reqd": 1
   },
   {
    "fieldname": "membership_form",
    "fieldtype": "Attach",
-   "label": "Membership form"
+   "label": "Membership form",
+   "reqd": 1
   },
   {
    "fieldname": "column_break_lhcd",
@@ -232,7 +245,8 @@
   {
    "fieldname": "payment_receipt",
    "fieldtype": "Attach",
-   "label": "Payment Receipt"
+   "label": "Payment Receipt",
+   "reqd": 1
   },
   {
    "fieldname": "column_break_kxcr",
@@ -241,7 +255,8 @@
   {
    "fieldname": "kyc",
    "fieldtype": "Attach",
-   "label": "KYC ( Adhar / PAN / Voter ID )"
+   "label": "KYC ( Adhar / PAN / Voter ID )",
+   "reqd": 1
   },
   {
    "fieldname": "column_break_nrre",
@@ -268,7 +283,8 @@
    "fieldname": "ac_type",
    "fieldtype": "Data",
    "label": "Account Type",
-   "read_only": 1
+   "read_only": 1,
+   "reqd": 1
   },
   {
    "fieldname": "ac_no",
@@ -294,12 +310,14 @@
    "fieldname": "saving_current_gl_code",
    "fieldtype": "Link",
    "label": "Account GL Code",
-   "options": "Account GL Code"
+   "options": "Account GL Code",
+   "reqd": 1
   },
   {
    "fieldname": "saving_current_ac_no",
    "fieldtype": "Data",
-   "label": "Account No."
+   "label": "Account No.",
+   "reqd": 1
   },
   {
    "fetch_from": "branch_gl.ac_type",
@@ -340,7 +358,8 @@
    "fieldname": "no_of_shares",
    "fieldtype": "Int",
    "label": "No. of Shares",
-   "non_negative": 1
+   "non_negative": 1,
+   "reqd": 1
   },
   {
    "fieldname": "column_break_iwul",
@@ -434,27 +453,31 @@
   {
    "fieldname": "aadhaar_number",
    "fieldtype": "Data",
-   "label": "Aadhaar Number"
+   "label": "Aadhaar Number",
+   "reqd": 1
   },
   {
    "default": "Indian",
    "fieldname": "nationality",
    "fieldtype": "Select",
    "label": "Nationality",
-   "options": "Indian\nOther"
+   "options": "Indian\nOther",
+   "reqd": 1
   },
   {
    "bold": 1,
    "fieldname": "account_type",
    "fieldtype": "Select",
    "label": "Account Type",
-   "options": "\nSAVING\nCURRENT\nLIABILITY\nLOAN"
+   "options": "\nSAVING\nCURRENT\nLIABILITY\nLOAN",
+   "reqd": 1
   },
   {
    "fieldname": "gender",
    "fieldtype": "Select",
    "label": "Gender",
-   "options": "\nMale\nFemale\nR\nFirm\nTransgender"
+   "options": "\nMale\nFemale\nR\nFirm\nTransgender",
+   "reqd": 1
   },
   {
    "bold": 1,
@@ -481,7 +504,8 @@
    "fieldname": "account_name",
    "fieldtype": "Data",
    "label": "Account Name",
-   "read_only": 1
+   "read_only": 1,
+   "reqd": 1
   },
   {
    "fieldname": "email_id",
@@ -505,7 +529,7 @@
   {
    "fieldname": "nominee_relation",
    "fieldtype": "Select",
-   "label": "Relation",
+   "label": "Relation  <span style=\"color: red;\">*</span>",
    "options": "\nSpouse\nParent\nMother\nFather\nSibling\nSon\nDaughter\nGrandfather\nGrandmother\nGrandchild\nAunt\nUncle\nCousin"
   },
   {
@@ -516,7 +540,7 @@
   {
    "fieldname": "nominee_share_percentage",
    "fieldtype": "Percent",
-   "label": "Share %",
+   "label": "Share %  <span style=\"color: red;\">*</span>",
    "precision": "0"
   },
   {
@@ -536,13 +560,13 @@
    "description": "First Name + Middle Name + Last Name",
    "fieldname": "nominee_fullname",
    "fieldtype": "Data",
-   "label": "Full Name"
+   "label": "Full Name <span style=\"color: red;\">*</span>"
   },
   {
    "fieldname": "nominee_age",
    "fieldtype": "Select",
-   "label": "Age",
-   "options": "\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20"
+   "label": "Age  <span style=\"color: red;\">*</span>",
+   "options": "\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20\n21\n22\n23\n24\n25\n26\n27\n28\n29\n30\n31\n32\n33\n34\n35\n36\n37\n38\n39\n40\n41\n42\n43\n44\n45\n46\n47\n48\n49\n50\n51\n52\n53\n54\n55\n56\n57\n58\n59\n60\n61\n62\n63\n64\n65\n66\n67\n68\n69\n70\n71\n72\n73\n74\n75\n76\n77\n78\n79\n80\n81\n82\n83\n84\n85\n86\n87\n88\n89\n90\n91\n92\n93\n94\n95\n96\n97\n98\n99\n100"
   },
   {
    "fieldname": "nominee_address",
@@ -553,7 +577,7 @@
    "depends_on": "eval:doc.nominee_age < 18 && doc.nominee_age ",
    "fieldname": "nominee_guardian_name",
    "fieldtype": "Data",
-   "label": "Guardian Name"
+   "label": "Guardian Name  <span style=\"color: red;\">*</span>"
   },
   {
    "depends_on": "eval:doc.status==\"Draft\" || doc.status==\"Not Saved\" ||  doc.status==\"Sanctioned\"",
@@ -600,13 +624,13 @@
   {
    "fieldname": "check_table",
    "fieldtype": "Button",
+   "hidden": 1,
    "label": "check table"
   }
  ],
- "hide_toolbar": 1,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-02-23 17:01:17.311648",
+ "modified": "2024-03-27 16:03:00.592908",
  "modified_by": "Administrator",
  "module": "Share Holder Management",
  "name": "Share Application",
@@ -661,12 +685,16 @@
    "title": "Pending From HO"
   },
   {
-   "color": "Cyan",
+   "color": "Green",
    "title": "Submitted"
   },
   {
    "color": "Purple",
    "title": "Received"
+  },
+  {
+   "color": "Yellow",
+   "title": "Return To Branch"
   }
  ],
  "title_field": "application_sr_no",

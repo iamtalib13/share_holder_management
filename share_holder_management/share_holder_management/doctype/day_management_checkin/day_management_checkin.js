@@ -3,6 +3,7 @@
 
 frappe.ui.form.on("Day Management Checkin", {
   refresh: function (frm) {
+    frm.trigger("custom_home_button");
     //frm.trigger()
     if (frm.is_new()) {
       //employee id set on new form
@@ -150,17 +151,19 @@ frappe.ui.form.on("Day Management Checkin", {
                               "Ho Day Completed. Perform actions accordingly."
                             );
                           } else if (r.message === "Ho Day Started") {
-                            frm.set_intro(
-                              "<b>Day Started from <b>" +
-                                "Gondia Head office" +
-                                "</b>" +
-                                " for " +
-                                "<b>" +
-                                new Date(frm.doc.log_time).toLocaleDateString(
-                                  "en-GB"
-                                ), // Format to DD/MM/YYYY
-                              "green" // Change the color as needed
-                            );
+                            if (frm.doc.log_type) {
+                              frm.set_intro(
+                                "<b>Day Started from <b>" +
+                                  "Gondia Head office" +
+                                  "</b>" +
+                                  " for " +
+                                  "<b>" +
+                                  new Date(frm.doc.log_time).toLocaleDateString(
+                                    "en-GB"
+                                  ), // Format to DD/MM/YYYY
+                                "green" // Change the color as needed
+                              );
+                            }
                           } else if (r.message === "Ho Day Ended") {
                             frappe.msgprint(
                               "Ho Day Ended. Perform actions accordingly."
@@ -223,6 +226,41 @@ frappe.ui.form.on("Day Management Checkin", {
                     });
                   }
                   // Place the last call inside this callback
+
+                  // Getting share application doc records
+                  frm.call({
+                    method: "check_share_records",
+                    args: {
+                      branch: branch,
+                      application_date: originalDate,
+                    },
+                    callback: function (response) {
+                      if (response && response.message) {
+                        // Process the response data
+                        const shareRecords = response.message;
+                        console.log("Share Records:", shareRecords);
+
+                        const flag = shareRecords.is_count_equal;
+                        console.log("flag:", flag);
+                        if (flag === "false") {
+                          console.log("False hai");
+                          frm.set_df_property("log_type", "options", "");
+                          frm.disable_save();
+                          // frm.disable_form();
+                          frm.set_intro(
+                            "<div style='display: inline-block; border-radius: 50%; width: 20px; height: 20px; background-color: yellow; color: black; text-align: center; line-height: 20px;'>&#9888;</div>" +
+                              "<b> Day cannot end due to branch pending work. </b>",
+                            "red"
+                          );
+                        }
+
+                        // You can perform further actions here based on the retrieved data
+                      } else {
+                        // Handle error case
+                        console.error("Error fetching share records.");
+                      }
+                    },
+                  });
                 } else {
                   // Handle the case where there is an error or no response
                   console.error(
@@ -248,7 +286,55 @@ frappe.ui.form.on("Day Management Checkin", {
       //       }
       //     },
       //   });
+
+      // // Get branch value for the specified employee
+      // frappe.db.get_value(
+      //   "Employee",
+      //   { employee: frm.doc.employee },
+      //   "branch",
+      //   function (response) {
+      //     if (response && response.branch) {
+      //       // Print branch value to console
+      //       const branchName = response.branch;
+      //       console.log("Branch second time:", branchName);
+      //     }
+      //   }
+      // );
     } else if (!frm.is_new()) {
+      frm
+        .add_custom_button(
+          '<span><img src="/files/home.png" alt="Home" style="width: 16px; height: 16px; vertical-align: middle;"> Home</span>',
+          function () {
+            frappe.set_route("/app/");
+          }
+        )
+        .addClass("custom-button")
+        .css({
+          "background-color": "black",
+          color: "white",
+          "font-weight": "bold",
+          border: "1px solid black",
+          transition: "all 0.3s ease",
+          padding: "5px 10px", // Adjust padding as needed
+        })
+        .hover(
+          function () {
+            $(this).css({
+              "background-color": "white",
+              color: "black",
+              "border-color": "black",
+            });
+          },
+          function () {
+            $(this).css({
+              "background-color": "black",
+              color: "white",
+              "border-color": "black",
+            });
+          }
+        );
+      frm.disable_form();
+      frm.disable_save();
       frm.set_intro(
         "<b>Day " +
           frm.doc.log_type +
@@ -271,6 +357,10 @@ frappe.ui.form.on("Day Management Checkin", {
   after_save: function (frm) {
     if (frappe.user.has_role("Share Executive")) {
       frappe.set_route("/app/day-management");
+    } else {
+      setTimeout(function () {
+        frappe.set_route("app/share-management");
+      }, 1000); //  1 seconds
     }
   },
   before_save: function (frm) {
@@ -305,4 +395,71 @@ frappe.ui.form.on("Day Management Checkin", {
   //   console.log("End Logtype:", endlog);
 
   // },
+
+  custom_home_button(frm) {
+    frm
+      .add_custom_button(
+        '<span><img src="/files/home.png" alt="Home" style="width: 16px; height: 16px; vertical-align: middle;"> Home</span>',
+        function () {
+          frappe.set_route("/app/");
+        }
+      )
+      .addClass("custom-button")
+      .css({
+        "background-color": "black",
+        color: "white",
+        "font-weight": "bold",
+        border: "1px solid black",
+        transition: "all 0.3s ease",
+        padding: "5px 10px", // Adjust padding as needed
+      })
+      .hover(
+        function () {
+          $(this).css({
+            "background-color": "white",
+            color: "black",
+            "border-color": "black",
+          });
+        },
+        function () {
+          $(this).css({
+            "background-color": "black",
+            color: "white",
+            "border-color": "black",
+          });
+        }
+      );
+    frm
+      .add_custom_button(
+        '<span><img src="/files/home.png" alt="Home" style="width: 16px; height: 16px; vertical-align: middle;"> Share Application</span>',
+        function () {
+          frappe.set_route("List", "Share Application");
+        }
+      )
+      .addClass("custom-button")
+      .css({
+        "background-color": "black",
+        color: "white",
+        "font-weight": "bold",
+        border: "1px solid black",
+        transition: "all 0.3s ease",
+        padding: "5px 10px", // Adjust padding as needed
+      })
+      .hover(
+        function () {
+          $(this).css({
+            "background-color": "white",
+            color: "black",
+            "border-color": "black",
+          });
+        },
+        function () {
+          $(this).css({
+            "background-color": "black",
+            color: "white",
+            "border-color": "black",
+          });
+        }
+      );
+  },
 });

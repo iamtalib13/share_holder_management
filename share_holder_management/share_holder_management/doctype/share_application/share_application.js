@@ -269,6 +269,9 @@ frappe.ui.form.on("Share Application", {
         console.log("Share Executive");
       } else if (frappe.user.has_role("Share User")) {
         console.log("Share User");
+        frm.set_value("no_of_shares", 1);
+        frm.refresh_field("no_of_shares");
+        frm.set_df_property("no_of_shares", "read_only", 1);
       } else {
       }
     }
@@ -725,6 +728,7 @@ frappe.ui.form.on("Share Application", {
         }
       } else if (frappe.user.has_role("Share User")) {
         console.log("Share User");
+        frm.set_df_property("no_of_shares", "read_only", 1);
 
         if (frm.doc.status == "Draft") {
           frm
@@ -805,6 +809,12 @@ frappe.ui.form.on("Share Application", {
               "background-color": "#28a745", // Set green color
               color: "#ffffff", // Set font color to white
             });
+        } else if (frm.doc.status == "Submitted") {
+          frm.set_intro(
+            "<div style='display: inline-block; border-radius: 50%; width: 20px; height: 20px; background-color: green; color: white; text-align: center; line-height: 20px;'>&#10003;</div>" +
+              "<b> Application is Submitted Successfully to Head Office </b>",
+            "green"
+          );
         } else {
           frm.disable_save();
           frm.disable_form();
@@ -839,19 +849,27 @@ frappe.ui.form.on("Share Application", {
   },
 
   Intro_messages(frm) {
-    if (frm.doc.status == "Draft") {
-      // Set intro message
-      frm.set_intro(
-        "Please Submit your Form",
-        "blue" // Change the color as needed
-      );
+    // Construct the intro message with the "Home" link aligned to the right
+    var introMessage =
+      "<div style='display: flex; align-items: center; justify-content: space-between;'>";
+
+    // Display "Please Submit your Form" message if document is in "Draft" status, aligned to the left
+    if (frm.doc.status == "Draft" && !frm.is_new()) {
+      introMessage +=
+        "<span style='float: left; color: blue;'>Please Submit your Form</span>";
+    } else if (frm.doc.status == "Draft" && frm.is_new()) {
+      introMessage +=
+        "<span style='float: left; color: blue;'>Please Fill <span style='color: red;'>*</span> All Mandatory fields</span>";
     }
+
+    introMessage += "</div>";
+
+    // Set the intro message
+    frm.set_intro(introMessage);
   },
+
   section_colors(frm) {
     //buttons
-    
-
-
 
     frm.fields_dict["nominee_form_section"].wrapper.css(
       "background-color",
@@ -1408,25 +1426,27 @@ frappe.ui.form.on("Share Application", {
     let nominee_guardian_name = frm.doc.nominee_guardian_name;
     let nominee_minor = frm.doc.minor;
 
-    if (
-      !nominee_fullname ||
-      !nominee_address ||
-      !nominee_relation ||
-      !nominee_contact ||
-      !nominee_share ||
-      !nominee_age
-    ) {
-      frappe.throw("Please fill in all required fields.");
-    } else if (nominee_contact.length !== 10) {
+    if (!nominee_fullname) {
+      frappe.throw("Please fill in the nominee's full name.");
+    } else if (!nominee_relation) {
+      frappe.throw("Please fill in the nominee's relation.");
+    } else if (!nominee_share) {
+      frappe.throw("Please fill in the nominee's share.");
+    } else if (!nominee_age) {
+      frappe.throw("Please fill in the nominee's age.");
+    } else if (nominee_contact && nominee_contact.length !== 10) {
       frappe.throw("Nominee Contact Number must be 10 digits");
     } else if (nominee_share > 100) {
       frappe.throw("Share Percentage cannot be more than 100%");
     } else {
       let totalPercentage = 0;
       // Calculate the total percentage in the child table
-      frm.doc.nominee_details.forEach(function (row) {
-        totalPercentage += row.nominee_share_percentage;
-      });
+      // Calculate the total percentage in the child table
+      if (frm.doc.nominee_details && frm.doc.nominee_details.length > 0) {
+        frm.doc.nominee_details.forEach(function (row) {
+          totalPercentage += row.nominee_share_percentage;
+        });
+      }
 
       let remainingPercentage = 100 - totalPercentage;
 
@@ -1545,6 +1565,7 @@ frappe.ui.form.on("Share Application", {
       frm.set_df_property("Print-Hin", "button_type", "primary");
       frm.set_df_property("Print-Mar", "button_type", "warning");
     }
+    frm.trigger("custome_home_button");
   },
 
   share_application_english_print(frm) {
@@ -1653,5 +1674,40 @@ frappe.ui.form.on("Share Application", {
         },
       });
     });
+  },
+
+  custome_home_button(frm) {
+    frm
+      .add_custom_button(
+        '<span><img src="/files/home.png" alt="Home" style="width: 16px; height: 16px; vertical-align: middle;"> Home</span>',
+        function () {
+          frappe.set_route("/app/");
+        }
+      )
+      .addClass("custom-button")
+      .css({
+        "background-color": "black",
+        color: "white",
+        "font-weight": "bold",
+        border: "1px solid black",
+        transition: "all 0.3s ease",
+        padding: "5px 10px", // Adjust padding as needed
+      })
+      .hover(
+        function () {
+          $(this).css({
+            "background-color": "white",
+            color: "black",
+            "border-color": "black",
+          });
+        },
+        function () {
+          $(this).css({
+            "background-color": "black",
+            color: "white",
+            "border-color": "black",
+          });
+        }
+      );
   },
 });

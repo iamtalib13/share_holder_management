@@ -322,7 +322,7 @@ g text{
         </div>
         <div class="certificate-30-start">
           <div>Account No &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {{doc.saving_current_ac_no}} <br> Share Certificate No : {{doc.name}}</div>
-          <div class="barcode-value-30"><img alt='' src='https://barcode.tec-it.com/barcode.ashx?data={{ doc.application_sr_no }}&code=Code128&translate-esc=on&imagetype=Png&eclevel=L&dmsize=Default' /></div>
+          <div class="barcode-value-30"><img alt='' src='https://barcode.tec-it.com/barcode.ashx?data={{ doc.share_ac_no }}&code=Code128&translate-esc=on&imagetype=Png&eclevel=L&dmsize=Default' /></div>
         </div>
         <hr />
         <div class="content-30">
@@ -383,7 +383,7 @@ g text{
           <div class="certificate-70-start">
             <div>Account No. {{doc.saving_current_ac_no}}</div>
             <div>Share Certificate No. {{doc.name}}</div>
-            <div class="barcode-value-70"><img alt='' src='https://barcode.tec-it.com/barcode.ashx?data={{ doc.application_sr_no }}&code=Code128&translate-esc=on&imagetype=Png&eclevel=L&dmsize=Default' /></div>
+            <div class="barcode-value-70"><img alt='' src='https://barcode.tec-it.com/barcode.ashx?data={{ doc.share_ac_no }}&code=Code128&translate-esc=on&imagetype=Png&eclevel=L&dmsize=Default' /></div>
           </div>
           <p>This is to certify that,</p>
           <p>Shri/Smt. <b> {{ doc.customer_name if doc.customer_name else '....................' }}</b></p>
