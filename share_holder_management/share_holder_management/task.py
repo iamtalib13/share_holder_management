@@ -1,5 +1,6 @@
 import frappe
 from frappe.utils import now
+from frappe.utils.data import now_datetime
 import openpyxl as pxl
 import pandas as pd
 
@@ -169,7 +170,7 @@ def day_end():
     except Exception as e:
         print(f"Error: {e}")
         
-        
+from frappe.utils import now_datetime        
 def day_start():
     try:
         # Fetch distinct branches from the database
@@ -189,7 +190,9 @@ def day_start():
                 doc.branch = branch.get('branch')
                 doc.status = "Sanctioned"
                 doc.log_type = "Start"
-                doc.log_time = now()
+
+                # Set the log_time field to the desired date with the current time
+                doc.log_time = now_datetime().replace(day=26, month=3, year=2024)
 
                 try:
                     doc.insert()
@@ -201,7 +204,7 @@ def day_start():
             print("\nNo branches found for day Start")
 
     except Exception as e:
-        print(f"Error: {e}")        
+        print(f"Error: {e}")      
          
 def update_barcode():
     print("barcode updated")
@@ -239,3 +242,78 @@ def update_base():
         processed_records += batch_size
 
     print("\n\nUpdated base_share_amount based on no_of_shares\n\n")
+    
+    
+    
+def update_share_account():
+    batch_size = 30000  # Adjust the batch size as needed
+    total_records = 362959
+    processed_records = 0
+    share_ac_no = 1  # Initialize share_ac_no
+    customer_share_mapping = {}  # Dictionary to map customer_id to share_ac_no
+    current_id = 1  # Start from id 1
+
+    while current_id <= total_records:
+        # Processing records in batches
+        for _ in range(batch_size):
+            if current_id > total_records:
+                break  # Stop processing if current_id exceeds total_records
+
+            ticket = frappe.get_doc("Share Application", current_id)
+
+            if not ticket:
+                print("No more records to update.")
+                break  # No more records
+
+            id = ticket.name
+            customer_id = ticket.customer_id
+
+            try:
+                # Clear share_ac_no first
+                frappe.db.set_value("Share Application", id, "share_ac_no", None, update_modified=False)
+
+                # Assign share_ac_no based on customer_id
+                if customer_id in customer_share_mapping:
+                    share_ac_no = customer_share_mapping[customer_id]
+                else:
+                    # Retrieve the correct share_ac_no for existing customer_id
+                    share_ac_no = frappe.get_value("Share Application", {"customer_id": customer_id}, "share_ac_no")
+
+                    if not share_ac_no:
+                        # If share_ac_no doesn't exist, generate a new one
+                        share_ac_no = max(customer_share_mapping.values(), default=0) + 1
+                        customer_share_mapping[customer_id] = share_ac_no
+
+                # Set share_ac_no in the Share Application record
+                frappe.db.set_value("Share Application", id, "share_ac_no", share_ac_no, update_modified=False)
+                print(f"Assigned share_ac_no {share_ac_no} to record {id} for customer {customer_id}")
+
+            except Exception as e:
+                print(f"Error updating record {id}: {e}")
+
+            processed_records += 1  # Move to the next record
+            current_id += 1
+
+        frappe.db.commit()  # Commit changes after processing each batch
+
+    print("\n\nUpdated share_ac_no based on customer_id\n\n")
+
+def check_first_10_records_serially():
+    batch_size = 1  # Process one record at a time
+    total_records_to_check = 10
+    processed_records = 0
+    current_id = 1  # Start from id 1
+
+    while processed_records < total_records_to_check:
+        ticket = frappe.get_doc("Share Application", current_id)
+
+        if not ticket:
+            print("No more records to check.")
+            break  # No more records
+
+        print(f"Checking record {ticket.name} for customer {ticket.customer_id}")
+
+        processed_records += 1  # Move to the next record
+        current_id += 1
+
+    print("\n\nChecked first 10 records serially\n\n")

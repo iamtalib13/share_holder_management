@@ -1402,6 +1402,142 @@ frappe.ui.form.on("Share Application", {
       }
     );
   },
+  customer_id: function (frm) {
+    var cust_id = frm.doc.customer_id;
+
+    // Check if a Share Application document exists with the given customer_id
+    if (cust_id) {
+      frm.call({
+        method: "get_existing_customer",
+        args: {
+          customer_id: cust_id,
+        },
+        callback: function (response) {
+          var customer_exists = response.message;
+
+          console.log("Customer exists:", customer_exists);
+          if (customer_exists == "True") {
+            frm.set_df_property(
+              "customer_id",
+              "description",
+              "<b style='color:darkgreen;'>Old-Customer</b>"
+            );
+          } else if (customer_exists == "False") {
+            frm.set_df_property(
+              "customer_id",
+              "description",
+              "<b style='color:orange;'>New-Customer</b>"
+            );
+          }
+        },
+      });
+    } else {
+      frm.set_df_property(
+        "customer_id",
+        "description",
+        "<b style='color:red;'>Enter Customer ID</b>"
+      );
+    }
+  },
+  mobile: function (frm) {
+    let mobile_no = frm.doc.mobile;
+    if (mobile_no) {
+      if (mobile_no.length === 10) {
+        frm.set_df_property(
+          "mobile",
+          "description",
+          "<b style='color:green;'>Valid Phone Number</b>"
+        );
+      } else {
+        frm.set_df_property(
+          "mobile",
+          "description",
+          "<b style='color:red;'>Invalid Phone Number</b>"
+        );
+      }
+    } else {
+      frm.set_df_property(
+        "mobile",
+        "description",
+        "<b style='color:red;'>Please Enter 10 Digit Phone No.</b>"
+      );
+    }
+  },
+  email_id: function (frm) {
+    let email = frm.doc.email_id;
+    if (email) {
+      let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (emailPattern.test(email)) {
+        frm.set_df_property(
+          "email_id",
+          "description",
+          "<b style='color:green;'>Valid Email Address</b>"
+        );
+      } else {
+        frm.set_df_property(
+          "email_id",
+          "description",
+          "<b style='color:red;'>Invalid Email Address</b>"
+        );
+      }
+    } else {
+      frm.set_df_property(
+        "email_id",
+        "description",
+        "<b style='color:red;'>Please Enter Email Address</b>"
+      );
+    }
+  },
+
+  aadhaar_number: function (frm) {
+    let aadhar = frm.doc.aadhaar_number;
+    if (aadhar) {
+      if (aadhar.length === 12 && /^\d+$/.test(aadhar)) {
+        frm.set_df_property(
+          "aadhaar_number",
+          "description",
+          "<b style='color:green;'>Valid Aadhar Number</b>"
+        );
+      } else {
+        frm.set_df_property(
+          "aadhaar_number",
+          "description",
+          "<b style='color:red;'>Invalid Aadhar Number. Please enter 12 digits.</b>"
+        );
+      }
+    } else {
+      frm.set_df_property(
+        "aadhaar_number",
+        "description",
+        "<b style='color:red;'>Please Enter 12 Digit Aadhar No.</b>"
+      );
+    }
+  },
+  pan_no: function (frm) {
+    let panNo = frm.doc.pan_no;
+    if (panNo) {
+      let panPattern = /^[A-Z]{5}\d{4}[A-Z]{1}$/;
+      if (panPattern.test(panNo)) {
+        frm.set_df_property(
+          "pan_no",
+          "description",
+          "<b style='color:green;'>Valid PAN Number</b>"
+        );
+      } else {
+        frm.set_df_property(
+          "pan_no",
+          "description",
+          "<b style='color:red;'>Invalid PAN Number. It should be in the format: ABCDE1234F</b>"
+        );
+      }
+    } else {
+      frm.set_df_property(
+        "pan_no",
+        "description",
+        "<b style='color:red;'>Please Enter PAN Number</b>"
+      );
+    }
+  },
 
   // set_base_share_amount(frm) {
   //   frm.set_value("base_share_amount", 100);

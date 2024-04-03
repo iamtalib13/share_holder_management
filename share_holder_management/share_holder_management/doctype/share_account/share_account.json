@@ -1,0 +1,58 @@
+{
+ "actions": [],
+ "autoname": "autoincrement",
+ "creation": "2024-04-01 10:24:16.381219",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "share_account_number",
+  "customer_id",
+  "share_application_number"
+ ],
+ "fields": [
+  {
+   "fieldname": "share_account_number",
+   "fieldtype": "Int",
+   "label": "Share Account Number"
+  },
+  {
+   "fieldname": "customer_id",
+   "fieldtype": "Int",
+   "label": "Customer ID"
+  },
+  {
+   "fieldname": "share_application_number",
+   "fieldtype": "Link",
+   "label": "Share Application Number",
+   "options": "Share Application"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-04-01 11:05:03.728979",
+ "modified_by": "Administrator",
+ "module": "Share Holder Management",
+ "name": "Share Account",
+ "naming_rule": "Autoincrement",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

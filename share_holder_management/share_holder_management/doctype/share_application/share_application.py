@@ -43,26 +43,49 @@ class ShareApplication(frappe.model.document.Document):
         return last_sr_no[0][0] if last_sr_no else 0
 
     def before_save(self):
-        self._calculate_share_amount()
+     self._calculate_share_amount()
 
-        if self.status == "Sanctioned":
-            if not self.share_ac_no:
-             self._set_share_ac_no()
+     if self.status == "Sanctioned":
+        if not self.share_ac_no:
+            self._set_share_ac_no()
 
+
+    def _create_share_ac_no(self):
+        try:
+         # Create a new Share Account Number
+         doc = frappe.new_doc('Share Account')
+         doc.share_application_number = self.name
+         doc.insert(ignore_permissions=True)  # Ignore permissions to allow creation
+        except Exception as e:
+         frappe.log_error(f"Error creating Share Account: {e}")
+     
+    def _set_share_ac_no(self):
+        try:
+        # Find and Set a Share Account Number
+            share_account_number = frappe.db.get_value('Share Account', 
+                                                   {'share_application_number': self.name}, 
+                                                   'name')
+            if share_account_number:
+                self.share_ac_no = share_account_number
+            else:
+                self._create_share_ac_no()  # Create if not found
+            share_account_number = frappe.db.get_value('Share Account', 
+                                                       {'share_application_number': self.name}, 
+                                                       'name')
+            if share_account_number:
+                self.share_ac_no = share_account_number
+            else:
+                frappe.log_error(f"Unable to set Share Account Number for Share Application {self.name}")
+        except Exception as e:
+              frappe.log_error(f"Error setting Share Account Number: {e}")
+
+
+    
     def _calculate_share_amount(self):
             self.base_share_amount = self.no_of_shares * 10
             self.tot_share_amt = self.base_share_amount + 10
             self.share_customer_name = self.customer_name
             self.acc_name = self.customer_name
-
-    def _set_share_ac_no(self):
-        if not self.share_ac_no:
-            last_ac_no = frappe.db.sql("""SELECT share_ac_no FROM `tabShare Application`
-                                  WHERE status='Sanctioned'
-                                  ORDER BY CAST(share_ac_no AS SIGNED) DESC LIMIT 1""")
-        next_ac_no = str(int(last_ac_no[0][0]) + 1) if last_ac_no and last_ac_no[0][0] else "1"
-            # Uncomment the following line if you want to set the share_ac_no attribute
-        self.share_ac_no = next_ac_no
 
 @frappe.whitelist()
 def check_last_application_sr_no():
@@ -117,6 +140,32 @@ def check_current_enable_share_amount():
 @frappe.whitelist()
 def get_server_datetime():
     return frappe.utils.now_datetime()
+
+
+
+
+@frappe.whitelist()
+def get_existing_customer(customer_id):
+    check_exist_customer = frappe.db.sql(f"""
+        SELECT 
+            CASE 
+                WHEN EXISTS (SELECT 1 FROM `tabShare Application` WHERE customer_id = '{customer_id}') THEN 1
+                ELSE 0
+            END AS exist;
+    """)
+
+    if check_exist_customer:
+        if check_exist_customer[0][0]:  # If True
+            return 'True'
+        
+        else:
+            return 'False'
+    else:
+        return 'False'  # Or whatever default value you prefer
+
+
+
+
 
 @frappe.whitelist()
 def share_certificate_template(docname):
