@@ -317,3 +317,38 @@ def check_first_10_records_serially():
         current_id += 1
 
     print("\n\nChecked first 10 records serially\n\n")
+
+import frappe
+
+import frappe
+
+import frappe
+
+import frappe
+import json
+import xml.etree.ElementTree as ET
+
+@frappe.whitelist(allow_guest=True)
+def get_employees():
+    # JSON data
+    json_data = {
+        "city": "San Jose",
+        "firstName": "John",
+        "lastName": "Doe",
+        "state": "CA"
+    }
+
+    # Convert JSON to XML
+    xml_data = convert_json_to_xml(json_data)
+
+    frappe.response['content_type'] = 'application/xml'
+    frappe.response['message'] = xml_data
+
+def convert_json_to_xml(json_data):
+    root = ET.Element("root")
+    for key, value in json_data.items():
+        sub_element = ET.SubElement(root, key)
+        sub_element.text = str(value)
+    return ET.tostring(root, encoding="unicode")
+
+

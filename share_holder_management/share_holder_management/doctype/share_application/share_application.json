@@ -40,7 +40,6 @@
   "column_break_uylz",
   "pan_no",
   "kyc_section_2",
-  "column_break_nrre",
   "membership_form",
   "column_break_lhcd",
   "payment_receipt",
@@ -75,6 +74,7 @@
   "received_date",
   "nominee_details_tab",
   "nominee_form_section",
+  "nominee_share_percentage",
   "nominee_fullname",
   "nominee_relation",
   "nominee_age",
@@ -84,7 +84,6 @@
   "add_to_child",
   "check_table",
   "column_break_xcnzm",
-  "nominee_share_percentage",
   "nominee_guardian_name",
   "minor",
   "nominee_table_section",
@@ -259,10 +258,6 @@
    "reqd": 1
   },
   {
-   "fieldname": "column_break_nrre",
-   "fieldtype": "Column Break"
-  },
-  {
    "depends_on": "eval:frappe.user.has_role('System Manager') || frappe.user.has_role('Share User Creator') || frappe.user.has_role('Share Executive') || frappe.user.has_role('Share Admin')",
    "fieldname": "dividend_transfer_ac_details_tab",
    "fieldtype": "Tab Break",
@@ -390,7 +385,8 @@
    "fieldtype": "Select",
    "label": "Amount Received By",
    "mandatory_depends_on": "//eval:doc.no_of_shares",
-   "options": "\nTRF\nCASH"
+   "options": "\nTRF\nCASH",
+   "reqd": 1
   },
   {
    "fieldname": "after_sanction_share_ac_information_section",
@@ -557,7 +553,6 @@
    "label": "Add"
   },
   {
-   "description": "First Name + Middle Name + Last Name",
    "fieldname": "nominee_fullname",
    "fieldtype": "Data",
    "label": "Full Name <span style=\"color: red;\">*</span>"
@@ -630,7 +625,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-03-27 16:03:00.592908",
+ "modified": "2024-04-10 15:48:27.094930",
  "modified_by": "Administrator",
  "module": "Share Holder Management",
  "name": "Share Application",

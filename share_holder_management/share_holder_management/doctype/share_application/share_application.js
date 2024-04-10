@@ -21,6 +21,8 @@ frappe.ui.form.on("Share Application", {
   refresh(frm) {
     frm.trigger("section_colors");
 
+    frm.trigger("custom_file_upload");
+
     frm.trigger("child_table_controls");
 
     if (frm.is_new()) {
@@ -842,6 +844,144 @@ frappe.ui.form.on("Share Application", {
     });
   },
 
+  async custom_file_upload(frm) {
+    frm.$wrapper.find(".mt-2 text-center").eq(1).hide(); // Hide the second button
+    frm.$wrapper.find(".mt-2 text-center").eq(2).hide(); // Hide the third button
+    frm.get_field("membership_form").df.options = {
+      restrictions: {
+        allowed_file_types: [".pdf", ".jpeg", ".jpg", ".png"],
+      },
+    };
+    frm.get_field("payment_receipt").df.options = {
+      restrictions: {
+        allowed_file_types: [".pdf", ".jpeg", ".jpg", ".png"],
+      },
+    };
+    frm.get_field("kyc").df.options = {
+      restrictions: {
+        allowed_file_types: [".pdf", ".jpeg", ".jpg", ".png"],
+      },
+    };
+  },
+
+  membership_form: function (frm) {
+    // Get the value of the membership_form field
+    var fileUrl = frm.doc.membership_form;
+
+    // Extract the file extension
+    var fileExtension = fileUrl.split(".").pop().toLowerCase();
+
+    // Check the file type
+    if (fileExtension === "jpg" || fileExtension === "jpeg") {
+      console.log("JPEG file uploaded");
+      frm.set_df_property(
+        "membership_form",
+        "description",
+        "<b style='color:darkgreen;'>JPEG</b>"
+      );
+    } else if (fileExtension === "png") {
+      console.log("PNG file uploaded");
+      frm.set_df_property(
+        "membership_form",
+        "description",
+        "<b style='color:darkgreen;'>PNG</b>"
+      );
+    } else if (fileExtension === "pdf") {
+      console.log("PDF file uploaded");
+      frm.set_df_property(
+        "membership_form",
+        "description",
+        "<b style='color:darkgreen;'>PDF</b>"
+      );
+    } else {
+      console.log("Unknown file type uploaded");
+      frm.set_df_property(
+        "membership_form",
+        "description",
+        "<b style='color:red;'>Only PDF/JPG/JPEG/PNG Supported</b>"
+      );
+      frm.set_value("membership_form", null);
+    }
+  },
+  payment_receipt: function (frm) {
+    // Get the value of the payment_receipt field
+    var fileUrl = frm.doc.payment_receipt;
+
+    // Extract the file extension
+    var fileExtension = fileUrl.split(".").pop().toLowerCase();
+
+    // Check the file type
+    if (fileExtension === "jpg" || fileExtension === "jpeg") {
+      console.log("JPEG file uploaded");
+      frm.set_df_property(
+        "payment_receipt",
+        "description",
+        "<b style='color:darkgreen;'>JPEG</b>"
+      );
+    } else if (fileExtension === "png") {
+      console.log("PNG file uploaded");
+      frm.set_df_property(
+        "payment_receipt",
+        "description",
+        "<b style='color:darkgreen;'>PNG</b>"
+      );
+    } else if (fileExtension === "pdf") {
+      console.log("PDF file uploaded");
+      frm.set_df_property(
+        "payment_receipt",
+        "description",
+        "<b style='color:darkgreen;'>PDF</b>"
+      );
+    } else {
+      console.log("Unknown file type uploaded");
+      frm.set_df_property(
+        "payment_receipt",
+        "description",
+        "<b style='color:red;'>Only PDF/JPG/JPEG/PNG Supported</b>"
+      );
+      frm.set_value("payment_receipt", null);
+    }
+  },
+  kyc: function (frm) {
+    // Get the value of the kyc field
+    var fileUrl = frm.doc.kyc;
+
+    // Extract the file extension
+    var fileExtension = fileUrl.split(".").pop().toLowerCase();
+
+    // Check the file type
+    if (fileExtension === "jpg" || fileExtension === "jpeg") {
+      console.log("JPEG file uploaded");
+      frm.set_df_property(
+        "kyc",
+        "description",
+        "<b style='color:darkgreen;'>JPEG</b>"
+      );
+    } else if (fileExtension === "png") {
+      console.log("PNG file uploaded");
+      frm.set_df_property(
+        "kyc",
+        "description",
+        "<b style='color:darkgreen;'>PNG</b>"
+      );
+    } else if (fileExtension === "pdf") {
+      console.log("PDF file uploaded");
+      frm.set_df_property(
+        "kyc",
+        "description",
+        "<b style='color:darkgreen;'>PDF</b>"
+      );
+    } else {
+      console.log("Unknown file type uploaded");
+      frm.set_df_property(
+        "kyc",
+        "description",
+        "<b style='color:red;'>Only PDF/JPG/JPEG/PNG Supported</b>"
+      );
+      frm.set_value("kyc", null);
+    }
+  },
+
   child_table_controls(frm) {
     frm.fields_dict["nominee_details"].grid.wrapper
       .find(".grid-add-row")
@@ -1129,20 +1269,71 @@ frappe.ui.form.on("Share Application", {
       }
     });
 
+    frm.fields_dict["nominee_share_percentage"].$input.on(
+      "keydown",
+      function (event) {
+        var key = event.key;
+        var currentValue =
+          frm.fields_dict["nominee_share_percentage"].get_value();
+
+        // Allow delete, backspace, right arrow, and left arrow keys
+        if (
+          key === "Delete" ||
+          key === "Backspace" ||
+          key === "ArrowRight" ||
+          key === "ArrowLeft"
+        ) {
+          return;
+        }
+
+        // Prevent Tab key by keycode and key value
+        if (event.keyCode === 9 || key === "Tab") {
+          return;
+        }
+
+        // Check if the current value is already 100%
+        if (parseInt(currentValue) >= 100 && key !== "Backspace") {
+          event.preventDefault();
+          return;
+        }
+
+        // Prevent typing if the value would exceed 100%
+        if (parseInt(currentValue + key) > 100) {
+          event.preventDefault();
+        }
+      }
+    );
+
     // Logic for 'aadhaar_number' field
     frm.fields_dict["aadhaar_number"].$input.on("keydown", function (event) {
       var key = event.key;
-
-      // Validate that only numbers are allowed
+      var aadhaarField = frm.fields_dict["aadhaar_number"];
+      var value = aadhaarField.get_value();
       var regex = /^[0-9]+$/;
 
-      // Allow only numeric keys (0-9) and Backspace
-      if (!(key >= "0" && key <= "9") && key !== "Backspace") {
+      // Allow right arrow, left arrow, delete key, and backspace
+      if (
+        key === "ArrowRight" ||
+        key === "ArrowLeft" ||
+        key === "Delete" ||
+        key === "Backspace"
+      ) {
+        return;
+      }
+
+      // Check if the current length is already 12
+      if (value.length >= 12 && key >= "0" && key <= "9") {
         event.preventDefault();
+        return;
+      }
+
+      // Validate that only numbers are allowed
+      if (!(key >= "0" && key <= "9")) {
+        event.preventDefault();
+        return;
       }
 
       // Validate the entire input against the regex
-      var value = frm.fields_dict["aadhaar_number"].get_value();
       if (!regex.test(value)) {
         frm.set_value("aadhaar_number", null);
         frm.refresh_field("aadhaar_number");
@@ -1244,23 +1435,38 @@ frappe.ui.form.on("Share Application", {
       "keydown",
       function (event) {
         var key = event.key;
+        var mobileField = frm.fields_dict["nominee_mobile_number"];
+
+        // Check if the current length is already 10
+        if (mobileField.get_value().length >= 10 && key >= "0" && key <= "9") {
+          event.preventDefault();
+          return;
+        }
 
         // Validate that only numbers are allowed
         var regex = /^[0-9]+$/;
 
-        // Allow only numeric keys (0-9) and Backspace
-        if (!(key >= "0" && key <= "9") && key !== "Backspace") {
+        // Allow only numeric keys (0-9), Backspace, Delete, Right Arrow, and Left Arrow
+        if (
+          !(key >= "0" && key <= "9") &&
+          key !== "Backspace" &&
+          key !== "Delete" &&
+          key !== "ArrowRight" &&
+          key !== "ArrowLeft"
+        ) {
           event.preventDefault();
+          return;
         }
 
         // Validate the entire input against the regex
-        var value = frm.fields_dict["nominee_mobile_number"].get_value();
+        var value = mobileField.get_value();
         if (!regex.test(value)) {
           frm.set_value("nominee_mobile_number", null);
           frm.refresh_field("nominee_mobile_number");
         }
       }
     );
+
     frm.fields_dict["customer_id"].$input.on("keydown", function (event) {
       var key = event.key;
 
@@ -1282,41 +1488,62 @@ frappe.ui.form.on("Share Application", {
 
     frm.fields_dict["mobile"].$input.on("keydown", function (event) {
       var key = event.key;
+      var mobileField = frm.fields_dict["mobile"];
 
-      // Validate that only numbers, right arrow, and left arrow are allowed
+      // Check if the current length is already 10
+      if (mobileField.get_value().length >= 10 && key >= "0" && key <= "9") {
+        event.preventDefault();
+        return;
+      }
+
+      // Validate that only numbers, right arrow, left arrow, delete, and backspace are allowed
       var regex = /^[0-9]+$/;
 
-      // Allow only numeric keys (0-9), Right Arrow, Left Arrow, and Backspace
+      // Allow only numeric keys (0-9), Right Arrow, Left Arrow, Delete, and Backspace
       if (
         !(
           (key >= "0" && key <= "9") ||
           key === "ArrowRight" ||
           key === "ArrowLeft" ||
+          key === "Delete" ||
           key === "Backspace"
+        )
+      ) {
+        event.preventDefault();
+        return;
+      }
+    });
+    frm.fields_dict["customer_name"].$input.on("keydown", function (event) {
+      var currentValue = frm.fields_dict["customer_name"].get_value();
+
+      // Convert lowercase characters to uppercase
+      if (event.key >= "a" && event.key <= "z") {
+        currentValue += event.key.toUpperCase();
+        frm.fields_dict["customer_name"].set_input(currentValue);
+        event.preventDefault(); // Prevent the lowercase character from being added
+      }
+
+      // Validate that only uppercase alphabets, space, right arrow, left arrow, and delete are allowed
+      var regex = /^[A-Z\s]+$/;
+
+      // Allow only uppercase alphabet keys (A-Z), space, Right Arrow, Left Arrow, Backspace, and Delete
+      if (
+        !(
+          (event.key >= "A" && event.key <= "Z") ||
+          event.key === " " ||
+          event.key === "ArrowRight" ||
+          event.key === "ArrowLeft" ||
+          event.key === "Backspace" ||
+          event.key === "Delete"
         )
       ) {
         event.preventDefault();
       }
     });
-    frm.fields_dict["customer_name"].$input.on("keydown", function (event) {
-      var key = event.key;
 
-      // Validate that only alphabets, space, right arrow, and left arrow are allowed
-      var regex = /^[a-zA-Z\s]+$/;
-
-      // Allow only alphabet keys (a-z, A-Z), space, Right Arrow, Left Arrow, and Backspace
-      if (
-        !(
-          (key >= "a" && key <= "z") ||
-          (key >= "A" && key <= "Z") ||
-          key === " " ||
-          key === "ArrowRight" ||
-          key === "ArrowLeft" ||
-          key === "Backspace"
-        )
-      ) {
-        event.preventDefault();
-      }
+    // Assuming moment.js is available
+    frm.fields_dict["date_of_birth"].$input.on("input", function () {
+      //console.log("working");
     });
 
     frm.fields_dict["nominee_fullname"].$input.on("keydown", function (event) {
@@ -1439,30 +1666,61 @@ frappe.ui.form.on("Share Application", {
       );
     }
   },
+
+  nominee_mobile_number: function (frm) {
+    let mobile_no = frm.doc.nominee_mobile_number;
+    let length = mobile_no ? mobile_no.length : 0;
+
+    if (mobile_no) {
+      if (length === 10) {
+        frm.set_df_property(
+          "nominee_mobile_number",
+          "description",
+          `<b style='color:green;'>Valid Phone Number (Length: ${length})</b>`
+        );
+      } else {
+        frm.set_df_property(
+          "nominee_mobile_number",
+          "description",
+          `<b style='color:red;'>Invalid Phone Number. Please enter 10 digits. (Length: ${length})</b>`
+        );
+      }
+    } else {
+      frm.set_df_property(
+        "nominee_mobile_number",
+        "description",
+        `<b style='color:red;'>Please Enter 10 Digit Phone No. (Length: ${length})</b>`
+      );
+    }
+  },
+
   mobile: function (frm) {
     let mobile_no = frm.doc.mobile;
+    let length = mobile_no ? mobile_no.length : 0;
+
     if (mobile_no) {
-      if (mobile_no.length === 10) {
+      if (length === 10) {
         frm.set_df_property(
           "mobile",
           "description",
-          "<b style='color:green;'>Valid Phone Number</b>"
+          `<b style='color:green;'>Valid Phone Number (Length: ${length})</b>`
         );
       } else {
         frm.set_df_property(
           "mobile",
           "description",
-          "<b style='color:red;'>Invalid Phone Number</b>"
+          `<b style='color:red;'>Invalid Phone Number. Please enter 10 digits. (Length: ${length})</b>`
         );
       }
     } else {
       frm.set_df_property(
         "mobile",
         "description",
-        "<b style='color:red;'>Please Enter 10 Digit Phone No.</b>"
+        `<b style='color:red;'>Please Enter 10 Digit Phone No. (Length: ${length})</b>`
       );
     }
   },
+
   email_id: function (frm) {
     let email = frm.doc.email_id;
     if (email) {
@@ -1491,28 +1749,31 @@ frappe.ui.form.on("Share Application", {
 
   aadhaar_number: function (frm) {
     let aadhar = frm.doc.aadhaar_number;
+    let length = aadhar ? aadhar.length : 0;
+
     if (aadhar) {
       if (aadhar.length === 12 && /^\d+$/.test(aadhar)) {
         frm.set_df_property(
           "aadhaar_number",
           "description",
-          "<b style='color:green;'>Valid Aadhar Number</b>"
+          `<b style='color:green;'>Valid Aadhar Number (Length: ${length})</b>`
         );
       } else {
         frm.set_df_property(
           "aadhaar_number",
           "description",
-          "<b style='color:red;'>Invalid Aadhar Number. Please enter 12 digits.</b>"
+          `<b style='color:red;'>Invalid Aadhar Number. Please enter 12 digits. (Length: ${length})</b>`
         );
       }
     } else {
       frm.set_df_property(
         "aadhaar_number",
         "description",
-        "<b style='color:red;'>Please Enter 12 Digit Aadhar No.</b>"
+        `<b style='color:red;'>Please Enter 12 Digit Aadhar No. (Length: ${length})</b>`
       );
     }
   },
+
   pan_no: function (frm) {
     let panNo = frm.doc.pan_no;
     if (panNo) {
