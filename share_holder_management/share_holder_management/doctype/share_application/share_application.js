@@ -845,8 +845,7 @@ frappe.ui.form.on("Share Application", {
   },
 
   async custom_file_upload(frm) {
-    frm.$wrapper.find(".mt-2 text-center").eq(1).hide(); // Hide the second button
-    frm.$wrapper.find(".mt-2 text-center").eq(2).hide(); // Hide the third button
+    $(".btn btn-file-upload").css("display", "none");
     frm.get_field("membership_form").df.options = {
       restrictions: {
         allowed_file_types: [".pdf", ".jpeg", ".jpg", ".png"],
@@ -1777,18 +1776,26 @@ frappe.ui.form.on("Share Application", {
   pan_no: function (frm) {
     let panNo = frm.doc.pan_no;
     if (panNo) {
+      // Check length
+      let lengthMsg = "<b>Length:</b> " + panNo.length;
+      if (panNo.length !== 10) {
+        lengthMsg += "<br>(Should be 10 characters)";
+      }
+
       let panPattern = /^[A-Z]{5}\d{4}[A-Z]{1}$/;
       if (panPattern.test(panNo)) {
         frm.set_df_property(
           "pan_no",
           "description",
-          "<b style='color:green;'>Valid PAN Number</b>"
+          "<b style='color:green;'>Valid PAN Number</b><br>(" + lengthMsg + ")"
         );
       } else {
         frm.set_df_property(
           "pan_no",
           "description",
-          "<b style='color:red;'>Invalid PAN Number. It should be in the format: ABCDE1234F</b>"
+          "<b style='color:red;'>Invalid PAN Number. It should be in the format: ABCDE1234F</b><br>(" +
+            lengthMsg +
+            ")"
         );
       }
     } else {

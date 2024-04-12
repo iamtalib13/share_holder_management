@@ -1,11 +1,39 @@
 import frappe
 import requests
-
+import barcode
 from frappe.model.document import Document
 
-class ShareTest(Document):
-    pass
+import frappe
+import os
+from barcode import Code128
+from barcode.writer import SVGWriter
 
+class ShareTest(Document):
+    def before_save(self):
+        self.set_barcode()
+
+    def set_barcode(self):
+        # Get the document name
+        barcode_number = self.name
+
+        # Create the barcode
+        barcode = Code128(str(barcode_number), writer=SVGWriter())
+        barcode_path = os.path.join(get_files_path(), f"{barcode_number}.svg")
+        barcode.write(barcode_path)
+
+        # Set the barcode field
+        self.barcode = barcode_path
+
+def get_files_path():
+    """
+    Get the path to the files directory in the Frappe framework.
+    """
+    site_path = frappe.utils.get_site_path()
+    files_path = os.path.join(site_path, 'public', 'files')
+    return files_path
+
+
+  
 
 import requests
 import xml.etree.ElementTree as ET
