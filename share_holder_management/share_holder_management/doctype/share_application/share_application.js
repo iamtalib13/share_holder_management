@@ -19,6 +19,7 @@ frappe.ui.form.on("Share Application", {
   },
 
   refresh(frm) {
+    $(".grid-add-row").css("display", "none");
     frm.trigger("section_colors");
 
     frm.trigger("custom_file_upload");
@@ -1338,6 +1339,18 @@ frappe.ui.form.on("Share Application", {
         frm.refresh_field("aadhaar_number");
       }
     });
+    // Limit input to only 10 digits
+    frm.fields_dict["pan_no"].$input.on("keyup", function (event) {
+      var panField = frm.fields_dict["pan_no"];
+      var value = panField.get_value();
+      console.log("pan - ", value.length);
+      // Check if the current length is already 10
+      if (value.length >= 10) {
+        console.log("length reached");
+        event.preventDefault(); // Prevents the default action (typing) for the event
+        return; // Exit the function to prevent further execution
+      }
+    });
 
     // Allow both uppercase and lowercase alphabets, and 0-9 numbers
     frm.fields_dict["pan_no"].$input.on("input", function () {
@@ -1355,6 +1368,7 @@ frappe.ui.form.on("Share Application", {
       // Set the sanitized value back to the field
       frm.fields_dict["pan_no"].set_input(sanitizedValue);
     });
+
     frm.fields_dict["nominee_share_percentage"].$input.on(
       "keydown",
       function (event) {
@@ -1508,7 +1522,7 @@ frappe.ui.form.on("Share Application", {
           key === "Backspace"
         )
       ) {
-        event.preventDefault();
+        event.preveentDefault();
         return;
       }
     });
@@ -1620,10 +1634,148 @@ frappe.ui.form.on("Share Application", {
             (key >= "0" && key <= "9") ||
             key === "ArrowRight" ||
             key === "ArrowLeft" ||
-            key === "Backspace"
+            key === "Backspace" ||
+            key === "Delete"
           )
         ) {
           event.preventDefault();
+        }
+      }
+    );
+
+    // Restrict child table "nominee_name" field in nominee_details
+    frm.fields_dict["nominee_details"].grid.wrapper.on(
+      "keydown",
+      'input[data-fieldname="nominee_name"]',
+      function (evt) {
+        // Get the pressed key
+        var key = evt.key;
+
+        // Get the current value of the input field
+        var currentValue = evt.target.value;
+
+        // Allow alphabetic characters (a-z, A-Z), space, left arrow, right arrow, delete, and backspace
+        if (
+          !(
+            (
+              (key >= "a" && key <= "z") || // lowercase letters
+              (key >= "A" && key <= "Z") || // uppercase letters
+              key === " " || // space
+              key === "Backspace" || // backspace
+              key === "ArrowLeft" || // left arrow
+              key === "ArrowRight" || // right arrow
+              key === "Delete"
+            ) // delete
+          )
+        ) {
+          // Prevent the default action for non-allowed keys
+          evt.preventDefault();
+        }
+      }
+    );
+
+    // Restrict child table "nominee_mobile_number" field in nominee_details
+    frm.fields_dict["nominee_details"].grid.wrapper.on(
+      "keydown",
+      'input[data-fieldname="nominee_mobile_number"]',
+      function (evt) {
+        // Get the pressed key
+        var key = evt.key;
+
+        // Get the current value of the input field
+        var currentValue = evt.target.value;
+
+        // Allow numeric keys (0-9), backspace, left arrow, right arrow, and delete
+        if (
+          !(
+            (
+              (key >= "0" && key <= "9") || // numeric keys
+              key === "Backspace" || // backspace
+              key === "ArrowLeft" || // left arrow
+              key === "ArrowRight" || // right arrow
+              key === "Delete"
+            ) // delete
+          )
+        ) {
+          // Prevent the default action for non-allowed keys
+          evt.preventDefault();
+        }
+
+        // Restrict input to 10 digits
+        if (
+          currentValue.length >= 10 &&
+          key !== "Backspace" &&
+          key !== "ArrowLeft" &&
+          key !== "ArrowRight"
+        ) {
+          // Prevent further input if the length is already 10 and the pressed key is not backspace or arrow keys
+          evt.preventDefault();
+        }
+      }
+    );
+
+    // Validate child table "nominee_share_percentage" field in nominee_details
+    frm.fields_dict["nominee_details"].grid.wrapper.on(
+      "keydown",
+      'input[data-fieldname="nominee_share_percentage"]',
+      function (evt) {
+        // Get the pressed key
+        var key = evt.key;
+
+        // Get the current value of the input field
+        var currentValue = parseFloat(evt.target.value);
+
+        // Allow numeric keys (0-9), backspace, delete, left arrow, and right arrow
+        if (
+          !(
+            (
+              (key >= "0" && key <= "9") || // numeric keys
+              key === "Backspace" || // backspace
+              key === "Delete" || // delete
+              key === "ArrowLeft" || // left arrow
+              key === "ArrowRight"
+            ) // right arrow
+          )
+        ) {
+          // Prevent the default action for non-allowed keys
+          evt.preventDefault();
+        }
+
+        // Prevent input if value exceeds 100%
+        var newValue = parseFloat(this.value + key);
+        if (!isNaN(newValue) && newValue > 100) {
+          evt.preventDefault();
+        }
+      }
+    );
+    // Validate child table "nominee_age" field in nominee_details
+    frm.fields_dict["nominee_details"].grid.wrapper.on(
+      "keydown",
+      'input[data-fieldname="nominee_age"]',
+      function (evt) {
+        // Get the pressed key
+        var key = evt.key;
+
+        // Allow Delete, Backspace, Left Arrow, Right Arrow, and numeric keys (0-9)
+        if (
+          !(
+            (
+              key === "Delete" || // delete
+              key === "Backspace" || // backspace
+              key === "ArrowLeft" || // left arrow
+              key === "ArrowRight" || // right arrow
+              (key >= "0" && key <= "9")
+            ) // numeric keys
+          )
+        ) {
+          // Prevent the default action for non-allowed keys
+          evt.preventDefault();
+        }
+
+        // Prevent input if value exceeds 999
+        var newValue = parseFloat(this.value + key);
+        if (!isNaN(newValue) && newValue > 120) {
+          evt.preventDefault();
         }
       }
     );
@@ -1821,6 +1973,7 @@ frappe.ui.form.on("Share Application", {
     frm.page.clear_primary_action();
   },
   add_to_child: function (frm) {
+    $(".grid-add-row").css("display", "none");
     let nominee_fullname = frm.doc.nominee_fullname;
     let nominee_address = frm.doc.nominee_address;
     let nominee_relation = frm.doc.nominee_relation;
@@ -1937,6 +2090,7 @@ frappe.ui.form.on("Share Application", {
 
 frappe.ui.form.on("Share Application", {
   refresh(frm) {
+    $(".grid-add-row").css("display", "none");
     if (!frm.is_new()) {
       if (frappe.user.has_role("System Manager")) {
         // Additional logic for System Manager role
@@ -2113,5 +2267,11 @@ frappe.ui.form.on("Share Application", {
           });
         }
       );
+  },
+});
+
+frappe.ui.form.on("Nominee", {
+  nominee_mobile_number: function (frm, cdt, cdn) {
+    console.log("child phone-", frm.doc.nominee_mobile_number);
   },
 });
