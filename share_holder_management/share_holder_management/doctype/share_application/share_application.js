@@ -1500,6 +1500,7 @@ frappe.ui.form.on("Share Application", {
     });
 
     frm.fields_dict["mobile"].$input.on("keydown", function (event) {
+      console.log("Mobile");
       var key = event.key;
       var mobileField = frm.fields_dict["mobile"];
 
@@ -1522,7 +1523,7 @@ frappe.ui.form.on("Share Application", {
           key === "Backspace"
         )
       ) {
-        event.preveentDefault();
+        event.preventDefault();
         return;
       }
     });
@@ -1579,6 +1580,30 @@ frappe.ui.form.on("Share Application", {
         event.preventDefault();
       }
     });
+
+    frm.fields_dict["nominee_guardian_name"].$input.on(
+      "keydown",
+      function (event) {
+        var key = event.key;
+
+        // Validate that only alphabets, space, right arrow, and left arrow are allowed
+        var regex = /^[a-zA-Z\s]+$/;
+
+        // Allow only alphabet keys (a-z, A-Z), space, Right Arrow, Left Arrow, and Backspace
+        if (
+          !(
+            (key >= "a" && key <= "z") ||
+            (key >= "A" && key <= "Z") ||
+            key === " " ||
+            key === "ArrowRight" ||
+            key === "ArrowLeft" ||
+            key === "Backspace"
+          )
+        ) {
+          event.preventDefault();
+        }
+      }
+    );
     frm.fields_dict["taluka"].$input.on("keydown", function (event) {
       var key = event.key;
 
