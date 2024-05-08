@@ -97,7 +97,8 @@
   "acc_name",
   "remark_section",
   "dividend_remark",
-  "return_remark"
+  "return_remark",
+  "reject_remark"
  ],
  "fields": [
   {
@@ -621,11 +622,16 @@
    "fieldtype": "Button",
    "hidden": 1,
    "label": "check table"
+  },
+  {
+   "fieldname": "reject_remark",
+   "fieldtype": "Small Text",
+   "label": "Reject Remark"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-04-10 15:48:27.094930",
+ "modified": "2024-05-08 17:34:00.782709",
  "modified_by": "Administrator",
  "module": "Share Holder Management",
  "name": "Share Application",

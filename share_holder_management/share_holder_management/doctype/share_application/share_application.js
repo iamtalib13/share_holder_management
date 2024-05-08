@@ -14,8 +14,19 @@ frappe.ui.form.on("Share Application", {
       // Check if the child table is empty
       if (!frm.doc.nominee_details || frm.doc.nominee_details.length === 0) {
         frappe.throw("Please Add at Least One Nominee.");
+        console.log("chcking nominee");
       }
+    } else {
     }
+  },
+  clear_nominee_form(frm) {
+    frm.set_value("nominee_fullname", "");
+    frm.set_value("nominee_guardian_name", "");
+    frm.set_value("nominee_address", "");
+    frm.set_value("nominee_relation", "");
+    frm.set_value("nominee_mobile_number", "");
+    frm.set_value("nominee_share_percentage", "");
+    frm.set_value("nominee_age", "");
   },
 
   refresh(frm) {
@@ -658,6 +669,10 @@ frappe.ui.form.on("Share Application", {
           frm.trigger("return_intro");
           frm.disable_save();
           frm.disable_form();
+        } else if (frm.doc.status == "Rejected") {
+          frm.trigger("reject_intro");
+          frm.disable_save();
+          frm.disable_form();
         } else if (
           frm.doc.status == "Pending From HO" ||
           frm.doc.status == "Received"
@@ -706,15 +721,46 @@ frappe.ui.form.on("Share Application", {
                 "Are you sure you want to Reject- <b>" +
                   frm.doc.customer_name +
                   "</b>",
-                () => {
-                  // action to perform if Yes is selected
-                  frm.set_value("status", "Rejected");
-                  frm.refresh_field("status");
-                  console.log("Reject");
-                  frm.save();
-                },
-                () => {
-                  // action to perform if No is selected
+                function () {
+                  var d = new frappe.ui.Dialog({
+                    title: __("Rejection Reason"),
+                    fields: [
+                      {
+                        label: __("Please Give Reason of Rejection"),
+                        fieldname: "reject_remark",
+                        fieldtype: "Small Text",
+                        reqd: 1, // Set the rejection reason field as mandatory
+                      },
+                    ],
+                    primary_action_label: __("Reject"),
+                    primary_action: function () {
+                      // Check if the rejection reason is provided
+                      var rejectRemark =
+                        d.fields_dict.reject_remark.get_value();
+                      if (!rejectRemark) {
+                        frappe.msgprint(
+                          __("Please provide a rejection reason.")
+                        );
+                        return;
+                      }
+
+                      // Update form fields
+                      frm.set_value("reject_remark", rejectRemark);
+
+                      // Set status to Rejected
+                      frm.set_value("status", "Rejected");
+
+                      // Save the form
+                      frm.save();
+                      d.hide();
+                    },
+                    secondary_action_label: __("Cancel"),
+                    secondary_action: function () {
+                      d.hide(); // Hide the dialog if canceled
+                    },
+                  });
+
+                  d.show(); // Show the dialog
                 }
               );
             })
@@ -753,6 +799,8 @@ frappe.ui.form.on("Share Application", {
                 if (totalPercentage !== 100) {
                   frappe.throw("Total Nominee Share Percentage must be 100%.");
                 } else {
+                  frm.trigger("clear_nominee_form");
+
                   frappe.confirm(
                     "Are you sure you want to submit the form to the Head-Office?",
                     () => {
@@ -760,6 +808,7 @@ frappe.ui.form.on("Share Application", {
                       frm.refresh_field("status");
                       frm.save();
                     },
+
                     () => {
                       // action to perform if No is selected
                     }
@@ -1086,6 +1135,9 @@ frappe.ui.form.on("Share Application", {
 
   return_intro: function (frm) {
     frm.set_intro("<b>Return Remark : </b>" + frm.doc.return_remark, "red");
+  },
+  reject_intro: function (frm) {
+    frm.set_intro("<b>Rejection Remark : </b>" + frm.doc.reject_remark, "red");
   },
 
   // date_of_birth: function (frm) {
@@ -1528,28 +1580,10 @@ frappe.ui.form.on("Share Application", {
       }
     });
     frm.fields_dict["customer_name"].$input.on("keydown", function (event) {
-      var currentValue = frm.fields_dict["customer_name"].get_value();
-
-      // Convert lowercase characters to uppercase
-      if (event.key >= "a" && event.key <= "z") {
-        currentValue += event.key.toUpperCase();
-        frm.fields_dict["customer_name"].set_input(currentValue);
-        event.preventDefault(); // Prevent the lowercase character from being added
-      }
-
-      // Validate that only uppercase alphabets, space, right arrow, left arrow, and delete are allowed
-      var regex = /^[A-Z\s]+$/;
-
-      // Allow only uppercase alphabet keys (A-Z), space, Right Arrow, Left Arrow, Backspace, and Delete
+      // Allow only uppercase alphabets, space, right arrow, left arrow, and delete
       if (
-        !(
-          (event.key >= "A" && event.key <= "Z") ||
-          event.key === " " ||
-          event.key === "ArrowRight" ||
-          event.key === "ArrowLeft" ||
-          event.key === "Backspace" ||
-          event.key === "Delete"
-        )
+        (event.keyCode >= 48 && event.keyCode <= 57) || // Top row numbers (0-9)
+        (event.keyCode >= 96 && event.keyCode <= 105) // Number pad numbers (0-9)
       ) {
         event.preventDefault();
       }
@@ -1862,11 +1896,11 @@ frappe.ui.form.on("Share Application", {
         );
       }
     } else {
-      frm.set_df_property(
-        "nominee_mobile_number",
-        "description",
-        `<b style='color:red;'>Please Enter 10 Digit Phone No. (Length: ${length})</b>`
-      );
+      // frm.set_df_property(
+      //   "nominee_mobile_number",
+      //   "description",
+      //   `<b style='color:red;'>Please Enter 10 Digit Phone No. (Length: ${length})</b>`
+      // );
     }
   },
 
@@ -2066,6 +2100,13 @@ frappe.ui.form.on("Share Application", {
         if (!frm.is_new()) {
           frm.save();
         }
+        frappe.show_alert(
+          {
+            message: __("Nominee Added"),
+            indicator: "green",
+          },
+          3
+        );
       }
     }
   },
