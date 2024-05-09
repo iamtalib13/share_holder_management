@@ -1,12 +1,10 @@
 import frappe
 import requests
-import barcode
+
 from frappe.model.document import Document
 
 import frappe
-import os
-from barcode import Code128
-from barcode.writer import SVGWriter
+
 
 class ShareTest(Document):
     def before_save(self):
