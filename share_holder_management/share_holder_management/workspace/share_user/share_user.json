@@ -12,7 +12,7 @@
  "is_hidden": 0,
  "label": "Share User",
  "links": [],
- "modified": "2024-01-30 10:14:51.299378",
+ "modified": "2024-05-15 10:56:18.292372",
  "modified_by": "Administrator",
  "module": "Share Holder Management",
  "name": "Share User",
@@ -26,7 +26,7 @@
    "role": "Share User Creator"
   }
  ],
- "sequence_id": 61.0,
+ "sequence_id": 38.0,
  "shortcuts": [
   {
    "color": "Cyan",

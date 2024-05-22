@@ -17,7 +17,7 @@
  "is_hidden": 0,
  "label": "Executive",
  "links": [],
- "modified": "2024-02-23 10:59:04.442972",
+ "modified": "2024-05-15 10:56:18.259057",
  "modified_by": "Administrator",
  "module": "Share Holder Management",
  "name": "Executive",
@@ -31,7 +31,7 @@
    "role": "Share Executive"
   }
  ],
- "sequence_id": 60.0,
+ "sequence_id": 37.0,
  "shortcuts": [
   {
    "color": "Green",
