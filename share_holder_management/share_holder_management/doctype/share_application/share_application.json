@@ -2,7 +2,7 @@
  "actions": [],
  "allow_events_in_timeline": 1,
  "allow_import": 1,
- "autoname": "format:{application_sr_no}",
+ "autoname": "autoincrement",
  "creation": "2023-12-15 12:30:16.419702",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -631,11 +631,11 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-05-08 17:34:00.782709",
+ "modified": "2024-05-27 10:40:57.524616",
  "modified_by": "Administrator",
  "module": "Share Holder Management",
  "name": "Share Application",
- "naming_rule": "Expression",
+ "naming_rule": "Autoincrement",
  "owner": "Administrator",
  "permissions": [
   {
