@@ -106,8 +106,7 @@
    "fieldname": "application_sr_no",
    "fieldtype": "Int",
    "label": "Application Sr. No.",
-   "read_only": 1,
-   "reqd": 1
+   "read_only": 1
   },
   {
    "fieldname": "column_break_hdes",
@@ -631,7 +630,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-05-27 10:40:57.524616",
+ "modified": "2024-06-03 11:49:25.748252",
  "modified_by": "Administrator",
  "module": "Share Holder Management",
  "name": "Share Application",

@@ -46,21 +46,10 @@ class ShareApplication(frappe.model.document.Document):
                 title=_("Invalid number of shares."),
             )
 
-    def before_insert(self):
-        self._set_application_sr_no()
 
-    def _set_application_sr_no(self):
-        last_sr_no = self._get_last_application_sr_no()
-        self.application_sr_no = last_sr_no + 1
-
-    def _get_last_application_sr_no(self):
-        last_sr_no = frappe.db.sql(
-            """SELECT application_sr_no FROM `tabShare Application`
-                                      ORDER BY CAST(application_sr_no AS SIGNED) DESC LIMIT 1"""
-        )
-        return last_sr_no[0][0] if last_sr_no else 0
 
     def before_save(self):
+        self.application_sr_no = self.name
         self._calculate_share_amount()
 
         if self.status == "Sanctioned":
@@ -104,20 +93,6 @@ class ShareApplication(frappe.model.document.Document):
         self.share_customer_name = self.customer_name
         self.acc_name = self.customer_name
 
-
-@frappe.whitelist()
-def check_last_application_sr_no():
-    result = frappe.db.sql(
-        """SELECT application_sr_no FROM `tabShare Application`
-                             ORDER BY CAST(application_sr_no AS SIGNED) DESC LIMIT 1""",
-        as_dict=True,
-    )
-
-    if result:
-        last_application_sr_no = result[0]["application_sr_no"]
-        return last_application_sr_no + 1
-    else:
-        frappe.msgprint("No records found in the 'Share Application' table.")
 
 
 @frappe.whitelist()

@@ -30,6 +30,7 @@ frappe.ui.form.on("Share Application", {
   },
 
   refresh(frm) {
+    $(".layout-side-section").hide();
     $(".grid-add-row").css("display", "none");
     frm.trigger("section_colors");
 
@@ -61,24 +62,24 @@ frappe.ui.form.on("Share Application", {
       });
 
       if (!frappe.user.has_role("System Manager")) {
-        frm.call({
-          method: "check_last_application_sr_no",
-          args: {},
-          callback: function (r) {
-            // Check if the message array contains at least one object
-            if (r.message) {
-              var barcodeValue = String(r.message);
-              frm.set_value("application_sr_no", r.message);
+        // frm.call({
+        //   method: "check_last_application_sr_no",
+        //   args: {},
+        //   callback: function (r) {
+        //     // Check if the message array contains at least one object
+        //     if (r.message) {
+        //       var barcodeValue = String(r.message);
+        //       frm.set_value("application_sr_no", r.message);
 
-              frm.refresh_field("application_sr_no");
+        //       frm.refresh_field("application_sr_no");
 
-              // Do something else with the response, if needed
-            } else {
-              frappe.throw("Server Down . .");
-              // Handle the case where there is no response
-            }
-          },
-        });
+        //       // Do something else with the response, if needed
+        //     } else {
+        //       frappe.throw("Server Down . .");
+        //       // Handle the case where there is no response
+        //     }
+        //   },
+        // });
         console.log("owner", frm.doc.owner);
         frappe.call({
           method:

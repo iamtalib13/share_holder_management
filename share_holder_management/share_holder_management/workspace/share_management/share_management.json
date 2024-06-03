@@ -17,7 +17,7 @@
  "is_hidden": 0,
  "label": "Share Management",
  "links": [],
- "modified": "2024-05-15 10:56:17.280990",
+ "modified": "2024-05-29 16:21:54.897481",
  "modified_by": "Administrator",
  "module": "Share Holder Management",
  "name": "Share Management",
@@ -31,7 +31,7 @@
    "role": "Share User"
   }
  ],
- "sequence_id": 11.0,
+ "sequence_id": 12.0,
  "shortcuts": [
   {
    "color": "Cyan",
