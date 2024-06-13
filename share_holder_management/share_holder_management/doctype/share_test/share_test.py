@@ -4,6 +4,9 @@ import requests
 from frappe.model.document import Document
 
 import frappe
+import requests
+import xml.etree.ElementTree as ET
+import frappe
 
 
 class ShareTest(Document):
@@ -22,20 +25,10 @@ class ShareTest(Document):
         # Set the barcode field
         self.barcode = barcode_path
 
-def get_files_path():
-    """
-    Get the path to the files directory in the Frappe framework.
-    """
-    site_path = frappe.utils.get_site_path()
-    files_path = os.path.join(site_path, 'public', 'files')
-    return files_path
-
 
   
 
-import requests
-import xml.etree.ElementTree as ET
-import frappe
+
 
 @frappe.whitelist()
 def receive_xml_data():
