@@ -5,6 +5,20 @@ frappe.ui.form.on("Share Application", {
   before_save: function (frm) {},
 
   validate: function (frm) {
+    //check customer_id is more than 6 digit
+    // Check if customer_id is present
+    if (frm.doc.customer_id) {
+      // Check if customer_id is not more than 6 digits
+      if (frm.doc.customer_id.length <= 6) {
+        // Valid customer_id
+        console.log("Valid customer_id");
+      } else {
+        // Invalid customer_id
+        frappe.throw("Customer ID must not be more than 6 digits.");
+        frappe.validated = false;
+      }
+    }
+
     // Check if the sanction date is blank or before 1/02/2024
     if (
       frm.doc.sanction_date &&
@@ -952,6 +966,7 @@ frappe.ui.form.on("Share Application", {
       );
       frm.set_value("membership_form", null);
     }
+    //return;
   },
   payment_receipt: function (frm) {
     // Get the value of the payment_receipt field
@@ -1532,12 +1547,16 @@ frappe.ui.form.on("Share Application", {
         }
       }
     );
-
     frm.fields_dict["customer_id"].$input.on("keydown", function (event) {
       var key = event.key;
+      var customerField = frm.fields_dict["customer_id"];
+      var currentLength = customerField.get_value().length;
 
-      // Validate that only numbers, right arrow, and left arrow are allowed
-      var regex = /^[0-9]+$/;
+      // Prevent input if the length is already 6 and the key is a number
+      if (currentLength >= 6 && key >= "0" && key <= "9") {
+        event.preventDefault();
+        return;
+      }
 
       // Allow only numeric keys (0-9), Right Arrow, Left Arrow, and Backspace
       if (
@@ -1684,11 +1703,16 @@ frappe.ui.form.on("Share Application", {
       "keydown",
       function (event) {
         var key = event.key;
+        var savingField = frm.fields_dict["saving_current_ac_no"];
+        var currentLength = savingField.get_value().length;
 
-        // Validate that only numbers, right arrow, and left arrow are allowed
-        var regex = /^[0-9]+$/;
+        // Prevent input if the length is already 8 and the key is a number
+        if (currentLength >= 8 && key >= "0" && key <= "9") {
+          event.preventDefault();
+          return;
+        }
 
-        // Allow only numeric keys (0-9), Right Arrow, Left Arrow, and Backspace
+        // Allow only numeric keys (0-9), Right Arrow, Left Arrow, Backspace, and Delete
         if (
           !(
             (key >= "0" && key <= "9") ||

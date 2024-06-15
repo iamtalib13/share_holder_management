@@ -465,7 +465,7 @@
    "fieldname": "account_type",
    "fieldtype": "Select",
    "label": "Account Type",
-   "options": "\nSAVING\nCURRENT\nLIABILITY\nLOAN",
+   "options": "\nSAVING\nCURRENT\nLIABILITY",
    "reqd": 1
   },
   {
@@ -630,7 +630,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-06-03 11:49:25.748252",
+ "modified": "2024-06-14 12:16:14.192848",
  "modified_by": "Administrator",
  "module": "Share Holder Management",
  "name": "Share Application",
