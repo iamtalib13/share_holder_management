@@ -389,6 +389,7 @@
    "reqd": 1
   },
   {
+   "depends_on": "eval:doc.status==\"Sanctioned\"",
    "fieldname": "after_sanction_share_ac_information_section",
    "fieldtype": "Section Break",
    "label": "After Sanction Share A/C Information"
@@ -410,6 +411,7 @@
    "read_only": 1
   },
   {
+   "depends_on": "eval:doc.status==\"Sanctioned\"",
    "fieldname": "section_break_eqr0",
    "fieldtype": "Section Break"
   },
@@ -465,7 +467,7 @@
    "fieldname": "account_type",
    "fieldtype": "Select",
    "label": "Account Type",
-   "options": "\nSAVING\nCURRENT\nLIABILITY\nLOAN",
+   "options": "\nSAVING\nCURRENT\nLIABILITY",
    "reqd": 1
   },
   {
@@ -628,9 +630,10 @@
    "label": "Reject Remark"
   }
  ],
+ "hide_toolbar": 1,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-06-03 11:49:25.748252",
+ "modified": "2024-06-14 11:44:32.334638",
  "modified_by": "Administrator",
  "module": "Share Holder Management",
  "name": "Share Application",
