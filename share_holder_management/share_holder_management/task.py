@@ -154,7 +154,6 @@ def day_end():
                 # create a new document
                 doc = frappe.new_doc('Day Management Checkin')
                 doc.branch = branch.get('branch')
-                doc.status = "Sanctioned"
                 doc.log_type = "End"
                 doc.log_time = now()
 
@@ -181,30 +180,29 @@ def day_start():
         """, as_dict=True)
 
         if result_branches:
-            print("\nCreating Day End Documents:")
+            frappe.log("Creating Day Start Documents:")
 
             # Loop through each branch and create a Day Management Checkin document
             for branch in result_branches:
                 # create a new document
                 doc = frappe.new_doc('Day Management Checkin')
                 doc.branch = branch.get('branch')
-                doc.status = "Sanctioned"
                 doc.log_type = "Start"
 
-                # Set the log_time field to the desired date with the current time
-                doc.log_time = now_datetime().replace(day=26, month=3, year=2024)
+                # Set the log_time field to the current date and time
+                doc.log_time = now_datetime()
 
                 try:
                     doc.insert()
-                    print(f"Created Day Start Document for Branch {branch.get('branch')}")
+                    frappe.log(f"Created Day Start Document for Branch {branch.get('branch')}")
                 except frappe.DuplicateEntryError:
-                    print(f"Day Start for Branch {branch.get('branch')} already exists.")
+                    frappe.log(f"Day Start for Branch {branch.get('branch')} already exists.", level="warn")
 
         else:
-            print("\nNo branches found for day Start")
+            frappe.log("No branches found for day Start")
 
     except Exception as e:
-        print(f"Error: {e}")      
+        frappe.log_error(f"Error in day_start: {e}", title="Day Start Error")
          
 def update_barcode():
     print("barcode updated")
