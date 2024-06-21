@@ -376,7 +376,7 @@ frappe.ui.form.on("Day Management Checkin", {
         },
         callback: function (r) {
           if (r.message) {
-            let flag = r.flag;
+            let flag = r.message.flag; // Change here: accessing flag from r.message
             if (!flag) {
               frappe.validated = false;
               frappe.msgprint(
@@ -389,7 +389,6 @@ frappe.ui.form.on("Day Management Checkin", {
       });
     }
   },
-
   // before_save: function (frm) {
   //   let endlog = frm.doc.log_type;
   //   console.log("End Logtype:", endlog);
