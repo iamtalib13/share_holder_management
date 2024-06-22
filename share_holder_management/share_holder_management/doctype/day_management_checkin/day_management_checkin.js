@@ -368,22 +368,49 @@ frappe.ui.form.on("Day Management Checkin", {
     let branch = frm.doc.branch;
 
     if (endlog === "End" && branch === "Gondia HO") {
-      frm.call({
-        method: "start_end_details",
-        args: {
-          totalEndCount: 0,
-          totalBranchCount: 0,
-        },
+      // Fetch the date before proceeding
+      frappe.call({
+        method:
+          "share_holder_management.share_holder_management.doctype.day_management.day_management.check_conditions",
+        freeze: true,
+        freeze_message: "Fetching date...",
         callback: function (r) {
-          if (r.message) {
-            let flag = r.message.flag; // Change here: accessing flag from r.message
-            if (!flag) {
-              frappe.validated = false;
-              frappe.msgprint(
-                "You cannot End HO until branches are not ended for the day."
-              );
-              frm.set_value("log_type", "");
-            }
+          if (!r.exc && r.message) {
+            const data = r.message;
+            console.log("Result message:", data);
+
+            // Assuming the date is in the format YYYY-MM-DD
+            const originalDate = data[0].Date;
+            console.log("Original Date:", originalDate);
+
+            // Split the original date into parts [year, month, day]
+            const [year, month, day] = originalDate.split("-");
+
+            // Reformat the date as DD/MM/YYYY
+            const formattedDate = `${day}/${month}/${year}`;
+            console.log("Formatted Date:", formattedDate);
+
+            // Use the formatted date in the frm.call method
+            frm.call({
+              method: "start_end_details",
+              args: {
+                totalEndCount: 0,
+                totalBranchCount: 0,
+                check_date: formattedDate,
+              },
+              callback: function (r) {
+                if (r.message) {
+                  let flag = r.message.flag;
+                  if (!flag) {
+                    frappe.validated = false;
+                    frappe.msgprint(
+                      "You cannot End HO until branches are not ended for the day."
+                    );
+                    frm.set_value("log_type", "");
+                  }
+                }
+              },
+            });
           }
         },
       });

@@ -24,7 +24,7 @@
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "Relation",
-   "options": "\nSpouse\nParent\nMother\nFather\nSibling\nSon\nDaughter\nGrandfather\nGrandmother\nGrandchild\nAunt\nUncle\nCousin"
+   "options": "\nSpouse\nParent\nMother\nFather\nSibling\nSon\nDaughter\nGrandfather\nGrandmother\nGrandchild\nAunt\nUncle\nCousin\nHusband\nWife"
   },
   {
    "columns": 1,
@@ -94,7 +94,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2024-04-12 17:51:40.725640",
+ "modified": "2024-06-21 15:37:05.453807",
  "modified_by": "Administrator",
  "module": "Share Holder Management",
  "name": "Nominee",

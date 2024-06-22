@@ -243,40 +243,54 @@ def branch_day_start_and_end(branch,date):
     return flag
 
     
+from datetime import datetime
 
-#before save check all branches are ended or not.
+
 @frappe.whitelist()
-def start_end_details(totalEndCount, totalBranchCount):
+def start_end_details(totalEndCount=0, totalBranchCount=0, check_date=None):
+    # Parse the check date parameter or use today's date if not provided
+    if check_date:
+        check_date_obj = datetime.strptime(check_date, '%d/%m/%Y').date()
+    else:
+        check_date_obj = datetime.today().date()
+
+    check_date_str = check_date_obj.isoformat()
+
+    # Construct SQL queries using the parsed date
     total_end_query = """
         SELECT COUNT(*) AS total_end_count
         FROM `tabDay Management Checkin`
-        WHERE DATE(log_time) = CURDATE() AND log_type = 'End' AND branch != 'Gondia HO';
+        WHERE DATE(log_time) = %s AND log_type = 'End' AND branch != 'Gondia HO';
     """
-    total_end_result = frappe.db.sql(total_end_query, as_dict=True)
-
     branches_query = """
         SELECT COUNT(DISTINCT branch) AS total_branch_count
         FROM `tabUser`
         WHERE role_profile_name = 'Share User Employee';
     """
+
+    # Execute SQL queries safely
+    total_end_result = frappe.db.sql(total_end_query, check_date_str, as_dict=True)
     branches_result = frappe.db.sql(branches_query, as_dict=True)
 
+    # Default to 0 if no results are found
+    total_end_count = total_end_result[0]['total_end_count'] if total_end_result else 0
+    total_branch_count = branches_result[0]['total_branch_count'] if branches_result else 0
+
     # Check if counts match
-    if total_end_result[0]['total_end_count'] == branches_result[0]['total_branch_count']:
+    if total_end_count == total_branch_count:
         return {
             'message': 'Success',
             'flag': True,
-            'totalEndCount': total_end_result[0]['total_end_count'],
-            'totalBranchCount': branches_result[0]['total_branch_count'],
+            'totalEndCount': total_end_count,
+            'totalBranchCount': total_branch_count,
         }
     else:
         return {
             'message': 'Counts do not match',
             'flag': False,
-            'totalEndCount': total_end_result[0]['total_end_count'],
-            'totalBranchCount': branches_result[0]['total_branch_count'],
-        }  
-    
+            'totalEndCount': total_end_count,
+            'totalBranchCount': total_branch_count,
+        }
 
 
 

@@ -526,7 +526,7 @@
    "fieldname": "nominee_relation",
    "fieldtype": "Select",
    "label": "Relation  <span style=\"color: red;\">*</span>",
-   "options": "\nSpouse\nParent\nMother\nFather\nSibling\nSon\nDaughter\nGrandfather\nGrandmother\nGrandchild\nAunt\nUncle\nCousin"
+   "options": "\nSpouse\nParent\nMother\nFather\nSibling\nSon\nDaughter\nGrandfather\nGrandmother\nGrandchild\nAunt\nUncle\nCousin\nHusband\nWife"
   },
   {
    "fieldname": "nominee_mobile_number",
@@ -630,7 +630,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-06-14 12:16:14.192848",
+ "modified": "2024-06-21 15:37:20.476175",
  "modified_by": "Administrator",
  "module": "Share Holder Management",
  "name": "Share Application",
