@@ -40,7 +40,7 @@
   },
   {
    "fieldname": "address",
-   "fieldtype": "Data",
+   "fieldtype": "Text",
    "label": "Address"
   },
   {
@@ -53,7 +53,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2024-02-21 13:14:22.305572",
+ "modified": "2024-06-22 15:55:48.625169",
  "modified_by": "Administrator",
  "module": "Share Holder Management",
  "name": "Proceeding Records",
