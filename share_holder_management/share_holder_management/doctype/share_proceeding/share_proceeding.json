@@ -9,10 +9,6 @@
   "proceeding_date",
   "find_btn",
   "clear",
-  "column_break_rct0f",
-  "reso_no",
-  "column_break_z0leb",
-  "sub_no",
   "section_break_uiqqm",
   "proceeding_members",
   "response"
@@ -48,26 +44,6 @@
    "options": "\nTrue\nFalse"
   },
   {
-   "fieldname": "column_break_rct0f",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "reso_no",
-   "fieldtype": "Select",
-   "label": "\u0920\u0930\u093e\u0935 \u0915\u094d\u0930. ",
-   "options": "\n1\n2\n3\n4\n5"
-  },
-  {
-   "fieldname": "sub_no",
-   "fieldtype": "Select",
-   "label": "\u0935\u093f\u0937\u092f \u0915\u094d\u0930.",
-   "options": "\n1\n2\n3\n4\n5"
-  },
-  {
-   "fieldname": "column_break_z0leb",
-   "fieldtype": "Column Break"
-  },
-  {
    "fieldname": "clear",
    "fieldtype": "Button",
    "label": "Clear"
@@ -77,7 +53,7 @@
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2024-02-23 11:38:39.351208",
+ "modified": "2024-06-22 12:38:37.972943",
  "modified_by": "Administrator",
  "module": "Share Holder Management",
  "name": "Share Proceeding",

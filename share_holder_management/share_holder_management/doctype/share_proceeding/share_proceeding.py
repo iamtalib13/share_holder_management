@@ -47,7 +47,7 @@ def get_end_branch_details(proceeding_date):
 
     # If records exist, return "Show Log"; otherwise, return "Ho not Ended"
     if ho_end_records:
-        return "Show Log"
+        return get_logs(proceeding_date)
     else:
         frappe.throw("Ho not Ended")
   

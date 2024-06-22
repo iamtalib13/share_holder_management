@@ -46,7 +46,7 @@ frappe.ui.form.on("Share Proceeding", {
 
   find_btn: function (frm) {
     let date = frm.doc.proceeding_date;
-    console.log("Date: ", date);
+    console.log("Proceeding Date : ", date);
 
     if (frm.doc.response === "False") {
       frm.call({

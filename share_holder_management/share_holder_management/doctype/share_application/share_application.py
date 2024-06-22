@@ -78,6 +78,7 @@ class ShareApplication(frappe.model.document.Document):
             share_account_number = frappe.db.get_value(
                 "Share Account", {"share_application_number": self.name}, "name"
             )
+            
             if share_account_number:
                 self.share_ac_no = share_account_number
             else:
