@@ -9,41 +9,49 @@
  "field_order": [
   "personal_details_tab",
   "acc_section_details",
-  "application_sr_no",
   "customer_id",
+  "column_break_qymml",
   "account_type",
-  "column_break_hdes",
+  "column_break_icorp",
   "ac_open_dt",
+  "column_break_hdes",
   "application_date",
+  "column_break_kff2j",
+  "application_sr_no",
   "status",
   "personal_information_section",
   "salutation",
   "gender",
-  "occupation",
-  "sh_category",
-  "column_break_sb8h",
+  "column_break_ic6fi",
   "customer_name",
-  "category",
-  "email_id",
-  "column_break_g9fn",
-  "date_of_birth",
+  "occupation",
+  "column_break_sb8h",
   "mobile",
+  "email_id",
+  "column_break_ftxnu",
+  "date_of_birth",
   "age",
+  "column_break_g9fn",
+  "category",
+  "sh_category",
   "location_section",
-  "address",
-  "column_break_gctx",
-  "taluka",
-  "city",
+  "state",
   "nationality",
+  "column_break_gctx",
+  "pin_code",
+  "city",
+  "column_break_lttaq",
+  "address",
+  "taluka",
   "kyc_section",
   "aadhaar_number",
   "column_break_uylz",
   "pan_no",
   "kyc_section_2",
   "membership_form",
-  "column_break_lhcd",
+  "column_break_cflxx",
   "payment_receipt",
-  "column_break_kxcr",
+  "column_break_wcqsl",
   "kyc",
   "ac_information_tab",
   "ac_information_section",
@@ -90,6 +98,7 @@
   "nominee_details",
   "dividend_transfer_ac_details_tab",
   "divident_section_1",
+  "share_account",
   "branch_gl",
   "ac_no",
   "column_break_qctw",
@@ -128,22 +137,22 @@
    "fieldname": "customer_name",
    "fieldtype": "Data",
    "label": "Customer Name",
-   "reqd": 1
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\""
   },
   {
-   "default": "Individual",
+   "default": "INDIVIDUAL",
    "fieldname": "category",
    "fieldtype": "Select",
    "label": "Category",
-   "options": "Individual\nGroup",
-   "reqd": 1
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\"",
+   "options": "INDIVIDUAL\nGROUP"
   },
   {
    "fieldname": "salutation",
    "fieldtype": "Link",
    "label": "Salutation",
-   "options": "Salutation",
-   "reqd": 1
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\"",
+   "options": "Salutation"
   },
   {
    "fieldname": "column_break_sb8h",
@@ -165,32 +174,32 @@
    "fieldname": "date_of_birth",
    "fieldtype": "Date",
    "label": "Birth Date",
-   "reqd": 1
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\""
   },
   {
    "fieldname": "address",
-   "fieldtype": "Small Text",
+   "fieldtype": "Text",
    "label": "Landmark",
-   "max_height": "180px",
-   "reqd": 1
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\"",
+   "max_height": "35px"
   },
   {
    "fieldname": "taluka",
    "fieldtype": "Data",
    "label": "Taluka / Tahshil",
-   "reqd": 1
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\""
   },
   {
    "fieldname": "city",
    "fieldtype": "Data",
    "label": "City/District",
-   "reqd": 1
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\""
   },
   {
    "fieldname": "mobile",
    "fieldtype": "Data",
    "label": "Mobile",
-   "reqd": 1
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\""
   },
   {
    "fieldname": "age",
@@ -214,48 +223,40 @@
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Customer ID",
-   "reqd": 1
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\""
   },
   {
    "fieldname": "occupation",
    "fieldtype": "Select",
    "label": "Occupation",
-   "options": "\nAdvocate\nAgriculture\nBusiness\nDoctor\nFarmer\nGovt Employee\nHouse Wife\nOther\nPrivate Employee\nRetired\nServices\nStudent\nTeacher",
-   "reqd": 1
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\"",
+   "options": "\nAdvocate\nAgriculture\nBusiness\nDoctor\nFarmer\nGovt Employee\nHouse Wife\nOther\nPrivate Employee\nRetired\nServices\nStudent\nTeacher"
   },
   {
    "default": "Regular",
    "fieldname": "sh_category",
    "fieldtype": "Select",
    "label": "Share Category",
-   "options": "Regular",
-   "reqd": 1
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\"",
+   "options": "Regular"
   },
   {
    "fieldname": "membership_form",
    "fieldtype": "Attach",
    "label": "Membership form",
-   "reqd": 1
-  },
-  {
-   "fieldname": "column_break_lhcd",
-   "fieldtype": "Column Break"
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\""
   },
   {
    "fieldname": "payment_receipt",
    "fieldtype": "Attach",
    "label": "Payment Receipt",
-   "reqd": 1
-  },
-  {
-   "fieldname": "column_break_kxcr",
-   "fieldtype": "Column Break"
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\""
   },
   {
    "fieldname": "kyc",
    "fieldtype": "Attach",
    "label": "KYC ( Adhar / PAN / Voter ID )",
-   "reqd": 1
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\""
   },
   {
    "depends_on": "eval:frappe.user.has_role('System Manager') || frappe.user.has_role('Share User Creator') || frappe.user.has_role('Share Executive') || frappe.user.has_role('Share Admin')",
@@ -278,8 +279,8 @@
    "fieldname": "ac_type",
    "fieldtype": "Data",
    "label": "Account Type",
-   "read_only": 1,
-   "reqd": 1
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\"",
+   "read_only": 1
   },
   {
    "fieldname": "ac_no",
@@ -305,14 +306,14 @@
    "fieldname": "saving_current_gl_code",
    "fieldtype": "Link",
    "label": "Account GL Code",
-   "options": "Account GL Code",
-   "reqd": 1
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\"",
+   "options": "Account GL Code"
   },
   {
    "fieldname": "saving_current_ac_no",
    "fieldtype": "Data",
    "label": "Account No.",
-   "reqd": 1
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\""
   },
   {
    "fetch_from": "branch_gl.ac_type",
@@ -353,18 +354,20 @@
    "fieldname": "no_of_shares",
    "fieldtype": "Int",
    "label": "No. of Shares",
-   "non_negative": 1,
-   "reqd": 1
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\"",
+   "non_negative": 1
   },
   {
    "fieldname": "column_break_iwul",
    "fieldtype": "Column Break"
   },
   {
+   "default": "0",
    "fieldname": "base_share_amount",
    "fieldtype": "Currency",
    "label": "Base Share Amount",
    "options": "currency",
+   "precision": "2",
    "read_only": 1
   },
   {
@@ -376,6 +379,8 @@
    "fieldname": "share_application_charges",
    "fieldtype": "Currency",
    "label": "Share Application Charges",
+   "options": "currency",
+   "precision": "2",
    "read_only": 1
   },
   {
@@ -384,11 +389,11 @@
    "fieldname": "amount_received_by",
    "fieldtype": "Select",
    "label": "Amount Received By",
-   "mandatory_depends_on": "//eval:doc.no_of_shares",
-   "options": "\nTRF\nCASH",
-   "reqd": 1
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\"",
+   "options": "\nTRF\nCASH"
   },
   {
+   "depends_on": "eval:doc.status==\"Sanctioned\"",
    "fieldname": "after_sanction_share_ac_information_section",
    "fieldtype": "Section Break",
    "label": "After Sanction Share A/C Information"
@@ -441,39 +446,42 @@
    "options": "Nominee"
   },
   {
+   "default": "0",
    "fieldname": "tot_share_amt",
    "fieldtype": "Currency",
    "label": "Total Share Amount",
+   "options": "currency",
+   "precision": "2",
    "read_only": 1
   },
   {
    "fieldname": "aadhaar_number",
    "fieldtype": "Data",
    "label": "Aadhaar Number",
-   "reqd": 1
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\""
   },
   {
    "default": "Indian",
    "fieldname": "nationality",
    "fieldtype": "Select",
    "label": "Nationality",
-   "options": "Indian\nOther",
-   "reqd": 1
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\"",
+   "options": "Indian\nOther"
   },
   {
    "bold": 1,
    "fieldname": "account_type",
    "fieldtype": "Select",
    "label": "Account Type",
-   "options": "\nSAVING\nCURRENT\nLIABILITY",
-   "reqd": 1
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\"",
+   "options": "\nSAVING\nCURRENT\nLIABILITY"
   },
   {
    "fieldname": "gender",
    "fieldtype": "Select",
    "label": "Gender",
-   "options": "\nMale\nFemale\nR\nFirm\nTransgender",
-   "reqd": 1
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\"",
+   "options": "\nNA\nF\nM\nMale\nFemale\nR\nFirm\nTransgender"
   },
   {
    "bold": 1,
@@ -500,8 +508,8 @@
    "fieldname": "account_name",
    "fieldtype": "Data",
    "label": "Account Name",
-   "read_only": 1,
-   "reqd": 1
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\"",
+   "read_only": 1
   },
   {
    "fieldname": "email_id",
@@ -626,11 +634,62 @@
    "fieldname": "reject_remark",
    "fieldtype": "Small Text",
    "label": "Reject Remark"
+  },
+  {
+   "default": "Maharashtra",
+   "fieldname": "state",
+   "fieldtype": "Select",
+   "label": "State",
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\"",
+   "options": "Andhra Pradesh\nArunachal Pradesh\nAssam\nBihar\nChhattisgarh\nGoa\nGujarat\nHaryana\nHimachal Pradesh\nJharkhand\nKarnataka\nKerala\nMadhya Pradesh\nMaharashtra\nManipur\nMeghalaya\nMizoram\nNagaland\nOdisha\nPunjab\nRajasthan\nSikkim\nTamil Nadu\nTelangana\nTripura\nUttarakhand\nUttar Pradesh\nWest Bengal"
+  },
+  {
+   "fieldname": "pin_code",
+   "fieldtype": "Data",
+   "label": "PIN Code",
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\""
+  },
+  {
+   "fieldname": "column_break_lttaq",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_qymml",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_icorp",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_kff2j",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_ic6fi",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_ftxnu",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_cflxx",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_wcqsl",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "share_account",
+   "fieldtype": "Data",
+   "label": "Share Account"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-06-21 15:37:20.476175",
+ "modified": "2024-08-24 13:16:21.344365",
  "modified_by": "Administrator",
  "module": "Share Holder Management",
  "name": "Share Application",

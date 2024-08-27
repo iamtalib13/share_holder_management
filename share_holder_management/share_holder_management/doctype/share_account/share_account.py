@@ -6,3 +6,8 @@ from frappe.model.document import Document
 
 class ShareAccount(Document):
 	pass
+	def before_save(self):
+		self.share_account_number = self.name
+	
+	def before_insert(self):
+		self.share_account_number = self.name

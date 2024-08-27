@@ -6,6 +6,25 @@ frappe.ui.form.on("Day Management Checkin", {
     frm.trigger("custom_home_button");
     //frm.trigger()
     if (frm.is_new()) {
+      // to disable checkin form for branch user
+      let userRole = frappe.user.has_role("Share User");
+      console.log(userRole);
+      if (userRole) {
+        // Display a message
+        frappe.msgprint(
+          __(
+            "You do not have permission to access this document. Redirecting to home page."
+          )
+        );
+
+        window.location.href = "/app/share-management";
+
+        // // Redirect to the home page after a short delay
+        // setTimeout(function () {
+        //   window.location.href = "/app/share-management";
+        // }, 500); // Delay of 2 seconds before redirect
+      }
+
       //employee id set on new form
 
       let user = frappe.session.user;
