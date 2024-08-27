@@ -19,19 +19,18 @@
   },
   {
    "fieldname": "customer_id",
-   "fieldtype": "Int",
+   "fieldtype": "Data",
    "label": "Customer ID"
   },
   {
    "fieldname": "share_application_number",
-   "fieldtype": "Link",
-   "label": "Share Application Number",
-   "options": "Share Application"
+   "fieldtype": "Data",
+   "label": "Share Application Number"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-04-01 11:05:03.728979",
+ "modified": "2024-08-10 14:15:38.722571",
  "modified_by": "Administrator",
  "module": "Share Holder Management",
  "name": "Share Account",

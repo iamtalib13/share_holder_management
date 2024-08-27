@@ -908,6 +908,36 @@ frappe.ui.form.on("Share Application", {
       cursor: "pointer", // Change cursor to pointer for better UX
     });
   },
+  add_nominee_dailog: function (frm) {
+    let d = new frappe.ui.Dialog({
+      title: "Enter details",
+      fields: [
+        {
+          label: "First Name",
+          fieldname: "first_name",
+          fieldtype: "Data",
+        },
+        {
+          label: "Last Name",
+          fieldname: "last_name",
+          fieldtype: "Data",
+        },
+        {
+          label: "Age",
+          fieldname: "age",
+          fieldtype: "Int",
+        },
+      ],
+      size: "small", // small, large, extra-large
+      primary_action_label: "Submit",
+      primary_action(values) {
+        console.log(values);
+        d.hide();
+      },
+    });
+
+    d.show();
+  },
 
   async custom_file_upload(frm) {
     $(".btn btn-file-upload").css("display", "none");
@@ -2206,6 +2236,9 @@ frappe.ui.form.on("Share Application", {
       } else if (frappe.user.has_role("Share User")) {
         if (frm.doc.status === "Sanctioned") {
           frm.trigger("share_certificate_print");
+        }
+        if (frm.doc.status == "Draft") {
+          frm.add_custom_button(__("Add Nominee"), function () {});
         }
       }
 

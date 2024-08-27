@@ -4,6 +4,7 @@ from frappe.utils.data import now_datetime
 import openpyxl as pxl
 import pandas as pd
 
+
 @frappe.whitelist()
 def load_items():
     SOURCE = "/files/Employee.xlsx"  # Replace with the correct file path
@@ -31,28 +32,37 @@ def load_items():
     except Exception as e:
         print(f"Error reading Excel file: {e}")
 
+
 def cron():
     tickets = frappe.get_all(
         "Share Application",
         filters={"status": "update"},
-        fields=["name", "ac_no", "share_ac_no","status"],
-        order_by="modified DESC"
+        fields=["name", "ac_no", "share_ac_no", "status"],
+        order_by="modified DESC",
     )
-    
 
     for ticket in tickets:
         account_number = ticket.ac_no
-        application_sr_no = ticket.name 
+        application_sr_no = ticket.name
 
         # Transfer the value of "ac_no" to "share_ac_no"
-        frappe.db.set_value("Share Application", application_sr_no, "share_ac_no", account_number, update_modified=False)
-        
+        frappe.db.set_value(
+            "Share Application",
+            application_sr_no,
+            "share_ac_no",
+            account_number,
+            update_modified=False,
+        )
+
         # Set "ac_no" to null
-        frappe.db.set_value("Share Application", application_sr_no, "ac_no", None, update_modified=False)
+        frappe.db.set_value(
+            "Share Application", application_sr_no, "ac_no", None, update_modified=False
+        )
 
     frappe.db.commit()  # Commit changes after updating all records
 
     print("\n\nUpdated share accounts where status is 'update'\n\n")
+
 
 def test():
     tickets = frappe.get_all(
@@ -73,8 +83,12 @@ def test():
         end_range = start_range + no_of_shares - 1
 
         # Update start_range and end_range in the Share Test record
-        frappe.db.set_value("Share Test", id, "start_range", start_range, update_modified=False)
-        frappe.db.set_value("Share Test", id, "end_range", end_range, update_modified=False)
+        frappe.db.set_value(
+            "Share Test", id, "start_range", start_range, update_modified=False
+        )
+        frappe.db.set_value(
+            "Share Test", id, "end_range", end_range, update_modified=False
+        )
 
         # Update last_end_range for the next iteration
         last_end_range = end_range
@@ -82,6 +96,8 @@ def test():
     frappe.db.commit()  # Commit changes after updating all records
 
     print("\n\nUpdated range '\n\n")
+
+
 def update():
     batch_size = 30000  # Adjust the batch size as needed
     total_records = 362963
@@ -91,7 +107,7 @@ def update():
         tickets = frappe.get_all(
             "Share Application",
             filters={"status": "Sanctioned"},
-            fields=["name", "status"],  
+            fields=["name", "status"],
             start=processed_records,
             limit=batch_size,
         )
@@ -104,7 +120,13 @@ def update():
 
             try:
                 # Update status to "Sanctioned"
-                frappe.db.set_value("Share Application", id, "status", "Sanctioned", update_modified=False)
+                frappe.db.set_value(
+                    "Share Application",
+                    id,
+                    "status",
+                    "Sanctioned",
+                    update_modified=False,
+                )
                 print(f"Updated record {id}")
             except Exception as e:
                 print(f"Error updating record {id}: {e}")
@@ -113,7 +135,6 @@ def update():
         processed_records += batch_size
 
     print("\n\nUpdated status to 'Sanctioned' for records with status 'Draft'\n\n")
-
 
 
 def branches():
@@ -129,7 +150,7 @@ def branches():
 
     if result_branches:
         print("\nDistinct Branches:")
-        
+
         # Loop through each branch and print
         for index, branch in enumerate(result_branches, start=1):
             print(f"{index}. {branch.get('branch')}")
@@ -137,76 +158,119 @@ def branches():
     else:
         print("\nNo branches found.")
 
-def day_end():
+
+# to all end branches day
+@frappe.whitelist()
+def day_end(datetime_str, userId, employeeName):
+    """
+    Start the day for all branches with the given datetime, employee ID, and employee name.
+    """
     try:
+        # Parse the provided datetime string into a datetime object
+        datetime_obj = datetime.strptime(datetime_str, "%d/%m/%Y %H:%M")
+
         # Fetch distinct branches from the database
-        result_branches = frappe.db.sql("""
+        result_branches = frappe.db.sql(
+            """
             SELECT DISTINCT branch
             FROM `tabUser`
             WHERE role_profile_name = 'Share User Employee'
-        """, as_dict=True)
+            """,
+            as_dict=True,
+        )
 
         if result_branches:
-            print("\nCreating Day End Documents:")
+            frappe.log("Creating Day End Documents:")
 
             # Loop through each branch and create a Day Management Checkin document
             for branch in result_branches:
-                # create a new document
-                doc = frappe.new_doc('Day Management Checkin')
-                doc.branch = branch.get('branch')
+                # Create a new document
+                doc = frappe.new_doc("Day Management Checkin")
+                doc.branch = branch.get("branch")
                 doc.log_type = "End"
-                doc.log_time = now()
+                doc.log_time = datetime_obj  # Use the provided datetime
+                doc.employee = userId
+                doc.emp_name = employeeName
 
                 try:
                     doc.insert()
-                    print(f"Created Day End Document for Branch {branch.get('branch')}")
+                    frappe.log(
+                        f"Created Day End Document for Branch {branch.get('branch')} with employee {employeeName}"
+                    )
                 except frappe.DuplicateEntryError:
-                    print(f"Day End for Branch {branch.get('branch')} already exists.")
+                    frappe.log(
+                        f"Day End for Branch {branch.get('branch')} with employee {employeeName} already exists.",
+                        level="warn",
+                    )
 
         else:
-            print("\nNo branches found for day end")
+            frappe.log("No branches found for day End")
 
     except Exception as e:
-        print(f"Error: {e}")
-        
-from frappe.utils import now_datetime        
-def day_start():
+        frappe.log_error(f"Error in day_end: {e}", title="Day end Error")
+        frappe.throw(str(e))
+
+
+from frappe.utils import now_datetime
+
+from datetime import datetime
+
+
+@frappe.whitelist()
+def day_start(datetime_str, userId, employeeName):
+    """
+    Start the day for all branches with the given datetime, employee ID, and employee name.
+    """
     try:
+        # Parse the provided datetime string into a datetime object
+        datetime_obj = datetime.strptime(datetime_str, "%d/%m/%Y %H:%M")
+
         # Fetch distinct branches from the database
-        result_branches = frappe.db.sql("""
+        result_branches = frappe.db.sql(
+            """
             SELECT DISTINCT branch
             FROM `tabUser`
             WHERE role_profile_name = 'Share User Employee'
-        """, as_dict=True)
+            """,
+            as_dict=True,
+        )
 
         if result_branches:
             frappe.log("Creating Day Start Documents:")
 
             # Loop through each branch and create a Day Management Checkin document
             for branch in result_branches:
-                # create a new document
-                doc = frappe.new_doc('Day Management Checkin')
-                doc.branch = branch.get('branch')
+                # Create a new document
+                doc = frappe.new_doc("Day Management Checkin")
+                doc.branch = branch.get("branch")
                 doc.log_type = "Start"
-
-                # Set the log_time field to the current date and time
-                doc.log_time = now_datetime()
+                doc.log_time = datetime_obj  # Use the provided datetime
+                doc.employee = userId
+                doc.emp_name = employeeName
 
                 try:
                     doc.insert()
-                    frappe.log(f"Created Day Start Document for Branch {branch.get('branch')}")
+                    frappe.log(
+                        f"Created Day Start Document for Branch {branch.get('branch')} with employee {employeeName}"
+                    )
                 except frappe.DuplicateEntryError:
-                    frappe.log(f"Day Start for Branch {branch.get('branch')} already exists.", level="warn")
+                    frappe.log(
+                        f"Day Start for Branch {branch.get('branch')} with employee {employeeName} already exists.",
+                        level="warn",
+                    )
 
         else:
-            frappe.log("No branches found for day Start")
+            frappe.log("No branches found for day start")
 
     except Exception as e:
         frappe.log_error(f"Error in day_start: {e}", title="Day Start Error")
-         
+        frappe.throw(str(e))
+
+
 def update_barcode():
     print("barcode updated")
-    
+
+
 def update_base():
     batch_size = 30000  # Adjust the batch size as needed
     total_records = 362963
@@ -216,7 +280,7 @@ def update_base():
         tickets = frappe.get_all(
             "Share Application",
             filters={"status": "Sanctioned"},
-            fields=["name", "status", "no_of_shares", "base_share_amount"],  
+            fields=["name", "status", "no_of_shares", "base_share_amount"],
             start=processed_records,
             limit=batch_size,
         )
@@ -226,11 +290,16 @@ def update_base():
 
         for ticket in tickets:
             id = ticket.name
-           
 
             try:
                 # Set base_share_amount to the calculated value
-                frappe.db.set_value("Share Application", id, "share_application_charges", 10, update_modified=False)
+                frappe.db.set_value(
+                    "Share Application",
+                    id,
+                    "share_application_charges",
+                    10,
+                    update_modified=False,
+                )
                 print(f"Set share appliction charges to 10 for record {id}")
 
             except Exception as e:
@@ -240,9 +309,8 @@ def update_base():
         processed_records += batch_size
 
     print("\n\nUpdated base_share_amount based on no_of_shares\n\n")
-    
-    
-    
+
+
 def update_share_account():
     batch_size = 30000  # Adjust the batch size as needed
     total_records = 362959
@@ -268,23 +336,37 @@ def update_share_account():
 
             try:
                 # Clear share_ac_no first
-                frappe.db.set_value("Share Application", id, "share_ac_no", None, update_modified=False)
+                frappe.db.set_value(
+                    "Share Application", id, "share_ac_no", None, update_modified=False
+                )
 
                 # Assign share_ac_no based on customer_id
                 if customer_id in customer_share_mapping:
                     share_ac_no = customer_share_mapping[customer_id]
                 else:
                     # Retrieve the correct share_ac_no for existing customer_id
-                    share_ac_no = frappe.get_value("Share Application", {"customer_id": customer_id}, "share_ac_no")
+                    share_ac_no = frappe.get_value(
+                        "Share Application", {"customer_id": customer_id}, "share_ac_no"
+                    )
 
                     if not share_ac_no:
                         # If share_ac_no doesn't exist, generate a new one
-                        share_ac_no = max(customer_share_mapping.values(), default=0) + 1
+                        share_ac_no = (
+                            max(customer_share_mapping.values(), default=0) + 1
+                        )
                         customer_share_mapping[customer_id] = share_ac_no
 
                 # Set share_ac_no in the Share Application record
-                frappe.db.set_value("Share Application", id, "share_ac_no", share_ac_no, update_modified=False)
-                print(f"Assigned share_ac_no {share_ac_no} to record {id} for customer {customer_id}")
+                frappe.db.set_value(
+                    "Share Application",
+                    id,
+                    "share_ac_no",
+                    share_ac_no,
+                    update_modified=False,
+                )
+                print(
+                    f"Assigned share_ac_no {share_ac_no} to record {id} for customer {customer_id}"
+                )
 
             except Exception as e:
                 print(f"Error updating record {id}: {e}")
@@ -295,6 +377,7 @@ def update_share_account():
         frappe.db.commit()  # Commit changes after processing each batch
 
     print("\n\nUpdated share_ac_no based on customer_id\n\n")
+
 
 def check_first_10_records_serially():
     batch_size = 1  # Process one record at a time
@@ -316,6 +399,7 @@ def check_first_10_records_serially():
 
     print("\n\nChecked first 10 records serially\n\n")
 
+
 import frappe
 
 import frappe
@@ -326,6 +410,7 @@ import frappe
 import json
 import xml.etree.ElementTree as ET
 
+
 @frappe.whitelist(allow_guest=True)
 def get_employees():
     # JSON data
@@ -333,14 +418,15 @@ def get_employees():
         "city": "San Jose",
         "firstName": "John",
         "lastName": "Doe",
-        "state": "CA"
+        "state": "CA",
     }
 
     # Convert JSON to XML
     xml_data = convert_json_to_xml(json_data)
 
-    frappe.response['content_type'] = 'application/xml'
-    frappe.response['message'] = xml_data
+    frappe.response["content_type"] = "application/xml"
+    frappe.response["message"] = xml_data
+
 
 def convert_json_to_xml(json_data):
     root = ET.Element("root")
@@ -348,5 +434,3 @@ def convert_json_to_xml(json_data):
         sub_element = ET.SubElement(root, key)
         sub_element.text = str(value)
     return ET.tostring(root, encoding="unicode")
-
-

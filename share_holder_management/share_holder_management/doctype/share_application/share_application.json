@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "actions": [],
   "allow_events_in_timeline": 1,
   "allow_import": 1,
@@ -703,3 +704,765 @@
   "title_field": "application_sr_no",
   "track_changes": 1
 }
+=======
+ "actions": [],
+ "allow_events_in_timeline": 1,
+ "allow_import": 1,
+ "autoname": "autoincrement",
+ "creation": "2023-12-15 12:30:16.419702",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "personal_details_tab",
+  "acc_section_details",
+  "customer_id",
+  "column_break_qymml",
+  "account_type",
+  "column_break_icorp",
+  "ac_open_dt",
+  "column_break_hdes",
+  "application_date",
+  "column_break_kff2j",
+  "application_sr_no",
+  "status",
+  "personal_information_section",
+  "salutation",
+  "gender",
+  "column_break_ic6fi",
+  "customer_name",
+  "occupation",
+  "column_break_sb8h",
+  "mobile",
+  "email_id",
+  "column_break_ftxnu",
+  "date_of_birth",
+  "age",
+  "column_break_g9fn",
+  "category",
+  "sh_category",
+  "location_section",
+  "state",
+  "nationality",
+  "column_break_gctx",
+  "pin_code",
+  "city",
+  "column_break_lttaq",
+  "address",
+  "taluka",
+  "kyc_section",
+  "aadhaar_number",
+  "column_break_uylz",
+  "pan_no",
+  "kyc_section_2",
+  "membership_form",
+  "column_break_cflxx",
+  "payment_receipt",
+  "column_break_wcqsl",
+  "kyc",
+  "ac_information_tab",
+  "ac_information_section",
+  "saving_current_gl_code",
+  "ac_type",
+  "account_name",
+  "saving_current_ac_no",
+  "column_break_ajht",
+  "share_customer_name",
+  "branch",
+  "branch_code",
+  "column_break_hgja",
+  "no_of_share_section",
+  "no_of_shares",
+  "column_break_iwul",
+  "base_share_amount",
+  "tot_share_amt",
+  "column_break_zigh",
+  "share_application_charges",
+  "amount_received_by",
+  "after_sanction_share_ac_information_section",
+  "share_gl_code",
+  "column_break_lq8k",
+  "share_ac_no",
+  "section_break_eqr0",
+  "sanction_date",
+  "column_break_t6xd",
+  "received_date",
+  "nominee_details_tab",
+  "nominee_form_section",
+  "nominee_share_percentage",
+  "nominee_fullname",
+  "nominee_relation",
+  "nominee_age",
+  "column_break_k6x0e",
+  "nominee_mobile_number",
+  "nominee_address",
+  "add_to_child",
+  "check_table",
+  "column_break_xcnzm",
+  "nominee_guardian_name",
+  "minor",
+  "nominee_table_section",
+  "nominee_details",
+  "dividend_transfer_ac_details_tab",
+  "divident_section_1",
+  "share_account",
+  "branch_gl",
+  "ac_no",
+  "column_break_qctw",
+  "div_ac_type",
+  "acc_name",
+  "remark_section",
+  "dividend_remark",
+  "return_remark",
+  "reject_remark"
+ ],
+ "fields": [
+  {
+   "bold": 1,
+   "fieldname": "application_sr_no",
+   "fieldtype": "Int",
+   "label": "Application Sr. No.",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_hdes",
+   "fieldtype": "Column Break"
+  },
+  {
+   "bold": 1,
+   "fieldname": "application_date",
+   "fieldtype": "Date",
+   "label": "Application Date",
+   "read_only": 1
+  },
+  {
+   "fieldname": "personal_information_section",
+   "fieldtype": "Section Break",
+   "label": "Personal Information"
+  },
+  {
+   "fieldname": "customer_name",
+   "fieldtype": "Data",
+   "label": "Customer Name",
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\""
+  },
+  {
+   "default": "INDIVIDUAL",
+   "fieldname": "category",
+   "fieldtype": "Select",
+   "label": "Category",
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\"",
+   "options": "INDIVIDUAL\nGROUP"
+  },
+  {
+   "fieldname": "salutation",
+   "fieldtype": "Link",
+   "label": "Salutation",
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\"",
+   "options": "Salutation"
+  },
+  {
+   "fieldname": "column_break_sb8h",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_g9fn",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "hidden": 1,
+   "in_standard_filter": 1,
+   "label": "Status",
+   "options": "Draft\nSubmitted\nReceived\nReturn To Branch\nPending From HO\nSanctioned\nRejected"
+  },
+  {
+   "fieldname": "date_of_birth",
+   "fieldtype": "Date",
+   "label": "Birth Date",
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\""
+  },
+  {
+   "fieldname": "address",
+   "fieldtype": "Text",
+   "label": "Landmark",
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\"",
+   "max_height": "35px"
+  },
+  {
+   "fieldname": "taluka",
+   "fieldtype": "Data",
+   "label": "Taluka / Tahshil",
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\""
+  },
+  {
+   "fieldname": "city",
+   "fieldtype": "Data",
+   "label": "City/District",
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\""
+  },
+  {
+   "fieldname": "mobile",
+   "fieldtype": "Data",
+   "label": "Mobile",
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\""
+  },
+  {
+   "fieldname": "age",
+   "fieldtype": "Data",
+   "label": "Age",
+   "read_only": 1
+  },
+  {
+   "fieldname": "pan_no",
+   "fieldtype": "Data",
+   "label": "PAN No."
+  },
+  {
+   "fieldname": "column_break_gctx",
+   "fieldtype": "Column Break"
+  },
+  {
+   "bold": 1,
+   "fieldname": "customer_id",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Customer ID",
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\""
+  },
+  {
+   "fieldname": "occupation",
+   "fieldtype": "Select",
+   "label": "Occupation",
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\"",
+   "options": "\nAdvocate\nAgriculture\nBusiness\nDoctor\nFarmer\nGovt Employee\nHouse Wife\nOther\nPrivate Employee\nRetired\nServices\nStudent\nTeacher"
+  },
+  {
+   "default": "Regular",
+   "fieldname": "sh_category",
+   "fieldtype": "Select",
+   "label": "Share Category",
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\"",
+   "options": "Regular"
+  },
+  {
+   "fieldname": "membership_form",
+   "fieldtype": "Attach",
+   "label": "Membership form",
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\""
+  },
+  {
+   "fieldname": "payment_receipt",
+   "fieldtype": "Attach",
+   "label": "Payment Receipt",
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\""
+  },
+  {
+   "fieldname": "kyc",
+   "fieldtype": "Attach",
+   "label": "KYC ( Adhar / PAN / Voter ID )",
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\""
+  },
+  {
+   "depends_on": "eval:frappe.user.has_role('System Manager') || frappe.user.has_role('Share User Creator') || frappe.user.has_role('Share Executive') || frappe.user.has_role('Share Admin')",
+   "fieldname": "dividend_transfer_ac_details_tab",
+   "fieldtype": "Tab Break",
+   "label": "Dividend Transfer A/C Details"
+  },
+  {
+   "fieldname": "branch_gl",
+   "fieldtype": "Link",
+   "label": "Branch GL",
+   "options": "Account GL Code"
+  },
+  {
+   "fieldname": "column_break_qctw",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "saving_current_gl_code.ac_type",
+   "fieldname": "ac_type",
+   "fieldtype": "Data",
+   "label": "Account Type",
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\"",
+   "read_only": 1
+  },
+  {
+   "fieldname": "ac_no",
+   "fieldtype": "Data",
+   "label": "Account Number"
+  },
+  {
+   "fieldname": "dividend_remark",
+   "fieldtype": "Data",
+   "label": "Remark"
+  },
+  {
+   "fieldname": "personal_details_tab",
+   "fieldtype": "Tab Break",
+   "label": "Personal Information"
+  },
+  {
+   "fieldname": "ac_information_tab",
+   "fieldtype": "Tab Break",
+   "label": "A/C Information"
+  },
+  {
+   "fieldname": "saving_current_gl_code",
+   "fieldtype": "Link",
+   "label": "Account GL Code",
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\"",
+   "options": "Account GL Code"
+  },
+  {
+   "fieldname": "saving_current_ac_no",
+   "fieldtype": "Data",
+   "label": "Account No.",
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\""
+  },
+  {
+   "fetch_from": "branch_gl.ac_type",
+   "fieldname": "div_ac_type",
+   "fieldtype": "Data",
+   "label": "Account GL Type",
+   "read_only": 1
+  },
+  {
+   "fieldname": "ac_information_section",
+   "fieldtype": "Section Break",
+   "label": "A/C Information"
+  },
+  {
+   "fieldname": "branch_code",
+   "fieldtype": "Data",
+   "label": "Branch Code",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_ajht",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "share_customer_name",
+   "fieldtype": "Data",
+   "label": "Customer Name",
+   "read_only": 1
+  },
+  {
+   "fieldname": "branch",
+   "fieldtype": "Data",
+   "in_standard_filter": 1,
+   "label": "Branch",
+   "read_only": 1
+  },
+  {
+   "fieldname": "no_of_shares",
+   "fieldtype": "Int",
+   "label": "No. of Shares",
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\"",
+   "non_negative": 1
+  },
+  {
+   "fieldname": "column_break_iwul",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "base_share_amount",
+   "fieldtype": "Currency",
+   "label": "Base Share Amount",
+   "options": "currency",
+   "precision": "2",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_zigh",
+   "fieldtype": "Column Break"
+  },
+  {
+   "depends_on": "eval:doc.no_of_shares",
+   "fieldname": "share_application_charges",
+   "fieldtype": "Currency",
+   "label": "Share Application Charges",
+   "options": "currency",
+   "precision": "2",
+   "read_only": 1
+  },
+  {
+   "default": "TRF",
+   "depends_on": "eval:doc.no_of_shares",
+   "fieldname": "amount_received_by",
+   "fieldtype": "Select",
+   "label": "Amount Received By",
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\"",
+   "options": "\nTRF\nCASH"
+  },
+  {
+   "depends_on": "eval:doc.status==\"Sanctioned\"",
+   "fieldname": "after_sanction_share_ac_information_section",
+   "fieldtype": "Section Break",
+   "label": "After Sanction Share A/C Information"
+  },
+  {
+   "fieldname": "share_gl_code",
+   "fieldtype": "Select",
+   "label": "Share GL Code",
+   "options": "SH-SHARE CAPITAL"
+  },
+  {
+   "fieldname": "column_break_lq8k",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "share_ac_no",
+   "fieldtype": "Data",
+   "label": "Share A/C No",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_eqr0",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_t6xd",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "received_date",
+   "fieldtype": "Date",
+   "label": "Received Date",
+   "read_only": 1
+  },
+  {
+   "fieldname": "sanction_date",
+   "fieldtype": "Date",
+   "label": "Sanction Date",
+   "read_only": 1
+  },
+  {
+   "fieldname": "nominee_details_tab",
+   "fieldtype": "Tab Break",
+   "label": "Nominee Details"
+  },
+  {
+   "fieldname": "nominee_details",
+   "fieldtype": "Table",
+   "label": "Nominee Details",
+   "options": "Nominee"
+  },
+  {
+   "default": "0",
+   "fieldname": "tot_share_amt",
+   "fieldtype": "Currency",
+   "label": "Total Share Amount",
+   "options": "currency",
+   "precision": "2",
+   "read_only": 1
+  },
+  {
+   "fieldname": "aadhaar_number",
+   "fieldtype": "Data",
+   "label": "Aadhaar Number",
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\""
+  },
+  {
+   "default": "Indian",
+   "fieldname": "nationality",
+   "fieldtype": "Select",
+   "label": "Nationality",
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\"",
+   "options": "Indian\nOther"
+  },
+  {
+   "bold": 1,
+   "fieldname": "account_type",
+   "fieldtype": "Select",
+   "label": "Account Type",
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\"",
+   "options": "\nSAVING\nCURRENT\nLIABILITY"
+  },
+  {
+   "fieldname": "gender",
+   "fieldtype": "Select",
+   "label": "Gender",
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\"",
+   "options": "\nNA\nF\nM\nMale\nFemale\nR\nFirm\nTransgender"
+  },
+  {
+   "bold": 1,
+   "fieldname": "ac_open_dt",
+   "fieldtype": "Date",
+   "label": "Account Opening Date",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_uylz",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "acc_name",
+   "fieldtype": "Data",
+   "label": "Account Holder Name"
+  },
+  {
+   "fieldname": "column_break_hgja",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "saving_current_gl_code.acc_name",
+   "fieldname": "account_name",
+   "fieldtype": "Data",
+   "label": "Account Name",
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\"",
+   "read_only": 1
+  },
+  {
+   "fieldname": "email_id",
+   "fieldtype": "Data",
+   "label": "Email ID"
+  },
+  {
+   "fieldname": "return_remark",
+   "fieldtype": "Small Text",
+   "hidden": 1,
+   "label": "Return Remark"
+  },
+  {
+   "fieldname": "column_break_k6x0e",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_xcnzm",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "nominee_relation",
+   "fieldtype": "Select",
+   "label": "Relation  <span style=\"color: red;\">*</span>",
+   "options": "\nSpouse\nParent\nMother\nFather\nSibling\nSon\nDaughter\nGrandfather\nGrandmother\nGrandchild\nAunt\nUncle\nCousin\nHusband\nWife"
+  },
+  {
+   "fieldname": "nominee_mobile_number",
+   "fieldtype": "Data",
+   "label": "Phone"
+  },
+  {
+   "fieldname": "nominee_share_percentage",
+   "fieldtype": "Percent",
+   "label": "Share %  <span style=\"color: red;\">*</span>",
+   "precision": "0"
+  },
+  {
+   "default": "0",
+   "depends_on": "eval:doc.nominee_age < 18 && doc.nominee_age ",
+   "fieldname": "minor",
+   "fieldtype": "Check",
+   "label": "Minor ?",
+   "read_only": 1
+  },
+  {
+   "fieldname": "add_to_child",
+   "fieldtype": "Button",
+   "label": "Add"
+  },
+  {
+   "fieldname": "nominee_fullname",
+   "fieldtype": "Data",
+   "label": "Full Name <span style=\"color: red;\">*</span>"
+  },
+  {
+   "fieldname": "nominee_age",
+   "fieldtype": "Select",
+   "label": "Age  <span style=\"color: red;\">*</span>",
+   "options": "\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20\n21\n22\n23\n24\n25\n26\n27\n28\n29\n30\n31\n32\n33\n34\n35\n36\n37\n38\n39\n40\n41\n42\n43\n44\n45\n46\n47\n48\n49\n50\n51\n52\n53\n54\n55\n56\n57\n58\n59\n60\n61\n62\n63\n64\n65\n66\n67\n68\n69\n70\n71\n72\n73\n74\n75\n76\n77\n78\n79\n80\n81\n82\n83\n84\n85\n86\n87\n88\n89\n90\n91\n92\n93\n94\n95\n96\n97\n98\n99\n100"
+  },
+  {
+   "fieldname": "nominee_address",
+   "fieldtype": "Small Text",
+   "label": "Address"
+  },
+  {
+   "depends_on": "eval:doc.nominee_age < 18 && doc.nominee_age ",
+   "fieldname": "nominee_guardian_name",
+   "fieldtype": "Data",
+   "label": "Guardian Name  <span style=\"color: red;\">*</span>"
+  },
+  {
+   "depends_on": "eval:doc.status==\"Draft\" || doc.status==\"Not Saved\" ||  doc.status==\"Sanctioned\"",
+   "fieldname": "nominee_form_section",
+   "fieldtype": "Section Break",
+   "label": "Nominee Form"
+  },
+  {
+   "fieldname": "no_of_share_section",
+   "fieldtype": "Section Break",
+   "label": "Number of Shares"
+  },
+  {
+   "fieldname": "nominee_table_section",
+   "fieldtype": "Section Break",
+   "label": "Nominee Table"
+  },
+  {
+   "fieldname": "acc_section_details",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "location_section",
+   "fieldtype": "Section Break",
+   "label": "Address Details"
+  },
+  {
+   "fieldname": "kyc_section",
+   "fieldtype": "Section Break",
+   "label": "KYC Details"
+  },
+  {
+   "fieldname": "kyc_section_2",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "divident_section_1",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "remark_section",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "check_table",
+   "fieldtype": "Button",
+   "hidden": 1,
+   "label": "check table"
+  },
+  {
+   "fieldname": "reject_remark",
+   "fieldtype": "Small Text",
+   "label": "Reject Remark"
+  },
+  {
+   "default": "Maharashtra",
+   "fieldname": "state",
+   "fieldtype": "Select",
+   "label": "State",
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\"",
+   "options": "Andhra Pradesh\nArunachal Pradesh\nAssam\nBihar\nChhattisgarh\nGoa\nGujarat\nHaryana\nHimachal Pradesh\nJharkhand\nKarnataka\nKerala\nMadhya Pradesh\nMaharashtra\nManipur\nMeghalaya\nMizoram\nNagaland\nOdisha\nPunjab\nRajasthan\nSikkim\nTamil Nadu\nTelangana\nTripura\nUttarakhand\nUttar Pradesh\nWest Bengal"
+  },
+  {
+   "fieldname": "pin_code",
+   "fieldtype": "Data",
+   "label": "PIN Code",
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\""
+  },
+  {
+   "fieldname": "column_break_lttaq",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_qymml",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_icorp",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_kff2j",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_ic6fi",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_ftxnu",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_cflxx",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_wcqsl",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "share_account",
+   "fieldtype": "Data",
+   "label": "Share Account"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-08-24 13:16:21.344365",
+ "modified_by": "Administrator",
+ "module": "Share Holder Management",
+ "name": "Share Application",
+ "naming_rule": "Autoincrement",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "select": 1,
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Share Executive",
+   "select": 1,
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "show_title_field_in_link": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [
+  {
+   "color": "Green",
+   "title": "Sanctioned"
+  },
+  {
+   "color": "Red",
+   "title": "Rejected"
+  },
+  {
+   "color": "Blue",
+   "title": "Draft"
+  },
+  {
+   "color": "Orange",
+   "title": "Pending From HO"
+  },
+  {
+   "color": "Green",
+   "title": "Submitted"
+  },
+  {
+   "color": "Purple",
+   "title": "Received"
+  },
+  {
+   "color": "Yellow",
+   "title": "Return To Branch"
+  }
+ ],
+ "title_field": "application_sr_no",
+ "track_changes": 1
+}
+>>>>>>> eda88b7f63c4c8bb3a725bf33f0c4b7a2b803e43
