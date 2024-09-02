@@ -107,7 +107,11 @@
   "remark_section",
   "dividend_remark",
   "return_remark",
-  "reject_remark"
+  "reject_remark",
+  "accepter_user_id",
+  "accepter_name",
+  "creator_user_id",
+  "creator_name"
  ],
  "fields": [
   {
@@ -410,8 +414,9 @@
   },
   {
    "fieldname": "share_ac_no",
-   "fieldtype": "Data",
+   "fieldtype": "Link",
    "label": "Share A/C No",
+   "options": "Share Account",
    "read_only": 1
   },
   {
@@ -685,11 +690,31 @@
    "fieldname": "share_account",
    "fieldtype": "Data",
    "label": "Share Account"
+  },
+  {
+   "fieldname": "accepter_user_id",
+   "fieldtype": "Data",
+   "label": "ACCEPTER USER ID"
+  },
+  {
+   "fieldname": "accepter_name",
+   "fieldtype": "Data",
+   "label": "ACCEPTER NAME"
+  },
+  {
+   "fieldname": "creator_user_id",
+   "fieldtype": "Data",
+   "label": "Creator User ID"
+  },
+  {
+   "fieldname": "creator_name",
+   "fieldtype": "Data",
+   "label": "Creator Name"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-08-24 13:16:21.344365",
+ "modified": "2024-09-02 12:40:00.181832",
  "modified_by": "Administrator",
  "module": "Share Holder Management",
  "name": "Share Application",
