@@ -329,11 +329,10 @@ g text{
           <p>This is to certify that,</p>
           <p>Shri/Smt. <b> {{ doc.customer_name if doc.customer_name else '.....................' }}</b></p>
           <p>R/o. <b>{{ doc.address + ',  ' if doc.address else '' }}{{ doc.taluka + ',  ' if doc.taluka else '' }} {{ doc.city if doc.city else '' }}</b></p>
-          <p>has been alloted <b>{{ doc.no_of_shares if doc.no_of_shares else '.....................' }} </b> shares, Sr.no</p>
-          <p>From {{start_no_share}} to {{end_no_share}}</p>
+          <p>has been alloted <b>{{ doc.no_of_shares if doc.no_of_shares else '.....................' }} </b> shares,</p>
           <p>having Face Value of  ₹10/- per share and aggregating</p>
-          <p> ₹<b>{{ doc.base_share_amount if doc.base_share_amount else '.....................' }} </b>
-          as per the provisions of the By Laws of the </p>
+          <p> ₹<b>{{ doc.base_share_amount if doc.base_share_amount else '.....................' }} </b></p>
+          <p> as per the provisions of the By Laws of the </p>
           <p><b>Sahayog Multi State Credit Co-operative Society </b></p>
           <p><b>Limited</b> (Registered under Multi State Co-operative</p> 
           <p>Societies Act 2002 and as amended time to time)</p> 
@@ -388,7 +387,7 @@ g text{
           <p>This is to certify that,</p>
           <p>Shri/Smt. <b> {{ doc.customer_name if doc.customer_name else '....................' }}</b></p>
           <p>R/o. <b>{{ doc.address + ',  ' if doc.address else '' }}{{ doc.taluka + ',  ' if doc.taluka else '' }} {{ doc.city if doc.city else '' }}</b></p>
-          <p>has been alloted <b>{{ doc.no_of_shares if doc.no_of_shares else '..................' }} </b> shares, Sr.no From {{start_no_share}} to {{end_no_share}}</p>
+          <p>has been alloted <b>{{ doc.no_of_shares if doc.no_of_shares else '..................' }} </b> shares,</p>
           <p>having Face Value of  ₹10/- per share and aggregating  ₹<b>{{ doc.base_share_amount if doc.base_share_amount else '....................' }} </b></p>
           <p>as per the provisions of the By Laws of the <b>Sahayog Multi State Credit Co-operative</b></p>
           <p><b>Society Limited</b>(Registered under Multi State Co-operative Societies Act 2002 and as</p>

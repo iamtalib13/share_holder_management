@@ -909,34 +909,81 @@ frappe.ui.form.on("Share Application", {
     });
   },
   add_nominee_dailog: function (frm) {
-    let d = new frappe.ui.Dialog({
-      title: "Enter details",
+    var dialog = new frappe.ui.Dialog({
+      title: "Add Nominee Details",
       fields: [
+        { fieldtype: "Data", label: "Nominee Name", fieldname: "nominee_name" },
         {
-          label: "First Name",
-          fieldname: "first_name",
-          fieldtype: "Data",
+          fieldtype: "Select",
+          label: "Nominee Relation",
+          fieldname: "nominee_relation",
+          options: [
+            "Spouse",
+            "Parent",
+            "Mother",
+            "Father",
+            "Sibling",
+            "Son",
+            "Daughter",
+            "Grandfather",
+            "Grandmother",
+            "Grandchild",
+            "Aunt",
+            "Uncle",
+            "Cousin",
+            "Husband",
+            "Wife",
+          ],
         },
         {
-          label: "Last Name",
-          fieldname: "last_name",
           fieldtype: "Data",
+          label: "Nominee Mobile Number",
+          fieldname: "nominee_mobile_number",
+          description: "Nominee Mobile Number must be an integer.",
+          description_class: "red-text",
         },
         {
-          label: "Age",
-          fieldname: "age",
-          fieldtype: "Int",
+          fieldtype: "Float",
+          label: "Nominee Share Percentage",
+          fieldname: "nominee_share_percentage",
+        },
+        {
+          fieldtype: "Text",
+          label: "Nominee Address",
+          fieldname: "nominee_address",
+        },
+        { fieldtype: "Int", label: "Nominee Age", fieldname: "nominee_age" },
+        { fieldtype: "Check", label: "Minor", fieldname: "minor" },
+        {
+          fieldtype: "Data",
+          label: "Nominee Guardian Name",
+          fieldname: "nominee_guardian_name",
         },
       ],
-      size: "small", // small, large, extra-large
-      primary_action_label: "Submit",
-      primary_action(values) {
-        console.log(values);
-        d.hide();
+      primary_action_label: "Save",
+      primary_action: function () {
+        var data = dialog.get_values();
+
+        // Validation for mobile number
+        if (!/^\d+$/.test(data.nominee_mobile_number)) {
+          frappe.throw(__("Nominee Mobile Number must be numbers."));
+          return;
+        }
+
+        // Add data to child table if validation passes
+        frm.add_child("nominee_details", data);
+        frm.refresh_field("nominee_details");
+        dialog.hide();
       },
     });
 
-    d.show();
+    // Apply custom CSS to style the description
+    $("<style>")
+      .prop("type", "text/css")
+      .html(".red-text { color: red; }")
+      .appendTo("head");
+
+    dialog.show();
   },
 
   async custom_file_upload(frm) {
@@ -2237,15 +2284,17 @@ frappe.ui.form.on("Share Application", {
         if (frm.doc.status === "Sanctioned") {
           frm.trigger("share_certificate_print");
         }
-        if (frm.doc.status == "Draft") {
-          frm.add_custom_button(__("Add Nominee"), function () {});
-        }
       }
 
       // Set button types
       frm.set_df_property("Print", "button_type", "success");
       frm.set_df_property("Print-Hin", "button_type", "primary");
       frm.set_df_property("Print-Mar", "button_type", "warning");
+    }
+    if (frm.doc.status == "Draft" || frm.is_new()) {
+      // frm.add_custom_button(__("Add Nominee"), function () {
+      //   frm.trigger("add_nominee_dailog");
+      // });
     }
     frm.trigger("custome_home_button");
   },

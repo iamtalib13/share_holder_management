@@ -55,6 +55,8 @@
   "kyc",
   "ac_information_tab",
   "ac_information_section",
+  "gl_sub_head_code",
+  "fin_account_type",
   "saving_current_gl_code",
   "ac_type",
   "account_name",
@@ -141,22 +143,21 @@
    "fieldname": "customer_name",
    "fieldtype": "Data",
    "label": "Customer Name",
-   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\""
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\"||doc.status != \"Submitted\""
   },
   {
    "default": "INDIVIDUAL",
    "fieldname": "category",
    "fieldtype": "Select",
    "label": "Category",
-   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\"",
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\"||doc.status != \"Submitted\"",
    "options": "INDIVIDUAL\nGROUP"
   },
   {
    "fieldname": "salutation",
-   "fieldtype": "Link",
+   "fieldtype": "Data",
    "label": "Salutation",
-   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\"",
-   "options": "Salutation"
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\"||doc.status != \"Submitted\""
   },
   {
    "fieldname": "column_break_sb8h",
@@ -178,32 +179,32 @@
    "fieldname": "date_of_birth",
    "fieldtype": "Date",
    "label": "Birth Date",
-   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\""
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\"||doc.status != \"Submitted\""
   },
   {
    "fieldname": "address",
    "fieldtype": "Text",
    "label": "Landmark",
-   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\"",
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\"||doc.status != \"Submitted\"",
    "max_height": "35px"
   },
   {
    "fieldname": "taluka",
    "fieldtype": "Data",
    "label": "Taluka / Tahshil",
-   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\""
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\"||doc.status != \"Submitted\""
   },
   {
    "fieldname": "city",
    "fieldtype": "Data",
    "label": "City/District",
-   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\""
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\"||doc.status != \"Submitted\""
   },
   {
    "fieldname": "mobile",
    "fieldtype": "Data",
    "label": "Mobile",
-   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\""
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\"||doc.status != \"Submitted\""
   },
   {
    "fieldname": "age",
@@ -227,40 +228,36 @@
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Customer ID",
-   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\""
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\"||doc.status != \"Submitted\""
   },
   {
    "fieldname": "occupation",
-   "fieldtype": "Select",
+   "fieldtype": "Data",
    "label": "Occupation",
-   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\"",
-   "options": "\nAdvocate\nAgriculture\nBusiness\nDoctor\nFarmer\nGovt Employee\nHouse Wife\nOther\nPrivate Employee\nRetired\nServices\nStudent\nTeacher"
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\"||doc.status != \"Submitted\""
   },
   {
    "default": "Regular",
    "fieldname": "sh_category",
    "fieldtype": "Select",
    "label": "Share Category",
-   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\"",
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\"||doc.status != \"Submitted\"",
    "options": "Regular"
   },
   {
    "fieldname": "membership_form",
    "fieldtype": "Attach",
-   "label": "Membership form",
-   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\""
+   "label": "Membership form"
   },
   {
    "fieldname": "payment_receipt",
    "fieldtype": "Attach",
-   "label": "Payment Receipt",
-   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\""
+   "label": "Payment Receipt"
   },
   {
    "fieldname": "kyc",
    "fieldtype": "Attach",
-   "label": "KYC ( Adhar / PAN / Voter ID )",
-   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\""
+   "label": "KYC ( Adhar / PAN / Voter ID )"
   },
   {
    "depends_on": "eval:frappe.user.has_role('System Manager') || frappe.user.has_role('Share User Creator') || frappe.user.has_role('Share Executive') || frappe.user.has_role('Share Admin')",
@@ -283,7 +280,7 @@
    "fieldname": "ac_type",
    "fieldtype": "Data",
    "label": "Account Type",
-   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\"",
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\"||doc.status != \"Submitted\"",
    "read_only": 1
   },
   {
@@ -310,14 +307,14 @@
    "fieldname": "saving_current_gl_code",
    "fieldtype": "Link",
    "label": "Account GL Code",
-   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\"",
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\"||doc.status != \"Submitted\"",
    "options": "Account GL Code"
   },
   {
    "fieldname": "saving_current_ac_no",
    "fieldtype": "Data",
    "label": "Account No.",
-   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\""
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\"||doc.status != \"Submitted\""
   },
   {
    "fetch_from": "branch_gl.ac_type",
@@ -358,7 +355,7 @@
    "fieldname": "no_of_shares",
    "fieldtype": "Int",
    "label": "No. of Shares",
-   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\"",
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\"||doc.status != \"Submitted\"",
    "non_negative": 1
   },
   {
@@ -463,14 +460,14 @@
    "fieldname": "aadhaar_number",
    "fieldtype": "Data",
    "label": "Aadhaar Number",
-   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\""
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\"||doc.status != \"Submitted\""
   },
   {
    "default": "Indian",
    "fieldname": "nationality",
    "fieldtype": "Select",
    "label": "Nationality",
-   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\"",
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\"||doc.status != \"Submitted\"",
    "options": "Indian\nOther"
   },
   {
@@ -478,14 +475,14 @@
    "fieldname": "account_type",
    "fieldtype": "Select",
    "label": "Account Type",
-   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\"",
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\"||doc.status != \"Submitted\"",
    "options": "\nSAVING\nCURRENT\nLIABILITY"
   },
   {
    "fieldname": "gender",
    "fieldtype": "Select",
    "label": "Gender",
-   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\"",
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\"||doc.status != \"Submitted\"",
    "options": "\nNA\nF\nM\nMale\nFemale\nR\nFirm\nTransgender"
   },
   {
@@ -513,7 +510,7 @@
    "fieldname": "account_name",
    "fieldtype": "Data",
    "label": "Account Name",
-   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\"",
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\"||doc.status != \"Submitted\"",
    "read_only": 1
   },
   {
@@ -641,18 +638,16 @@
    "label": "Reject Remark"
   },
   {
-   "default": "Maharashtra",
    "fieldname": "state",
-   "fieldtype": "Select",
+   "fieldtype": "Data",
    "label": "State",
-   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\"",
-   "options": "Andhra Pradesh\nArunachal Pradesh\nAssam\nBihar\nChhattisgarh\nGoa\nGujarat\nHaryana\nHimachal Pradesh\nJharkhand\nKarnataka\nKerala\nMadhya Pradesh\nMaharashtra\nManipur\nMeghalaya\nMizoram\nNagaland\nOdisha\nPunjab\nRajasthan\nSikkim\nTamil Nadu\nTelangana\nTripura\nUttarakhand\nUttar Pradesh\nWest Bengal"
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\"||doc.status != \"Submitted\""
   },
   {
    "fieldname": "pin_code",
    "fieldtype": "Data",
    "label": "PIN Code",
-   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\""
+   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\"||doc.status != \"Submitted\""
   },
   {
    "fieldname": "column_break_lttaq",
@@ -710,11 +705,21 @@
    "fieldname": "creator_name",
    "fieldtype": "Data",
    "label": "Creator Name"
+  },
+  {
+   "fieldname": "gl_sub_head_code",
+   "fieldtype": "Data",
+   "label": "GL Sub Head Code"
+  },
+  {
+   "fieldname": "fin_account_type",
+   "fieldtype": "Data",
+   "label": "Account Type"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-09-02 12:40:00.181832",
+ "modified": "2024-09-10 16:46:42.411946",
  "modified_by": "Administrator",
  "module": "Share Holder Management",
  "name": "Share Application",

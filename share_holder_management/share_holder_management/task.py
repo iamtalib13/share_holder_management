@@ -1,37 +1,133 @@
 import frappe
 from frappe.utils import now
 from frappe.utils.data import now_datetime
-import openpyxl as pxl
-import pandas as pd
+import frappe
+import psycopg2 # type: ignore
+import psycopg2.extras # type: ignore
+import frappe
+from psycopg2.extras import DictCursor # type: ignore
 
+from datetime import datetime
 
-@frappe.whitelist()
-def load_items():
-    SOURCE = "/files/Employee.xlsx"  # Replace with the correct file path
+from datetime import datetime
+import frappe
+
+def convert_date_format(date_str, input_format='%d-%m-%Y', output_format='%Y-%m-%d'):
+    """Convert date string from input_format to output_format."""
     try:
-        # Load workbook and save it (this is a workaround)
-        wkbk = pxl.load_workbook(SOURCE)
-        wkbk.save(SOURCE)
+        if date_str:
+            return datetime.strptime(date_str, input_format).strftime(output_format)
+    except ValueError:
+        # Handle the case where the date format is incorrect
+        return None
+    return None
 
-        # Read Excel file using pandas
-        df = pd.read_excel(SOURCE)
+def create_or_update_share_application(data):
+    try:
+        # Convert date fields to the correct format
+        cif_creation_dt = convert_date_format(data.get('cif_creation_dt'))
+        account_opening_date = convert_date_format(data.get('account_opening_date'))
+        date_of_birth = convert_date_format(data.get('birth_date'))
 
-        # Print data in table format
-        print(df.to_string(index=False))
+        # Check if a Share Application already exists for the given customer_id
+        existing_application = frappe.db.get_value("Share Application", {"customer_id": data.get('customer_id')})
 
-        # Optional: Save data to Frappe database
-        # Assuming you have a doctype named 'Excel Data' with fields matching columns in the Excel file
-        # for index, row in df.iterrows():
-        #     frappe.get_doc({
-        #         "doctype": "Excel Data",
-        #         "field1": row['Column1'],
-        #         "field2": row['Column2'],
-        #         # Add more fields as needed
-        #     }).insert()
+        if existing_application:
+            # Update existing Share Application
+            share_app = frappe.get_doc("Share Application", existing_application)
+            share_app.update({
+                "salutation": data.get('salutation', None),
+                "customer_name": data.get('customer_name', None),
+                "date_of_birth": date_of_birth,
+                "gender": data.get('gender', None),
+                "address": data.get('address_line1', None),
+                "city": data.get('city', None),
+                "state": data.get('state', None),
+                "pin_code": data.get('zip', None),
+                "mobile": data.get('mobile', None),
+                "occupation": data.get('occupation', None),
+                "aadhaar_number": data.get('aadhaar_number', None),
+                "branch": data.get('branch', None),
+                "branch_code": data.get('branch_code', None),
+                "ac_open_dt": cif_creation_dt,
+                "application_date": cif_creation_dt,
+                "saving_current_ac_no": data.get('acct_num', None),
+                "fin_account_type": data.get('account_type', None),
+                "gl_sub_head_code": data.get('gl_sub_head_code', None),
+                "account_opening_date": account_opening_date,
+                "status": "Submitted"
+            })
+            share_app.save()
+            frappe.db.commit()
+            print(f"Updated Share Application for customer_id: {data.get('customer_id')}")
+        else:
+            # Create a new Share Application
+            share_app = frappe.get_doc({
+                "doctype": "Share Application",
+                "customer_id": data.get('customer_id'),
+                "salutation": data.get('salutation', None),
+                "customer_name": data.get('customer_name', None),
+                "date_of_birth": date_of_birth,
+                "gender": data.get('gender', None),
+                "address": data.get('address_line1', None),
+                "city": data.get('city', None),
+                "state": data.get('state', None),
+                "pin_code": data.get('zip', None),
+                "mobile": data.get('mobile', None),
+                "occupation": data.get('occupation', None),
+                "aadhaar_number": data.get('aadhaar_number', None),
+                "branch": data.get('branch', None),
+                "branch_code": data.get('branch_code', None),
+                "ac_open_dt": cif_creation_dt,
+                "application_date": cif_creation_dt,
+                "saving_current_ac_no": data.get('acct_num', None),
+                "fin_account_type": data.get('account_type', None),
+                "gl_sub_head_code": data.get('gl_sub_head_code', None),
+                "account_opening_date": account_opening_date,
+                "status": "Submitted"
+            })
+            share_app.insert()
+            frappe.db.commit()
+            print(f"Created Share Application for customer_id: {data.get('customer_id')}")
+    except Exception as e:
+        frappe.log_error(frappe.get_traceback(), f"Error processing Share Application for customer_id: {data.get('customer_id')}")
+        print(f"Error processing Share Application for customer_id: {data.get('customer_id')} - {str(e)}")
+
+def check_db_and_sync():
+    conn_string = "host='10.60.133.66' dbname='finprd' user='custom' password='custom' port='2951'"
+    
+    conn = None
+    cursor = None
+    
+    try:
+        conn = psycopg2.connect(conn_string)
+        cursor = conn.cursor(cursor_factory=DictCursor)
+
+        if conn:
+            print("Connected to the database")
+            cursor.execute("SELECT * FROM custom.c_shares")
+            rows = cursor.fetchall()
+
+            for row in rows:
+                data = dict(row)  # Convert row to dictionary
+                create_or_update_share_application(data)  # Create or update Share Application
+        else:
+            print("Failed to connect to the database")
 
     except Exception as e:
-        print(f"Error reading Excel file: {e}")
+        frappe.log_error(frappe.get_traceback(), "Error in database synchronization")
+        print(f"Error: {e}")
 
+    finally:
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()
+        print("Database connection closed")
+
+def ping():
+    print("pong")
+        
 
 def cron():
     tickets = frappe.get_all(
@@ -434,3 +530,45 @@ def convert_json_to_xml(json_data):
         sub_element = ET.SubElement(root, key)
         sub_element.text = str(value)
     return ET.tostring(root, encoding="unicode")
+
+
+
+def test_db():
+    # Database connection details
+    conn_string = "host='10.60.133.66' dbname='finprd' user='custom' password='custom' port='2951'"
+    
+    conn = None
+    cursor = None
+    
+    try:
+        # Establish a connection to the database
+        conn = psycopg2.connect(conn_string)
+        cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+
+        # Check if the connection is successful
+        if conn:
+            print("Connected to the database")
+            
+            # Execute a SQL query to fetch all records from the custom.c_shares table
+            cursor.execute("SELECT * FROM custom.c_shares")
+            
+            # Fetch all rows from the executed query
+            rows = cursor.fetchall()
+            
+            # Print each row
+            for row in rows:
+                print(dict(row))  # Convert each row to a dictionary for better readability
+
+        else:
+            print("Failed to connect to the database")
+
+    except Exception as e:
+        print(f"Error: {e}")
+
+    finally:
+        # Close the cursor and connection
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()
+        print("Database connection closed")
