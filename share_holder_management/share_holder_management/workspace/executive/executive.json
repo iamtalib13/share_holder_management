@@ -1,6 +1,10 @@
 {
  "charts": [],
+<<<<<<< HEAD
  "content": "[{\"id\":\"9YwVD5ABpy\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Executive Dashboard\",\"col\":12}},{\"id\":\"bInxAfNvQR\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"0zuO19PNuB\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"Pending\",\"col\":4}},{\"id\":\"GzTmuzpdqS\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"Sanctioned\",\"col\":4}},{\"id\":\"h_mmmsJKiI\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"Rejected\",\"col\":4}},{\"id\":\"FLLqlzBDQL\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Status - Wise</b></span>\",\"col\":12}},{\"id\":\"sUmYzoDSYa\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Submitted\",\"col\":3}},{\"id\":\"iVl7_BHIP4\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Return To Branch\",\"col\":3}},{\"id\":\"sEWrMe9iDA\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Received\",\"col\":3}},{\"id\":\"BVmmKfBCBQ\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Sanctioned\",\"col\":3}},{\"id\":\"y9m50hszfP\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Rejected\",\"col\":3}},{\"id\":\"N7pIpkDMyI\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"irgbW95g80\",\"type\":\"paragraph\",\"data\":{\"text\":\"<span class=\\\"h1\\\"><b>Reports</b></span>\",\"col\":12}},{\"id\":\"rERbJYEHsc\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Share Application Report\",\"col\":3}}]",
+=======
+ "content": "[{\"id\":\"9YwVD5ABpy\",\"type\":\"custom_block\",\"data\":{\"custom_block_name\":\"Executive Dashboard\",\"col\":12}},{\"id\":\"bInxAfNvQR\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"0zuO19PNuB\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"Pending\",\"col\":4}},{\"id\":\"GzTmuzpdqS\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"Sanctioned\",\"col\":4}},{\"id\":\"h_mmmsJKiI\",\"type\":\"quick_list\",\"data\":{\"quick_list_name\":\"Rejected\",\"col\":4}},{\"id\":\"FLLqlzBDQL\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Status - Wise</b></span>\",\"col\":12}},{\"id\":\"sUmYzoDSYa\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Submitted\",\"col\":3}},{\"id\":\"iVl7_BHIP4\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Return To Branch\",\"col\":3}},{\"id\":\"sEWrMe9iDA\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Received\",\"col\":3}},{\"id\":\"BVmmKfBCBQ\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Sanctioned\",\"col\":3}},{\"id\":\"y9m50hszfP\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Rejected\",\"col\":3}},{\"id\":\"N7pIpkDMyI\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"b7ADWb2r_E\",\"type\":\"paragraph\",\"data\":{\"text\":\"<span class=\\\"h1\\\"><b>Reports</b></span>\",\"col\":12}},{\"id\":\"XWOGdpiki0\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Share Application Report\",\"col\":3}}]",
+>>>>>>> 61341525119f66acfe8a57c6aa49655a69426c63
  "creation": "2024-01-09 12:33:44.718788",
  "custom_blocks": [
   {
@@ -17,7 +21,11 @@
  "is_hidden": 0,
  "label": "Executive",
  "links": [],
+<<<<<<< HEAD
  "modified": "2024-09-04 16:23:55.720511",
+=======
+ "modified": "2024-09-04 16:23:12.649202",
+>>>>>>> 61341525119f66acfe8a57c6aa49655a69426c63
  "modified_by": "Administrator",
  "module": "Share Holder Management",
  "name": "Executive",
