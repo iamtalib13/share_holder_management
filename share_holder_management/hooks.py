@@ -127,23 +127,23 @@ app_license = "MIT"
 # Scheduled Tasks
 # ---------------
 
-# scheduler_events = {
-# 	"all": [
-# 		"share_holder_management.tasks.all"
-# 	],
-# 	"daily": [
-# 		"share_holder_management.tasks.daily"
-# 	],
-# 	"hourly": [
-# 		"share_holder_management.tasks.hourly"
-# 	],
-# 	"weekly": [
-# 		"share_holder_management.tasks.weekly"
-# 	],
-# 	"monthly": [
-# 		"share_holder_management.tasks.monthly"
-# 	],
-# }
+scheduler_events = {
+	# "all": [
+	# 	"share_holder_management.tasks.all"
+	# ],
+	# "daily": [
+	# 	"share_holder_management.tasks.daily"
+	# ],
+	"hourly": [
+		"share_holder_management.share_holder_management.task.check_db_and_sync"
+	],
+	# "weekly": [
+	# 	"share_holder_management.tasks.weekly"
+	# ],
+	# "monthly": [
+	# 	"share_holder_management.tasks.monthly"
+	# ],
+}
 
 # Testing
 # -------

@@ -1,32 +1,80 @@
 import frappe
-import requests
-
+import socket
+import fcntl
+import struct
 from frappe.model.document import Document
-
-import frappe
-import requests
-import xml.etree.ElementTree as ET
-import frappe
-
 
 class ShareTest(Document):
     def before_save(self):
-        self.set_barcode()
+        self.set_mac_and_ip()
 
-    def set_barcode(self):
-        # Get the document name
-        barcode_number = self.name
+    def set_mac_and_ip(self):
+        # Get the correct IP address from an active network interface
+        ip_address = self.get_active_ip()
 
-        # Create the barcode
-        barcode = Code128(str(barcode_number), writer=SVGWriter())
-        barcode_path = os.path.join(get_files_path(), f"{barcode_number}.svg")
-        barcode.write(barcode_path)
+        # Get MAC address for the interface with the found IP address
+        mac_address = self.get_mac_address(ip_address)
 
-        # Set the barcode field
-        self.barcode = barcode_path
+        # Assuming 'mac' and 'ip' fields exist in your doctype
+        self.mac = mac_address
+        self.ip = ip_address
 
+    def get_active_ip(self):
+        # Iterate over all interfaces and get the IP of the first active one (non-loopback)
+        interfaces = socket.if_nameindex()
+        for if_name, _ in interfaces:
+            ip_address = self.get_ip_for_interface(if_name)
+            if ip_address and not ip_address.startswith("127."):
+                return ip_address
+        return None
 
-  
+    def get_ip_for_interface(self, interface_name):
+        try:
+            ip_address = socket.inet_ntoa(fcntl.ioctl(
+                socket.socket(socket.AF_INET, socket.SOCK_DGRAM),
+                0x8915,  # SIOCGIFADDR
+                struct.pack('256s', bytes(interface_name[:15], 'utf-8'))
+            )[20:24])
+            return ip_address
+        except Exception as e:
+            return None
+
+    def get_mac_address(self, ip_address):
+        # Retrieve the MAC address based on the IP address
+        interface_name = self.get_interface_name(ip_address)
+        if interface_name:
+            mac_address = self.get_interface_mac(interface_name)
+            return mac_address
+        else:
+            return "00:00:00:00:00:00"  # Return a default value if something goes wrong
+
+    def get_interface_name(self, ip_address):
+        interfaces = socket.if_nameindex()
+        for if_name, _ in interfaces:
+            try:
+                # Check if this interface has the IP we're looking for
+                if_ip = socket.inet_ntoa(fcntl.ioctl(
+                    socket.socket(socket.AF_INET, socket.SOCK_DGRAM),
+                    0x8915,  # SIOCGIFADDR
+                    struct.pack('256s', bytes(if_name[:15], 'utf-8'))
+                )[20:24])
+                if if_ip == ip_address:
+                    return if_name
+            except Exception as e:
+                continue
+        return None
+
+    def get_interface_mac(self, interface_name):
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        try:
+            mac_address = ':'.join(['{:02x}'.format(b) for b in fcntl.ioctl(
+                s.fileno(),
+                0x8927,  # SIOCGIFHWADDR
+                struct.pack('256s', bytes(interface_name[:15], 'utf-8'))
+            )[18:24]])
+            return mac_address.upper()
+        except Exception as e:
+            return "00:00:00:00:00:00"  # Return a default value if something goes wrong
 
 
 

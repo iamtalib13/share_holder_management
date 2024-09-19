@@ -5,10 +5,12 @@ import re
 from datetime import datetime
 class ShareApplication(Document):
     def before_insert(self):
-       user_id = frappe.session.user.split('@')[0]
-       fname, lname = frappe.db.get_value('Employee', {'employee_id': user_id}, ['first_name', 'last_name'])
-       self.creator_user_id = user_id
-       self.creator_name = f"{fname} {lname}"
+        self.no_of_shares = 1
+    #    user_id = frappe.session.user.split('@')[0]
+    #    fname, lname = frappe.db.get_value('Employee', {'employee_id': user_id}, ['first_name', 'last_name'])
+    #    self.creator_user_id = user_id
+    #    self.creator_name = f"{fname} {lname}"
+       
 
     def before_save(self):
         # Convert customer name to uppercase and assign to relevant fields
@@ -52,10 +54,11 @@ class ShareApplication(Document):
 
        
     def validate(self):
-        self._validate_aadhaar_number()
-        self._validate_mobile_number()
-        self._validate_pan_number()
-        self._validate_no_of_shares()
+        pass
+        #self._validate_aadhaar_number()
+        #self._validate_mobile_number()
+        #self._validate_pan_number()
+        #self._validate_no_of_shares()
 
     def _validate_aadhaar_number(self):
         # Check if status is not "Sanctioned"
@@ -68,14 +71,15 @@ class ShareApplication(Document):
                 )
 
     def _validate_mobile_number(self):
+        pass
         # Check if status is not "Sanctioned"
-        if self.status != "Sanctioned":
-            # Validate mobile number
-            if self.mobile and len(str(self.mobile)) != 10:
-                frappe.throw(
-                    _("Mobile number is not valid, it must be 10 digits."),
-                    title=_("Please provide the proper mobile number."),
-                )
+        # if self.status != "Sanctioned":
+        #     # Validate mobile number
+        #     if self.mobile and len(str(self.mobile)) != 10:
+        #         frappe.throw(
+        #             _("Mobile number is not valid, it must be 10 digits."),
+        #             title=_("Please provide the proper mobile number."),
+        #         )
 
     def _validate_pan_number(self):
         # Check if status is not "Sanctioned"

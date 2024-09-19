@@ -18,7 +18,10 @@
   "end_range",
   "status",
   "branch",
-  "barcode"
+  "barcode",
+  "mac",
+  "ip",
+  "customer_id"
  ],
  "fields": [
   {
@@ -79,11 +82,26 @@
   {
    "fieldname": "column_break_n241q",
    "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "mac",
+   "fieldtype": "Data",
+   "label": "MAC"
+  },
+  {
+   "fieldname": "ip",
+   "fieldtype": "Data",
+   "label": "IP"
+  },
+  {
+   "fieldname": "customer_id",
+   "fieldtype": "Data",
+   "label": "Customer Id"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-04-03 11:00:19.073198",
+ "modified": "2024-09-10 16:39:32.377151",
  "modified_by": "Administrator",
  "module": "Share Holder Management",
  "name": "Share Test",
