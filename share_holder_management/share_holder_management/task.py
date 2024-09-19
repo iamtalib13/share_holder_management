@@ -2,7 +2,10 @@ import frappe
 from frappe.utils import now
 from frappe.utils.data import now_datetime
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 61341525119f66acfe8a57c6aa49655a69426c63
 import frappe
 import psycopg2 # type: ignore
 import psycopg2.extras # type: ignore
@@ -130,6 +133,9 @@ def check_db_and_sync():
 def ping():
     print("pong")
         
+<<<<<<< HEAD
+>>>>>>> 61341525119f66acfe8a57c6aa49655a69426c63
+=======
 >>>>>>> 61341525119f66acfe8a57c6aa49655a69426c63
 
 def cron():
