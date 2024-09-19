@@ -1,37 +1,6 @@
 import frappe
 from frappe.utils import now
 from frappe.utils.data import now_datetime
-import openpyxl as pxl
-import pandas as pd
-
-
-@frappe.whitelist()
-def load_items():
-    SOURCE = "/files/Employee.xlsx"  # Replace with the correct file path
-    try:
-        # Load workbook and save it (this is a workaround)
-        wkbk = pxl.load_workbook(SOURCE)
-        wkbk.save(SOURCE)
-
-        # Read Excel file using pandas
-        df = pd.read_excel(SOURCE)
-
-        # Print data in table format
-        print(df.to_string(index=False))
-
-        # Optional: Save data to Frappe database
-        # Assuming you have a doctype named 'Excel Data' with fields matching columns in the Excel file
-        # for index, row in df.iterrows():
-        #     frappe.get_doc({
-        #         "doctype": "Excel Data",
-        #         "field1": row['Column1'],
-        #         "field2": row['Column2'],
-        #         # Add more fields as needed
-        #     }).insert()
-
-    except Exception as e:
-        print(f"Error reading Excel file: {e}")
-
 
 def cron():
     tickets = frappe.get_all(
