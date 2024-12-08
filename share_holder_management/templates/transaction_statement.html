@@ -61,7 +61,7 @@
   <body>
     <div class="container">
       <div class="logo">
-        <img src="/files/Sahayog.png" alt="" width="300" />
+        <img src="/files/Sahayog.png" alt="Sahayog Logo" width="300" />
       </div>
       <h1>Transaction Statement</h1>
       <h2>Customer Ledger For SAVING DEPOSIT</h2>
@@ -79,7 +79,6 @@
         <div class="bank-detail">
           <p><strong>Branch Name:</strong> {{ branch_name }}</p>
           <p><strong>Branch Code:</strong> {{ branch_code }}</p>
-
         </div>
       </div>
       <div>
@@ -111,13 +110,11 @@
             <td>-</td>
             <td>Opening Balance</td>
             <td></td>
-            <td></td>  <!-- Show opening balance directly -->
-            <td></td>  <!-- Leave this cell empty or as required -->
-            <td>{{  abs(cumulative_balance) }}</td>  <!-- Show cumulative balance -->
-        </tr>
-        
-          
+            <td></td>
+            <td></td>
+            <td>{{ abs(cumulative_balance) }}</td>
           </tr>
+
           {% for transaction in transactions %}
           <tr>
             <td>{{ transaction.transaction_date }}</td>
@@ -132,6 +129,8 @@
             </td>
             <td>{{ abs(transaction.balance) }}</td>
           </tr>
+          {% set cumulative_balance = transaction.balance %}
+          <!-- Update cumulative balance -->
           {% endfor %}
         </tbody>
       </table>

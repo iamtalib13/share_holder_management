@@ -1029,6 +1029,9 @@ port = "1521"  # Default port for Oracle
 sid = "orcl"   # SID or service name
 
 import cx_Oracle
+import cx_Oracle
+import cx_Oracle
+from datetime import datetime
 
 def connect_to_oracle():
     """
@@ -1036,11 +1039,18 @@ def connect_to_oracle():
     to generate a bank statement.
     """
     # Initialize parameters
-    branch_code = 'SADA15'
-    ac_code = 'B110'
-    ac_no = 5002355  # Replace with actual AC_NO
-    acmastcode = None  # To be fetched later
-    gmst_code = None  # To be fetched later
+    branch_code = 'MBR02'
+    ac_code = 'SAV'
+    ac_no = 5030324  # Replace with actual AC_NO
+    username = "sahyog"
+    password = "sahyog"
+    host = "10.0.115.20"
+    port = "1521"
+    sid = "orcl"
+
+    # Define start and end dates for the transaction query
+    start_date = '01-01-2023'
+    end_date = '02-12-2024'
 
     # Create a DSN (Data Source Name)
     dsn = cx_Oracle.makedsn(host, port, service_name=sid)
@@ -1054,7 +1064,8 @@ def connect_to_oracle():
         cursor = connection.cursor()
 
         # 1. Retrieve Branch Name and Branch Code
-        cursor.execute("SELECT branchname, branchcode FROM sahyog.branchmas WHERE branchcode = :branch_code", {'branch_code': branch_code})
+        cursor.execute("SELECT branchname, branchcode FROM sahyog.branchmas WHERE branchcode = :branch_code", 
+                       {'branch_code': branch_code})
         branch_info = cursor.fetchone()
         if branch_info:
             branch_name, branch_code = branch_info
@@ -1062,27 +1073,33 @@ def connect_to_oracle():
         else:
             print("Branch information not found.")
 
-        # 2. Retrieve ACMASTCODE for AC_CODE 'B110'
-        cursor.execute("SELECT ACMASTCODE FROM SAHYOG.ACMAST WHERE AC_CODE = :ac_code", {'ac_code': ac_code})
+            # 2. Retrieve ACMASTCODE and AC_NAME for AC_CODE 'SAV'
+        cursor.execute("SELECT ACMASTCODE, AC_NAME FROM SAHYOG.ACMAST WHERE AC_CODE = :ac_code", 
+                    {'ac_code': ac_code})
         acmastcode_row = cursor.fetchone()
         if acmastcode_row:
             acmastcode = acmastcode_row[0]
-            print(f"ACMASTCODE: {acmastcode}")
+            ac_name = acmastcode_row[1]  # Retrieve AC_NAME
+            print(f"ACMASTCODE: {acmastcode}, Branch Code: {branch_code}, Ac No: {ac_no}")
+            print(f"AC_NAME: {ac_name}")
         else:
-            print("ACMASTCODE not found.")
+            print("ACMASTCODE not found. Exiting due to missing ACMASTCODE.")
+            return
 
         # 3. Retrieve GMST_CODE using ACMASTCODE and Branch Code
-        cursor.execute("SELECT gmst_code FROM SAHYOG.CURMAS WHERE ACMASTCODE = :acmastcode AND BRANCHCODE = :branch_code AND AC_NO = :ac_no", 
+        cursor.execute("SELECT gmst_code FROM SAHYOG.SAVMAS WHERE ACMASTCODE = :acmastcode AND BRANCHCODE = :branch_code AND AC_NO = :ac_no", 
                        {'acmastcode': acmastcode, 'branch_code': branch_code, 'ac_no': ac_no})
         gmst_code_row = cursor.fetchone()
         if gmst_code_row:
-            gmst_code = gmst_code_row[0]  # Adjust index based on the actual column order
+            gmst_code = gmst_code_row[0]
             print(f"GMST_CODE: {gmst_code}")
         else:
-            print("GMST_CODE not found.")
+            print("GMST_CODE not found. Exiting due to missing GMST_CODE.")
+            return
 
         # 4. Retrieve Customer Details
-        cursor.execute("SELECT name, addr, city, tele, adharno, gmst_code FROM sahyog.bankmas WHERE gmst_code = :gmst_code", {'gmst_code': gmst_code})
+        cursor.execute("SELECT name, addr, city, tele, adharno, gmst_code FROM sahyog.bankmas WHERE gmst_code = :gmst_code", 
+                       {'gmst_code': gmst_code})
         customer_details = cursor.fetchone()
         if customer_details:
             print("Customer Details:")
@@ -1090,9 +1107,34 @@ def connect_to_oracle():
         else:
             print("Customer details not found.")
 
-        # 5. Retrieve Transactions
-        cursor.execute("SELECT tdate, drcr, csh_trn, prtcls, doc_no, debit, credit FROM SAHYOG.ACBK WHERE AC_NO = :ac_no AND FORBRANCH = :branch_code AND ACMASTCODE = :acmastcode ORDER BY TDATE", 
-                       {'ac_no': ac_no, 'branch_code': branch_code, 'acmastcode': acmastcode})
+        # 5. Retrieve Transactions with Date Filtering
+        cursor.execute("""
+            SELECT 
+                tdate AS Transaction_Date,
+                drcr AS Debit_Credit_Indicator,
+                csh_trn AS Transaction_Type,
+                prtcls AS Particulars,
+                doc_no AS Document_Number,
+                debit AS Debit_Amount,
+                credit AS Credit_Amount
+            FROM 
+                SAHYOG.ACBK
+            WHERE 
+                AC_NO = :ac_no 
+                AND FORBRANCH = :branch_code 
+                AND ACMASTCODE = :acmastcode
+                AND tdate BETWEEN TO_DATE(:start_date, 'DD-MM-YYYY') AND TO_DATE(:end_date, 'DD-MM-YYYY')
+            ORDER BY 
+                tdate ASC  -- Ensure to order by transaction date
+        """, 
+        {
+            'ac_no': ac_no, 
+            'branch_code': branch_code, 
+            'acmastcode': acmastcode,
+            'start_date': start_date,
+            'end_date': end_date
+        })
+
         transactions = cursor.fetchall()
         print("Transactions:")
         for transaction in transactions:
@@ -1108,17 +1150,34 @@ def connect_to_oracle():
             connection.close()
             print("Connection closed.")
 
+
+
 import cx_Oracle
 import frappe
 from frappe.utils.pdf import get_pdf
 from datetime import datetime
-
-@frappe.whitelist(allow_guest=True)   
+from decimal import Decimal
+import datetime
+import cx_Oracle
+import frappe
+import datetime
+import cx_Oracle
+import frappe
+import cx_Oracle
+from datetime import datetime
+import frappe
+import frappe
+import cx_Oracle
+from datetime import datetime
+@frappe.whitelist(allow_guest=True)
 def fetch_db(branch_code, ac_code, ac_no, account_type, start_date, end_date):
+    connection = None  # Initialize connection variable
     try:
-        # Parse dates
+        # Parse and validate dates
         start_date = datetime.strptime(start_date, "%Y-%m-%d")
         end_date = datetime.strptime(end_date, "%Y-%m-%d")
+        if start_date > end_date:
+            frappe.throw("Start date must be before end date.")
 
         # Database connection parameters
         username = "sahyog"
@@ -1132,23 +1191,20 @@ def fetch_db(branch_code, ac_code, ac_no, account_type, start_date, end_date):
         connection = cx_Oracle.connect(user=username, password=password, dsn=dsn)
         cursor = connection.cursor()
 
+        # Fetch branch name
         cursor.execute(
             "SELECT branchname FROM sahyog.branchmas WHERE branchcode = :branch_code",
             {'branch_code': branch_code}
         )
         result = cursor.fetchone()
-        if not result:
-            print(f"Debug: No branch found for branch_code = '{branch_code}'")
-            branch_name = "Unknown Branch"
-        else:
-            branch_name = result[0]
+        branch_name = result[0] if result else "Unknown Branch"
 
         # Fetch customer details
         cursor.execute(
             """
             SELECT name, addr, city, tele, adharno FROM sahyog.bankmas
             WHERE gmst_code = (
-                SELECT gmst_code FROM SAHYOG.CURMAS
+                SELECT gmst_code FROM SAHYOG.SAVMAS
                 WHERE acmastcode = (
                     SELECT ACMASTCODE FROM SAHYOG.ACMAST WHERE AC_CODE = :ac_code
                 )
@@ -1159,7 +1215,7 @@ def fetch_db(branch_code, ac_code, ac_no, account_type, start_date, end_date):
         )
         customer_details = cursor.fetchone()
         if not customer_details:
-            frappe.throw("Customer details not found.")
+            frappe.throw("Customer details not found for the provided account number.")
 
         customer_info = {
             "name": customer_details[0],
@@ -1169,67 +1225,87 @@ def fetch_db(branch_code, ac_code, ac_no, account_type, start_date, end_date):
             "aadhar": customer_details[4],
         }
 
+        # Fetch ACMASTCODE using AC_CODE
+        cursor.execute(
+            "SELECT ACMASTCODE FROM SAHYOG.ACMAST WHERE AC_CODE = :ac_code",
+            {'ac_code': ac_code}
+        )
+        acmastcode_result = cursor.fetchone()
+        if not acmastcode_result:
+            frappe.throw("ACMASTCODE not found for the given AC_CODE.")
+        acmastcode = acmastcode_result[0]
+
+        # Fetch opening balance
+        cursor.execute(
+            """
+            SELECT 
+                NVL(SUM(CASE WHEN credit > 0 THEN credit ELSE 0 END), 0) - 
+                NVL(SUM(CASE WHEN debit > 0 THEN debit ELSE 0 END), 0) AS opening_balance
+            FROM 
+                SAHYOG.ACBK
+            WHERE 
+                AC_NO = :ac_no 
+                AND FORBRANCH = :branch_code 
+                AND ACMASTCODE = :acmastcode 
+                AND tdate < :start_date
+            """,
+            {
+                'ac_no': ac_no,
+                'branch_code': branch_code,
+                'acmastcode': acmastcode,
+                'start_date': start_date
+            }
+        )
+        opening_balance = cursor.fetchone()[0] or 0  # Get opening balance
+
         # Fetch transactions within the specified period
         cursor.execute(
             """
             SELECT tdate, drcr, csh_trn, prtcls, doc_no, debit, credit
             FROM SAHYOG.ACBK
             WHERE AC_NO = :ac_no AND FORBRANCH = :branch_code AND
-                  ACMASTCODE = (SELECT ACMASTCODE FROM SAHYOG.ACMAST WHERE AC_CODE = :ac_code)
-                  AND tdate BETWEEN :start_date AND :end_date
-            ORDER BY tdate
+                  ACMASTCODE = :acmastcode AND tdate BETWEEN :start_date AND :end_date
+            ORDER BY ctrnno
             """,
             {
-                'ac_no': ac_no, 'branch_code': branch_code,
-                'ac_code': ac_code, 'start_date': start_date, 'end_date': end_date
+                'ac_no': ac_no,
+                'branch_code': branch_code,
+                'acmastcode': acmastcode,
+                'start_date': start_date,
+                'end_date': end_date
             }
         )
         transactions = cursor.fetchall()
         if not transactions:
             frappe.throw("No transactions found for the given criteria.")
 
-        # Calculate opening balance by summing records before the start date
-        cursor.execute(
-            """
-            SELECT NVL(SUM(debit), 0) - NVL(SUM(credit), 0)
-            FROM SAHYOG.ACBK
-            WHERE AC_NO = :ac_no AND FORBRANCH = :branch_code AND tdate < :start_date
-            """,
-            {'ac_no': ac_no, 'branch_code': branch_code, 'start_date': start_date}
-        )
-        opening_balance = cursor.fetchone()[0] or 0  # Get opening balance
-
-        # Ensure opening balance is non-negative
-        opening_balance_display = opening_balance 
-
         # Prepare transaction data and calculate running balance
         formatted_transactions = []
         running_balance = opening_balance  # Start with opening balance
 
-        # Create a formatted entry for the opening balance if it is non-negative
-        if opening_balance_display > 0:
-            formatted_transactions.append({
-                "transaction_date": start_date.strftime("%d/%m/%Y"),  # Use start_date for the opening balance
-                "transaction_type": "Opening Balance",
-                "description": "Opening Balance",
-                "doc_no": "",
-                "debit": 0.0,
-                "credit": 0.0,
-                "balance": running_balance,  # Opening balance
-            })
+        # Create a formatted entry for the opening balance
+        formatted_transactions.append({
+            "transaction_date": start_date.strftime("%d/%m/%Y"),  # Format start_date for opening balance
+            "transaction_type": "Opening Balance",
+            "description": "Opening Balance",
+            "doc_no": "",
+            "debit": 0.0,
+            "credit": 0.0,
+            "balance": running_balance,  # Opening balance
+        })
 
         # Loop through transactions to calculate running balance
         for t in transactions:
-            # Update running balance
-            running_balance += t[5] - t[6]  # Debit - Credit
+            tdate, drcr, csh_trn, prtcls, doc_no, debit, credit = t
+            running_balance += (credit - debit)  # Update running balance
 
             formatted_transactions.append({
-                "transaction_date": t[0].strftime("%d/%m/%Y"),  # Format date
-                "transaction_type": "Debit" if t[5] > 0 else "Credit",
-                "description": t[3],
-                "doc_no": t[4],
-                "debit": t[5] if t[5] > 0 else 0,  # Avoid negative
-                "credit": t[6] if t[6] > 0 else 0,  # Avoid negative
+                "transaction_date": tdate.strftime("%d/%m/%Y"),  # Format date
+                "transaction_type": "Debit" if debit > 0 else "Credit",
+                "description": prtcls,
+                "doc_no": doc_no,
+                "debit": debit if debit > 0 else 0,  # Avoid negative
+                "credit": credit if credit > 0 else 0,  # Avoid negative
                 "balance": running_balance,  # Running balance
             })
 
@@ -1243,7 +1319,7 @@ def fetch_db(branch_code, ac_code, ac_no, account_type, start_date, end_date):
             "start_date": start_date.strftime("%d/%m/%Y"),  # Format date for display
             "end_date": end_date.strftime("%d/%m/%Y"),  # Format date for display
             "customer_info": customer_info,
-            "opening_balance": opening_balance_display,  # Pass opening balance to template
+            "opening_balance": "{:.2f}".format(opening_balance),  # Pass formatted opening balance to template
         })
 
         pdf_data = get_pdf(html_content)
@@ -1257,7 +1333,313 @@ def fetch_db(branch_code, ac_code, ac_no, account_type, start_date, end_date):
         error, = e.args
         frappe.throw(f"Database error: {error.message}")
     except Exception as e:
+        frappe.throw(f"An error occurred: {str(e)}")
+    finally:
+        if connection:
+            connection.close()  # Ensure the connection is closed
+
+
+
+@frappe.whitelist(allow_guest=True)
+def test_db(branch_code, ac_code, ac_no, start_date, end_date):
+    connection = None  # Initialize connection variable
+    try:
+        print(f"Received inputs - Branch Code: {branch_code}, Account Code: {ac_code}, Account Number: {ac_no}, Start Date: {start_date}, End Date: {end_date}")
+
+        # Convert string dates to datetime objects
+        start_date = datetime.strptime(start_date, "%d-%m-%Y")
+        end_date = datetime.strptime(end_date, "%d-%m-%Y")
+        print(f"Parsed dates - Start Date: {start_date}, End Date: {end_date}")
+
+        # Database connection parameters
+        username = "sahyog"
+        password = "sahyog"
+        host = "10.0.115.20"
+        port = "1521"
+        sid = "orcl"
+        print(f"Database connection parameters - Host: {host}, Port: {port}, SID: {sid}")
+
+        # Create DSN and connect
+        dsn = cx_Oracle.makedsn(host, port, service_name=sid)
+        connection = cx_Oracle.connect(user=username, password=password, dsn=dsn)
+        cursor = connection.cursor()
+        print("Database connection established.")
+
+        # Fetch ACMASTCODE using AC_CODE
+        cursor.execute(
+            "SELECT ACMASTCODE FROM SAHYOG.ACMAST WHERE AC_CODE = :ac_code",
+            {'ac_code': ac_code}
+        )
+        acmastcode_result = cursor.fetchone()
+        if not acmastcode_result:
+            frappe.throw("ACMASTCODE not found for the given AC_CODE.")
+        acmastcode = acmastcode_result[0]
+        print(f"ACMASTCODE: {acmastcode}")
+
+        # Calculate opening balance
+        print("Calculating opening balance...")
+        cursor.execute(
+            """
+            SELECT 
+                NVL(SUM(CASE WHEN credit > 0 THEN credit ELSE 0 END), 0) - 
+                NVL(SUM(CASE WHEN debit > 0 THEN debit ELSE 0 END), 0) AS opening_balance
+            FROM 
+                SAHYOG.ACBK
+            WHERE 
+                AC_NO = :ac_no 
+                AND FORBRANCH = :branch_code 
+                AND ACMASTCODE = :acmastcode 
+                AND tdate < :start_date
+            """,
+            {
+                'ac_no': ac_no,
+                'branch_code': branch_code,
+                'acmastcode': acmastcode,
+                'start_date': start_date
+            }
+        )
+        opening_balance = cursor.fetchone()[0] or 0  # Get opening balance
+        print(f"Opening Balance: {opening_balance}")
+
+        # Fetch previous records before the start date
+        print("Fetching previous records...")
+        cursor.execute(
+            """
+            SELECT tdate, credit, debit
+            FROM SAHYOG.ACBK
+            WHERE AC_NO = :ac_no 
+            AND FORBRANCH = :branch_code 
+            AND ACMASTCODE = :acmastcode 
+            AND tdate < :start_date
+            ORDER BY tdate
+            """,
+            {
+                'ac_no': ac_no,
+                'branch_code': branch_code,
+                'acmastcode': acmastcode,
+                'start_date': start_date
+            }
+        )
+
+        previous_records = cursor.fetchall()
+
+        # Print previous records
+        print("Previous Records:")
+        for record in previous_records:
+            tdate, credit, debit = record
+            print(f"Date: {tdate.strftime('%d/%m/%Y')}, Credit: {credit}, Debit: {debit}")
+
+        # Fetch transactions within the specified date range
+        print("Fetching transactions between start and end dates...")
+        cursor.execute(
+            """
+            SELECT tdate, credit, debit
+            FROM SAHYOG.ACBK
+            WHERE AC_NO = :ac_no 
+            AND FORBRANCH = :branch_code 
+            AND ACMASTCODE = :acmastcode 
+            AND tdate BETWEEN :start_date AND :end_date
+            ORDER BY ctrnno
+            """,
+            {
+                'ac_no': ac_no,
+                'branch_code': branch_code,
+                'acmastcode': acmastcode,
+                'start_date': start_date,  # Ensure these are datetime objects
+                'end_date': end_date
+            }
+        )
+
+        transactions = cursor.fetchall()
+
+        # Calculate running balance and print transactions
+        current_balance = opening_balance
+        print("Transactions between Start Date and End Date:")
+        for record in transactions:
+            tdate, credit, debit = record
+            current_balance += (credit - debit)  # Update the current balance
+            print(f"Date: {tdate.strftime('%d/%m/%Y')}, Credit: {credit}, Debit: {debit}, Balance: {current_balance}")
+
+    except cx_Oracle.DatabaseError as e:
+        error, = e.args
+        frappe.throw(f"Database error: {error.message}")
+    except Exception as e:
         frappe.throw(str(e))
     finally:
         if 'connection' in locals():
             connection.close()
+
+
+
+@frappe.whitelist(allow_guest=True)
+def test1(branch_code, ac_code, ac_no, start_date, end_date):
+    connection = None  # Initialize connection variable
+    try:
+        print(f"Received inputs - Branch Code: {branch_code}, Account Code: {ac_code}, Account Number: {ac_no}, Start Date: {start_date}, End Date: {end_date}")
+
+        # Convert string dates to datetime objects
+        start_date = datetime.strptime(start_date, "%d-%m-%Y")
+        end_date = datetime.strptime(end_date, "%d-%m-%Y")
+        print(f"Parsed dates - Start Date: {start_date}, End Date: {end_date}")
+
+        # Database connection parameters
+        username = "sahyog"
+        password = "sahyog"
+        host = "10.0.115.20"
+        port = "1521"
+        sid = "orcl"
+        print(f"Database connection parameters - Host: {host}, Port: {port}, SID: {sid}")
+
+        # Create DSN and connect
+        dsn = cx_Oracle.makedsn(host, port, service_name=sid)
+        connection = cx_Oracle.connect(user=username, password=password, dsn=dsn)
+        cursor = connection.cursor()
+        print("Database connection established.")
+
+        # Fetch ACMASTCODE using AC_CODE
+        cursor.execute(
+            "SELECT ACMASTCODE FROM SAHYOG.ACMAST WHERE AC_CODE = :ac_code",
+            {'ac_code': ac_code}
+        )
+        acmastcode_result = cursor.fetchone()
+        if not acmastcode_result:
+            frappe.throw("ACMASTCODE not found for the given AC_CODE.")
+        acmastcode = acmastcode_result[0]
+        print(f"ACMASTCODE: {acmastcode}")
+
+        # Calculate opening balance
+        print("Calculating opening balance...")
+        cursor.execute(
+            """
+            SELECT 
+                NVL(SUM(CASE WHEN credit > 0 THEN credit ELSE 0 END), 0) - 
+                NVL(SUM(CASE WHEN debit > 0 THEN debit ELSE 0 END), 0) AS opening_balance
+            FROM 
+                SAHYOG.ACBK
+            WHERE 
+                AC_NO = :ac_no 
+                AND FORBRANCH = :branch_code 
+                AND ACMASTCODE = :acmastcode 
+                AND tdate < :start_date
+            """,
+            {
+                'ac_no': ac_no,
+                'branch_code': branch_code,
+                'acmastcode': acmastcode,
+                'start_date': start_date
+            }
+        )
+        opening_balance = cursor.fetchone()[0] or 0  # Get opening balance
+        print(f"Opening Balance: {opening_balance}")
+
+        # Fetch previous records before the start date
+        print("Fetching previous records...")
+        cursor.execute(
+            """
+            SELECT tdate, credit, debit
+            FROM SAHYOG.ACBK
+            WHERE AC_NO = :ac_no 
+            AND FORBRANCH = :branch_code 
+            AND ACMASTCODE = :acmastcode 
+            AND tdate < :start_date
+            ORDER BY tdate
+            """,
+            {
+                'ac_no': ac_no,
+                'branch_code': branch_code,
+                'acmastcode': acmastcode,
+                'start_date': start_date
+            }
+        )
+        previous_records = cursor.fetchall()
+
+        # Fetch transactions within the specified date range
+        print("Fetching transactions between start and end dates...")
+        cursor.execute(
+            """
+            SELECT tdate, credit, debit
+            FROM SAHYOG.ACBK
+            WHERE AC_NO = :ac_no 
+            AND FORBRANCH = :branch_code 
+            AND ACMASTCODE = :acmastcode 
+            AND tdate BETWEEN :start_date AND :end_date
+            ORDER BY ctrnno
+            """,
+            {
+                'ac_no': ac_no,
+                'branch_code': branch_code,
+                'acmastcode': acmastcode,
+                'start_date': start_date,  # Ensure these are datetime objects
+                'end_date': end_date
+            }
+        )
+        transactions = cursor.fetchall()
+
+        # Prepare data for PDF
+        formatted_transactions = []
+        current_balance = opening_balance
+
+        # Create formatted entry for the opening balance
+        formatted_transactions.append({
+            "transaction_date": start_date.strftime("%d/%m/%Y"),  # Format start_date for opening balance
+            "transaction_type": "Opening Balance",
+            "description": "Opening Balance",
+            "doc_no": "",
+            "debit": 0.0,
+            "credit": 0.0,
+            "balance": current_balance,  # Opening balance
+        })
+
+        # Loop through previous records to add them to the PDF
+        for record in previous_records:
+            tdate, credit, debit = record
+            current_balance += (credit - debit)  # Update the current balance
+            formatted_transactions.append({
+                "transaction_date": tdate.strftime("%d/%m/%Y"),
+                "transaction_type": "Credit" if credit > 0 else "Debit",
+                "description": "Previous Record",
+                "doc_no": "",  # If you have a document number, add it here
+                "debit": debit,
+                "credit": credit,
+                "balance": current_balance,
+            })
+
+        # Loop through transactions to calculate running balance
+        for record in transactions:
+            tdate, credit, debit = record
+            current_balance += (credit - debit)  # Update the current balance
+            formatted_transactions.append({
+                "transaction_date": tdate.strftime("%d/%m/%Y"),
+                "transaction_type": "Credit" if credit > 0 else "Debit",
+                "description": "Transaction",
+                "doc_no": "",  # Add doc_no if available
+                "debit": debit,
+                "credit": credit,
+                "balance": current_balance,
+            })
+
+        # Render PDF using a template
+        html_content = frappe.render_template("templates/transaction_statement.html", {
+            "transactions": formatted_transactions,
+            "branch_code": branch_code,
+            "ac_no": ac_no,
+            "start_date": start_date.strftime("%d/%m/%Y"),
+            "end_date": end_date.strftime("%d/%m/%Y"),
+            "opening_balance": opening_balance,
+        })
+
+        pdf_data = get_pdf(html_content)
+
+        # Return PDF as response
+        frappe.local.response.filename = f"Transaction_Statement_{ac_no}.pdf"
+        frappe.local.response.filecontent = pdf_data
+        frappe.local.response.type = "download"
+        
+    except cx_Oracle.DatabaseError as e:
+        error, = e.args
+        frappe.throw(f"Database error: {error.message}")
+    except Exception as e:
+        frappe.throw(str(e))
+    finally:
+        if connection:
+            connection.close()  # Ensure the connection is closed

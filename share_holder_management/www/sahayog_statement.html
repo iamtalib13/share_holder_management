@@ -135,15 +135,31 @@
           const acCode = document.getElementById("ac_code").value;
           const acNo = document.getElementById("ac_no").value;
           const accountType = document.getElementById("account_type").value;
-          const startDate = document.getElementById("start_date").value;
-          const endDate = document.getElementById("end_date").value;
+          const startDateInput = document.getElementById("start_date").value;
+          const endDateInput = document.getElementById("end_date").value;
+
+          // Convert dates to DD-MM-YYYY format
+          const startDate = new Date(startDateInput);
+          const endDate = new Date(endDateInput);
+          const formattedStartDate = `${startDate
+            .getDate()
+            .toString()
+            .padStart(2, "0")}-${(startDate.getMonth() + 1)
+            .toString()
+            .padStart(2, "0")}-${startDate.getFullYear()}`;
+          const formattedEndDate = `${endDate
+            .getDate()
+            .toString()
+            .padStart(2, "0")}-${(endDate.getMonth() + 1)
+            .toString()
+            .padStart(2, "0")}-${endDate.getFullYear()}`;
 
           console.log("Branch Code:", branchCode);
           console.log("AC Code:", acCode);
           console.log("AC No:", acNo);
           console.log("Account Type:", accountType);
-          console.log("Start Date:", startDate);
-          console.log("End Date:", endDate);
+          console.log("Start Date:", formattedStartDate);
+          console.log("End Date:", formattedEndDate);
 
           const submitButton = document.querySelector(".btn-primary");
           submitButton.disabled = true; // Disable button to prevent multiple submissions
@@ -151,7 +167,7 @@
           try {
             // Make API request to fetch transactions
             const response = await fetch(
-              "/api/method/share_holder_management.share_holder_management.task.fetch_db",
+              "/api/method/share_holder_management.share_holder_management.task.test_db",
               {
                 method: "POST",
                 headers: {
@@ -162,8 +178,8 @@
                   ac_code: acCode,
                   ac_no: acNo,
                   account_type: accountType,
-                  start_date: startDate,
-                  end_date: endDate,
+                  start_date: formattedStartDate, // Use formatted start date
+                  end_date: formattedEndDate, // Use formatted end date
                 }),
               }
             );
