@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Transaction Statement</title>
+    <link rel="stylesheet" href="/assets/frappe/css/bootstrap.css" />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
+      .container {
+        max-width: 600px;
+        margin: 0 auto;
+      }
+      h1 {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+      .form-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 15px;
+      }
+      .form-group {
+        flex: 1;
+        margin-right: 10px;
+      }
+      .form-group:last-child {
+        margin-right: 0;
+      }
+      .form-label {
+        display: block;
+        margin-bottom: 5px;
+      }
+      .form-control,
+      .form-select {
+        width: 100%;
+        padding: 8px;
+        box-sizing: border-box;
+      }
+      .btn-primary {
+        width: 100%;
+        padding: 10px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        cursor: pointer;
+      }
+      .btn-primary:hover {
+        background-color: #0056b3;
+      }
+      .alert {
+        margin-top: 20px;
+        display: none; /* Initially hidden */
+        padding: 10px;
+        color: white;
+        background-color: #dc3545;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="logo text-center">
+        <img src="/files/Sahayog.png" alt="" width="500" />
+      </div>
+      <h1>Transaction Statement</h1>
+      <form id="statement-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="ac_no" class="form-label">Account No</label>
+            <input
+              type="text"
+              class="form-control"
+              id="ac_no"
+              placeholder="Enter Account No"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="ac_code" class="form-label">Account Code</label>
+            <input
+              type="text"
+              class="form-control"
+              id="ac_code"
+              placeholder="Enter Account Code"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="branch_code" class="form-label">Branch Code</label>
+            <input
+              type="text"
+              class="form-control"
+              id="branch_code"
+              placeholder="Enter Branch Code"
+              required
+            />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="account_type" class="form-label">Account Type</label>
+          <select class="form-select" id="account_type" required>
+            <option value="">Select Account Type</option>
+            <option value="saving">Saving</option>
+            <option value="current">Current</option>
+            <option value="loan">Loan</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="start_date" class="form-label">Start Date</label>
+            <input type="date" class="form-control" id="start_date" required />
+          </div>
+          <div class="form-group">
+            <label for="end_date" class="form-label">End Date</label>
+            <input type="date" class="form-control" id="end_date" required />
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary">
+          Download Statement
+        </button>
+      </form>
+
+      <div id="alert-container" class="alert" role="alert"></div>
+    </div>
+
+    <script>
+      document
+        .getElementById("statement-form")
+        .addEventListener("submit", async (event) => {
+          event.preventDefault();
+
+          // Collect form data
+          const branchCode = document.getElementById("branch_code").value;
+          const acCode = document.getElementById("ac_code").value;
+          const acNo = document.getElementById("ac_no").value;
+          const accountType = document.getElementById("account_type").value;
+          const startDate = document.getElementById("start_date").value;
+          const endDate = document.getElementById("end_date").value;
+
+          console.log("Branch Code:", branchCode);
+          console.log("AC Code:", acCode);
+          console.log("AC No:", acNo);
+          console.log("Account Type:", accountType);
+          console.log("Start Date:", startDate);
+          console.log("End Date:", endDate);
+
+          const submitButton = document.querySelector(".btn-primary");
+          submitButton.disabled = true; // Disable button to prevent multiple submissions
+
+          try {
+            // Make API request to fetch transactions
+            const response = await fetch(
+              "/api/method/share_holder_management.share_holder_management.task.fetch_db",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  branch_code: branchCode,
+                  ac_code: acCode,
+                  ac_no: acNo,
+                  account_type: accountType,
+                  start_date: startDate,
+                  end_date: endDate,
+                }),
+              }
+            );
+
+            if (response.ok) {
+              // Handle success response
+              const blob = await response.blob(); // Assuming the response is a PDF file
+              const url = window.URL.createObjectURL(blob);
+              const a = document.createElement("a");
+              a.href = url;
+              a.download = "Transaction_Statement.pdf"; // Set default filename
+              document.body.appendChild(a);
+              a.click();
+              document.body.removeChild(a);
+              showAlert(
+                "Transaction statement downloaded successfully!",
+                "success"
+              );
+            } else {
+              // Handle error response
+              const errorMessage = await response.text();
+              showAlert(`Error: ${errorMessage}`, "error");
+            }
+          } catch (error) {
+            console.error("An error occurred:", error);
+            showAlert(
+              "An unexpected error occurred. Please try again.",
+              "error"
+            );
+          } finally {
+            submitButton.disabled = false; // Re-enable the button
+          }
+        });
+
+      function showAlert(message, type) {
+        const alertContainer = document.getElementById("alert-container");
+        alertContainer.textContent = message;
+        alertContainer.style.display = "block"; // Show the alert
+        alertContainer.style.backgroundColor =
+          type === "success" ? "#28a745" : "#dc3545"; // Green for success, red for error
+        setTimeout(() => {
+          alertContainer.style.display = "none"; // Hide after 5 seconds
+        }, 5000);
+      }
+    </script>
+  </body>
+</html>

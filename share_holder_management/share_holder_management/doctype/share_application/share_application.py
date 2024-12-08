@@ -10,7 +10,111 @@ class ShareApplication(Document):
     #    fname, lname = frappe.db.get_value('Employee', {'employee_id': user_id}, ['first_name', 'last_name'])
     #    self.creator_user_id = user_id
     #    self.creator_name = f"{fname} {lname}"
-       
+    def on_change(self):
+        if self.status == "Submitted":
+           frappe.enqueue_doc(
+                                self.doctype,  # The doctype of the document
+                                self.name,     # The name (ID) of the document
+                                "create_account",   # The method to be called
+                                queue="short", # Use the "short" queue
+                                timeout=500    # Timeout in seconds
+                            )
+           
+        if self.status == "Sanctioned":
+            self.create_journal_entry()
+        #    frappe.enqueue_doc(
+        #                         self.doctype,  # The doctype of the document
+        #                         self.name,     # The name (ID) of the document
+        #                         "create_journal_entry",   # The method to be called
+        #                         queue="short", # Use the "short" queue
+        #                         timeout=500    # Timeout in seconds
+        #                     )       
+    
+    def create_account(self):
+        # Prepare the account details
+        account_details = {
+            'doctype': 'Account',
+            'account_name': self.customer_name,  # Use customer_name for the account name
+            'account_type': 'Bank',         # Set account type to Receivable
+            'is_group': 0,                        # Set is_group to 0 for a regular account
+            'parent_account': "Bank Accounts - Sahayog",  # Set parent account
+            'account_number': self.saving_current_ac_no,  # Use the provided account number
+            # Add any additional fields as necessary
+        }
+
+        # Create and insert the account document
+        account = frappe.get_doc(account_details)
+        
+        try:
+            account.insert(ignore_permissions=True)
+            frappe.msgprint(f"Account '{account.account_name}' created successfully.")
+        except Exception as e:
+            frappe.msgprint(f"Failed to create account: {str(e)}")
+        
+    def create_journal_entry(self):
+        try:
+            # Validate the existence of `self.saving_current_ac_no`
+            if not self.saving_current_ac_no:
+                frappe.throw("Saving/Current Account Number is required to create a Journal Entry.")
+
+            # Fetch the linked account using the custom account number
+            main_account = frappe.db.get_value("Account", {"account_number": self.saving_current_ac_no}, "name")
+            if not main_account:
+                frappe.throw(f"No account found with custom account number: {self.saving_current_ac_no}")
+
+            # Prepare the child table data with the custom account number
+            accounts = [
+                {
+                    "account": main_account,
+                   
+                    "party_type": None,  # Set if needed (e.g., "Customer", "Supplier")
+                    "party": None,  # Specify the party if applicable
+                    "debit_in_account_currency": 20.00,  # Debit amount
+                    "credit_in_account_currency": 0.00,  # Credit amount
+                },
+                {
+                    "account": "100001410010001 - SH -  SHARE ACCOUNT - Sahayog",  # Replace with your account name
+                    
+                    "party_type": None,  # Set if needed (e.g., "Customer", "Supplier")
+                    "party": None,  # Specify the party if applicable
+                    "debit_in_account_currency": 0.00,
+                    "credit_in_account_currency": 10.00,  # Credit amount
+                },
+                {
+                    "account": "100001670060001 - MBEFEE - SHARE MEMBER ENTRY FEE - Sahayog",  # Replace with your account name
+                   
+                    "party_type": None,  # Set if needed (e.g., "Customer", "Supplier")
+                    "party": None,  # Specify the party if applicable
+                    "debit_in_account_currency": 0.00,
+                    "credit_in_account_currency": 10.00,
+                },
+            ]
+
+            # Create the Journal Entry in draft mode
+            journal_entry = frappe.get_doc({
+                "doctype": "Journal Entry",
+                "posting_date": frappe.utils.today(),  # Use current date
+                "voucher_type": "Journal Entry",  # Adjust type if needed
+                "custom_share_application_id": self.name,  # Custom link field
+                "accounts": accounts,  # Add the child table data
+                "docstatus": 0,  # Save as draft
+            })
+
+            # Insert the Journal Entry
+            journal_entry.insert()
+            frappe.msgprint(f"Journal Entry {journal_entry.name} created successfully.")
+
+        except Exception as e:
+            # Log the error for debugging
+            frappe.log_error(message=str(e), title="Journal Entry Creation Failed")
+
+            # Notify the user with an error message
+            frappe.msgprint(
+                f"An error occurred while creating the Journal Entry: {str(e)}",
+                indicator="red",
+                alert=True
+            )
+      
 
     def before_save(self):
         # Convert customer name to uppercase and assign to relevant fields
