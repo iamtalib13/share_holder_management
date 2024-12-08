@@ -1,3 +1,4 @@
+import argparse
 import frappe
 from frappe.utils import now
 import frappe
@@ -5,6 +6,7 @@ import psycopg2 # type: ignore
 import psycopg2.extras # type: ignore
 import frappe
 from psycopg2.extras import DictCursor # type: ignore
+
 
 from datetime import datetime
 
@@ -28,13 +30,20 @@ def create_or_update_share_application(data):
         account_opening_date = convert_date_format(data.get('account_opening_date'))
         date_of_birth = convert_date_format(data.get('birth_date'))
 
+        # Ensure that acct_num exists before proceeding
+        acct_num = data.get('acct_num', None)
+        if not acct_num:
+            print(f"Account number missing for customer_id: {data.get('customer_id')}. Skipping creation.")
+            return  # Exit the function if acct_num is missing
+
         # Check if a Share Application already exists for the given customer_id
         existing_application = frappe.db.get_value("Share Application", {"customer_id": data.get('customer_id')})
 
         if existing_application:
-            # Update existing Share Application
+            # Update existing Share Application using db_set
             share_app = frappe.get_doc("Share Application", existing_application)
-            share_app.update({
+            
+            fields_to_update = {
                 "salutation": data.get('salutation', None),
                 "customer_name": data.get('customer_name', None),
                 "date_of_birth": date_of_birth,
@@ -50,17 +59,21 @@ def create_or_update_share_application(data):
                 "branch_code": data.get('branch_code', None),
                 "ac_open_dt": cif_creation_dt,
                 "application_date": cif_creation_dt,
-                "saving_current_ac_no": data.get('acct_num', None),
+                "saving_current_ac_no": acct_num,
                 "fin_account_type": data.get('account_type', None),
                 "gl_sub_head_code": data.get('gl_sub_head_code', None),
-                "account_opening_date": account_opening_date,
                 "status": "Submitted"
-            })
-            share_app.save()
+            }
+            
+            # Update fields using db_set with update_modified=False
+            for field, value in fields_to_update.items():
+                if value is not None:  # Only update non-None values
+                    share_app.db_set(field, value, update_modified=False)
+
             frappe.db.commit()
             print(f"Updated Share Application for customer_id: {data.get('customer_id')}")
         else:
-            # Create a new Share Application
+            # Create a new Share Application only if acct_num exists
             share_app = frappe.get_doc({
                 "doctype": "Share Application",
                 "customer_id": data.get('customer_id'),
@@ -79,18 +92,19 @@ def create_or_update_share_application(data):
                 "branch_code": data.get('branch_code', None),
                 "ac_open_dt": cif_creation_dt,
                 "application_date": cif_creation_dt,
-                "saving_current_ac_no": data.get('acct_num', None),
+                "saving_current_ac_no": acct_num,
                 "fin_account_type": data.get('account_type', None),
                 "gl_sub_head_code": data.get('gl_sub_head_code', None),
                 "account_opening_date": account_opening_date,
                 "status": "Submitted"
             })
-            share_app.insert()
+            share_app.insert(ignore_permissions=True)
             frappe.db.commit()
             print(f"Created Share Application for customer_id: {data.get('customer_id')}")
     except Exception as e:
         frappe.log_error(frappe.get_traceback(), f"Error processing Share Application for customer_id: {data.get('customer_id')}")
         print(f"Error processing Share Application for customer_id: {data.get('customer_id')} - {str(e)}")
+
 
 def check_db_and_sync():
     conn_string = "host='10.60.133.66' dbname='finprd' user='custom' password='custom' port='2951'"
@@ -124,16 +138,29 @@ def check_db_and_sync():
             conn.close()
         print("Database connection closed")
 
+
 def ping():
     print("pong")
         
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> 61341525119f66acfe8a57c6aa49655a69426c63
-=======
->>>>>>> 61341525119f66acfe8a57c6aa49655a69426c63
-=======
->>>>>>> 61341525119f66acfe8a57c6aa49655a69426c63
+
+# def ping():
+#     print("pong")
+    
+def check_db():
+    conn_string = "host='10.60.133.66' dbname='finprd' user='custom' password='custom' port='2951'"
+    
+    try:
+        with psycopg2.connect(conn_string) as conn:
+            print("Connected to the database")
+            with conn.cursor(cursor_factory=DictCursor) as cursor:
+                cursor.execute("SELECT customer_id,acct_num,customer_name,cif_creation_dt FROM custom.c_shares;")
+                for row in cursor.fetchall():
+                    print(dict(row))  # Print the data as a dictionary
+    except Exception as e:
+        print(f"Error: {e}")
+    finally:
+        print("Database connection closed")        
+
 
 def cron():
     tickets = frappe.get_all(
@@ -578,3 +605,659 @@ def test_db():
         if conn:
             conn.close()
         print("Database connection closed")
+
+
+
+import frappe
+import random
+import requests
+import xmltodict
+
+def finacle_fund_transfer_api():
+    try:
+        # Fetch all Journal Entries with docstatus 0
+        journal_entries = frappe.get_all('Journal Entry', filters={'docstatus': 0}, fields=['name'])
+
+        for entry in journal_entries:
+            entry_name = entry.name  # Get the name of each Journal Entry
+
+            # Fetch the specific Journal Entry record
+            entry_doc = frappe.get_doc('Journal Entry', entry_name, ignore_permissions=True)
+
+            # Debit Customer Account Number
+            debitor_account = None
+            for child in entry_doc.accounts:
+                if child.debit_in_account_currency > 0:
+                    # Fetch the linked Account document
+                    account_doc = frappe.get_doc('Account', child.account)
+                    debitor_account = account_doc.account_number
+                    break  # Exit the loop after finding the first matching record
+
+            print("Debitor Account Number:", debitor_account)
+
+            # Generate a random GUID (10-digit random number)
+            guid = random.randint(1000000000, 9999999999)
+
+            # XML Data to be sent
+            xml_data = f"""<?xml version="1.0" encoding="UTF-8"?>
+
+<FIXML xsi:schemaLocation="http://www.finacle.com/fixml XferTrnAdd.xsd" xmlns="http://www.finacle.com/fixml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <Header>
+
+        <RequestHeader>
+
+            <MessageKey>
+
+                <RequestUUID>{guid}</RequestUUID>
+
+                <ServiceRequestId>XferTrnAdd</ServiceRequestId>
+
+                <ServiceRequestVersion>10.2</ServiceRequestVersion>
+
+                <ChannelId>COR</ChannelId>
+
+                <LanguageId></LanguageId>
+
+            </MessageKey>
+
+            <RequestMessageInfo>
+
+                <BankId>01</BankId>
+
+                <TimeZone></TimeZone>
+
+                <EntityId></EntityId>
+
+                <EntityType></EntityType>
+
+                <ArmCorrelationId></ArmCorrelationId>
+
+                <MessageDateTime>2019-08-30T12:40:18.494</MessageDateTime>
+
+            </RequestMessageInfo>
+
+            <Security>
+
+                <Token>
+
+                    <PasswordToken>
+
+                        <UserId></UserId>
+
+                        <Password></Password>
+
+                    </PasswordToken>
+
+                </Token>
+
+                <FICertToken></FICertToken>
+
+                <RealUserLoginSessionId></RealUserLoginSessionId>
+
+                <RealUser></RealUser>
+
+                <RealUserPwd></RealUserPwd>
+
+                <SSOTransferToken></SSOTransferToken>
+
+            </Security>
+
+        </RequestHeader>
+
+    </Header>
+
+    <Body>
+
+        <XferTrnAddRequest>
+
+            <XferTrnAddRq>
+
+                <XferTrnHdr>
+
+                    <TrnType>T</TrnType>
+
+                    <TrnSubType>CI</TrnSubType>
+
+                </XferTrnHdr>
+
+                <XferTrnDetail>
+
+                    <!-- Debit Transaction -->
+                    <PartTrnRec>
+
+                        <AcctId>
+
+                            <AcctId>{debitor_account}</AcctId>
+
+                        </AcctId>
+
+                        <CreditDebitFlg>D</CreditDebitFlg>
+
+                        <TrnAmt>
+
+                            <amountValue>20</amountValue>
+
+                            <currencyCode>INR</currencyCode>
+
+                        </TrnAmt>
+
+                        <TrnParticulars>Debit tran</TrnParticulars>
+
+                        <PartTrnRmks>Talib</PartTrnRmks>
+
+                        <ValueDt>2024-09-14T00:00:00.000</ValueDt>
+
+                        <UserPartTrnCode></UserPartTrnCode>
+
+                    </PartTrnRec>
+
+                    <!-- Credit Transaction 1 -->
+                    <PartTrnRec>
+
+                        <AcctId>
+
+                            <AcctId>100001410010001</AcctId>
+
+                        </AcctId>
+
+                        <CreditDebitFlg>C</CreditDebitFlg>
+
+                        <TrnAmt>
+
+                            <amountValue>10</amountValue>
+
+                            <currencyCode>INR</currencyCode>
+
+                        </TrnAmt>
+
+                        <TrnParticulars>Credit tran 1</TrnParticulars>
+
+                        <PartTrnRmks>Share</PartTrnRmks>
+
+                        <ValueDt>2024-09-14T00:00:00.000</ValueDt>
+
+                        <UserPartTrnCode></UserPartTrnCode>
+
+                    </PartTrnRec>
+
+                    <!-- Credit Transaction 2 -->
+                    <PartTrnRec>
+
+                        <AcctId>
+
+                            <AcctId>100001670060001</AcctId>
+
+                        </AcctId>
+
+                        <CreditDebitFlg>C</CreditDebitFlg>
+
+                        <TrnAmt>
+
+                            <amountValue>10</amountValue>
+
+                            <currencyCode>INR</currencyCode>
+
+                        </TrnAmt>
+
+                        <TrnParticulars>Credit tran 2</TrnParticulars>
+
+                        <PartTrnRmks>share</PartTrnRmks>
+
+                        <ValueDt>2024-09-14T00:00:00.000</ValueDt>
+
+                        <UserPartTrnCode></UserPartTrnCode>
+
+                    </PartTrnRec>
+
+                </XferTrnDetail>
+
+            </XferTrnAddRq>
+
+        </XferTrnAddRequest>
+
+    </Body>
+
+</FIXML>
+
+"""
+
+           
+
+            # Set up the API request
+            url = 'https://smcprd.sahayog.net.in:2950/FISERVLET/fihttp'
+            headers = {'Content-Type': 'application/xml'}
+
+            # Initialize variables
+            status = None
+            custom_trn_id = None
+
+            # Disable SSL verification and send the request
+            response = requests.post(url, data=xml_data, headers=headers, verify=False)
+
+            print(f"HTTP Status Code for {entry_name}: {response.status_code}")
+            print("XML Response Received:\n" + response.text)
+
+            if response.status_code == 200:
+                # Convert XML response to JSON
+                response_json = xmltodict.parse(response.text)
+                
+                # Extract necessary values
+                status = response_json.get('FIXML', {}).get('Header', {}).get('ResponseHeader', {}).get('HostTransaction', {}).get('Status')
+                custom_trn_id = response_json.get('FIXML', {}).get('Body', {}).get('XferTrnAddResponse', {}).get('XferTrnAddRs', {}).get('TrnIdentifier', {}).get('TrnId')
+                
+                print(f"Transaction ID for {entry_name}: {custom_trn_id}, Status: {status}")
+
+                # Update the Journal Entry if the transaction is successful
+                if status == "SUCCESS":
+                    entry_doc.db_set('docstatus', 1)
+                    entry_doc.db_set('custom_finacle_transaction_id', custom_trn_id)
+                    entry_doc.db_set('custom_status', status)
+                else:
+                    entry_doc.db_set('docstatus', 0)
+                    entry_doc.db_set('custom_api_response', response.text)
+                    entry_doc.db_set('custom_status', status)
+            else:
+                entry_doc.db_set('docstatus', 0)
+                entry_doc.db_set('custom_api_response', response.text)
+                entry_doc.db_set('custom_status', status)
+
+    except Exception as e:
+        print(f"Error sending data to API: {e}")
+        return False, f"Error: {e}"
+
+
+@frappe.whitelist(allow_guest=True)    
+def ping():
+    return "Apeksha"
+
+ 
+############################### Sahayog Statement #################################################
+import frappe
+from frappe.utils.pdf import get_pdf
+from datetime import datetime
+
+# Pre-defined transactions dictionary
+transactions_data = [
+    {
+        "account_number": "1234567890",
+        "transaction_date": "2024-01-01",
+        "amount": 1000,
+        "transaction_type": "Credit",
+        "description": "Salary",
+        "account_type": "SAV"
+    },
+    {
+        "account_number": "1234567890",
+        "transaction_date": "2024-01-05",
+        "amount": -200,
+        "transaction_type": "Debit",
+        "description": "Shopping",
+        "account_type": "SAV"
+    },
+    {
+        "account_number": "9876543210",
+        "transaction_date": "2024-01-10",
+        "amount": 1500,
+        "transaction_type": "Credit",
+        "description": "Freelance",
+        "account_type": "RD"
+        
+    },
+    {
+        "account_number": "1234567890",
+        "transaction_date": "2024-01-15",
+        "amount": 1000,
+        "transaction_type": "Credit",
+        "description": "Electricity Bill",
+        "account_type": "SAV"
+    },
+     {
+        "account_number": "1234567890",
+        "transaction_date": "2024-06-15",
+        "amount": -500,
+        "transaction_type": "Debit",
+        "description": "Xyz",
+        "account_type": "SAV"
+    },
+      {
+        "account_number": "1234567890",
+        "transaction_date": "2024-08-11",
+        "amount": -200,
+        "transaction_type": "Debit",
+        "description": "ABC",
+        "account_type": "SAV"
+    },
+]
+
+@frappe.whitelist()
+def fetch_transactions(account_number, start_date, end_date):
+    # Convert string dates to datetime
+    start_date = datetime.strptime(start_date, "%Y-%m-%d")
+    end_date = datetime.strptime(end_date, "%Y-%m-%d")
+    
+    # Filter transactions based on input
+    filtered_transactions = [
+        t for t in transactions_data
+        if t["account_number"] == account_number
+        and start_date <= datetime.strptime(t["transaction_date"], "%Y-%m-%d") <= end_date
+    ]
+    
+    if not filtered_transactions:
+        frappe.throw("No transactions found for the given criteria.")
+        
+    # Calculate balance for each transaction
+    balance = 0  # Initialize balance
+    for transaction in filtered_transactions:
+        # Debit transactions are subtracted from the balance
+        if transaction["transaction_type"] == "Debit":
+            balance -= abs(transaction["amount"])
+        # Credit transactions are added to the balance
+        else:
+            balance += abs(transaction["amount"])
+        
+        # Add the balance to the transaction object
+        transaction["balance"] = balance
+    
+    # Render HTML for PDF
+    html_content = frappe.render_template("templates/transaction_statement.html", {
+        "transactions": filtered_transactions,
+        "account_number": account_number,
+        "start_date": start_date.strftime("%d/%m/%Y"),  # Ensure the date format is correct
+        "end_date": end_date.strftime("%d/%m/%Y")  # Ensure the date format is correct
+    })
+    pdf_data = get_pdf(html_content)
+    
+    # Return PDF as response
+    frappe.local.response.filename = "Transaction_Statement.pdf"
+    frappe.local.response.filecontent = pdf_data
+    frappe.local.response.type = "download"
+
+
+
+
+# @frappe.whitelist(allow_guest=True)
+# def fetch_transactions(start_date, end_date):
+#     # Convert start_date and end_date to date objects for comparison
+#     start_date_obj = datetime.strptime(start_date, "%d/%m/%Y")
+#     end_date_obj = datetime.strptime(end_date, "%d/%m/%Y")
+    
+#     # Filter transactions based on account_number and date range
+#     filtered_transactions = [
+#         t for t in transactions_data
+#         if start_date_obj <= datetime.strptime(t["transaction_date"], "%d/%m/%Y")<= end_date_obj
+#     ]
+    
+#     # Calculate totals for debit and credit transactions
+#     total_debit = sum(abs(t["amount"]) for t in filtered_transactions if t["amount"] < 0)
+#     total_credit = sum(t["amount"] for t in filtered_transactions if t["amount"] > 0)
+
+#     # Render the HTML template with the transaction data and totals
+#     html = frappe.render_template(
+#         "templates/transaction_statement.html",
+#         {
+           
+#             "start_date": start_date,
+#             "end_date": end_date,
+#             "transactions": filtered_transactions,
+#             "total_debit": total_debit,
+#             "total_credit": total_credit,
+#         },
+#     )
+
+#     # Generate the PDF from the rendered HTML
+#     pdf = get_pdf(html)
+
+#     # Return the generated PDF as a response
+#     frappe.local.response.filename = f"Transaction_Statement_123456789.pdf"
+#     frappe.local.response.filecontent = pdf
+#     frappe.local.response.type = "pdf"
+
+
+
+###################################################################
+# Database Connection Details for Statement Generation
+###################################################################
+import cx_Oracle
+
+
+# Connection Parameters (already initialized)
+username = "sahyog"
+password = "sahyog"
+host = "10.0.115.20"
+port = "1521"  # Default port for Oracle
+sid = "orcl"   # SID or service name
+
+import cx_Oracle
+
+def connect_to_oracle():
+    """
+    Connect to an Oracle database using pre-initialized parameters and perform operations
+    to generate a bank statement.
+    """
+    # Initialize parameters
+    branch_code = 'SADA15'
+    ac_code = 'B110'
+    ac_no = 5002355  # Replace with actual AC_NO
+    acmastcode = None  # To be fetched later
+    gmst_code = None  # To be fetched later
+
+    # Create a DSN (Data Source Name)
+    dsn = cx_Oracle.makedsn(host, port, service_name=sid)
+
+    try:
+        # Establish the connection
+        connection = cx_Oracle.connect(user=username, password=password, dsn=dsn)
+        print("Connection successful!")
+
+        # Create a cursor
+        cursor = connection.cursor()
+
+        # 1. Retrieve Branch Name and Branch Code
+        cursor.execute("SELECT branchname, branchcode FROM sahyog.branchmas WHERE branchcode = :branch_code", {'branch_code': branch_code})
+        branch_info = cursor.fetchone()
+        if branch_info:
+            branch_name, branch_code = branch_info
+            print(f"Branch: {branch_name}, Code: {branch_code}")
+        else:
+            print("Branch information not found.")
+
+        # 2. Retrieve ACMASTCODE for AC_CODE 'B110'
+        cursor.execute("SELECT ACMASTCODE FROM SAHYOG.ACMAST WHERE AC_CODE = :ac_code", {'ac_code': ac_code})
+        acmastcode_row = cursor.fetchone()
+        if acmastcode_row:
+            acmastcode = acmastcode_row[0]
+            print(f"ACMASTCODE: {acmastcode}")
+        else:
+            print("ACMASTCODE not found.")
+
+        # 3. Retrieve GMST_CODE using ACMASTCODE and Branch Code
+        cursor.execute("SELECT gmst_code FROM SAHYOG.CURMAS WHERE ACMASTCODE = :acmastcode AND BRANCHCODE = :branch_code AND AC_NO = :ac_no", 
+                       {'acmastcode': acmastcode, 'branch_code': branch_code, 'ac_no': ac_no})
+        gmst_code_row = cursor.fetchone()
+        if gmst_code_row:
+            gmst_code = gmst_code_row[0]  # Adjust index based on the actual column order
+            print(f"GMST_CODE: {gmst_code}")
+        else:
+            print("GMST_CODE not found.")
+
+        # 4. Retrieve Customer Details
+        cursor.execute("SELECT name, addr, city, tele, adharno, gmst_code FROM sahyog.bankmas WHERE gmst_code = :gmst_code", {'gmst_code': gmst_code})
+        customer_details = cursor.fetchone()
+        if customer_details:
+            print("Customer Details:")
+            print(f"Name: {customer_details[0]}, Address: {customer_details[1]}, City: {customer_details[2]}, Telephone: {customer_details[3]}, Aadhar No: {customer_details[4]}, GMST Code: {customer_details[5]}")
+        else:
+            print("Customer details not found.")
+
+        # 5. Retrieve Transactions
+        cursor.execute("SELECT tdate, drcr, csh_trn, prtcls, doc_no, debit, credit FROM SAHYOG.ACBK WHERE AC_NO = :ac_no AND FORBRANCH = :branch_code AND ACMASTCODE = :acmastcode ORDER BY TDATE", 
+                       {'ac_no': ac_no, 'branch_code': branch_code, 'acmastcode': acmastcode})
+        transactions = cursor.fetchall()
+        print("Transactions:")
+        for transaction in transactions:
+            print(transaction)
+
+    except cx_Oracle.DatabaseError as e:
+        error, = e.args
+        print(f"An error occurred: {error.message}")
+
+    finally:
+        # Ensure the connection is closed
+        if 'connection' in locals() and connection:
+            connection.close()
+            print("Connection closed.")
+
+import cx_Oracle
+import frappe
+from frappe.utils.pdf import get_pdf
+from datetime import datetime
+
+@frappe.whitelist(allow_guest=True)   
+def fetch_db(branch_code, ac_code, ac_no, account_type, start_date, end_date):
+    try:
+        # Parse dates
+        start_date = datetime.strptime(start_date, "%Y-%m-%d")
+        end_date = datetime.strptime(end_date, "%Y-%m-%d")
+
+        # Database connection parameters
+        username = "sahyog"
+        password = "sahyog"
+        host = "10.0.115.20"
+        port = "1521"
+        sid = "orcl"
+
+        # Create DSN and connect
+        dsn = cx_Oracle.makedsn(host, port, service_name=sid)
+        connection = cx_Oracle.connect(user=username, password=password, dsn=dsn)
+        cursor = connection.cursor()
+
+        cursor.execute(
+            "SELECT branchname FROM sahyog.branchmas WHERE branchcode = :branch_code",
+            {'branch_code': branch_code}
+        )
+        result = cursor.fetchone()
+        if not result:
+            print(f"Debug: No branch found for branch_code = '{branch_code}'")
+            branch_name = "Unknown Branch"
+        else:
+            branch_name = result[0]
+
+        # Fetch customer details
+        cursor.execute(
+            """
+            SELECT name, addr, city, tele, adharno FROM sahyog.bankmas
+            WHERE gmst_code = (
+                SELECT gmst_code FROM SAHYOG.CURMAS
+                WHERE acmastcode = (
+                    SELECT ACMASTCODE FROM SAHYOG.ACMAST WHERE AC_CODE = :ac_code
+                )
+                AND BRANCHCODE = :branch_code AND AC_NO = :ac_no
+            )
+            """,
+            {'ac_code': ac_code, 'branch_code': branch_code, 'ac_no': ac_no}
+        )
+        customer_details = cursor.fetchone()
+        if not customer_details:
+            frappe.throw("Customer details not found.")
+
+        customer_info = {
+            "name": customer_details[0],
+            "address": customer_details[1],
+            "city": customer_details[2],
+            "telephone": customer_details[3],
+            "aadhar": customer_details[4],
+        }
+
+        # Fetch transactions within the specified period
+        cursor.execute(
+            """
+            SELECT tdate, drcr, csh_trn, prtcls, doc_no, debit, credit
+            FROM SAHYOG.ACBK
+            WHERE AC_NO = :ac_no AND FORBRANCH = :branch_code AND
+                  ACMASTCODE = (SELECT ACMASTCODE FROM SAHYOG.ACMAST WHERE AC_CODE = :ac_code)
+                  AND tdate BETWEEN :start_date AND :end_date
+            ORDER BY tdate
+            """,
+            {
+                'ac_no': ac_no, 'branch_code': branch_code,
+                'ac_code': ac_code, 'start_date': start_date, 'end_date': end_date
+            }
+        )
+        transactions = cursor.fetchall()
+        if not transactions:
+            frappe.throw("No transactions found for the given criteria.")
+
+        # Calculate opening balance by summing records before the start date
+        cursor.execute(
+            """
+            SELECT NVL(SUM(debit), 0) - NVL(SUM(credit), 0)
+            FROM SAHYOG.ACBK
+            WHERE AC_NO = :ac_no AND FORBRANCH = :branch_code AND tdate < :start_date
+            """,
+            {'ac_no': ac_no, 'branch_code': branch_code, 'start_date': start_date}
+        )
+        opening_balance = cursor.fetchone()[0] or 0  # Get opening balance
+
+        # Ensure opening balance is non-negative
+        opening_balance_display = opening_balance 
+
+        # Prepare transaction data and calculate running balance
+        formatted_transactions = []
+        running_balance = opening_balance  # Start with opening balance
+
+        # Create a formatted entry for the opening balance if it is non-negative
+        if opening_balance_display > 0:
+            formatted_transactions.append({
+                "transaction_date": start_date.strftime("%d/%m/%Y"),  # Use start_date for the opening balance
+                "transaction_type": "Opening Balance",
+                "description": "Opening Balance",
+                "doc_no": "",
+                "debit": 0.0,
+                "credit": 0.0,
+                "balance": running_balance,  # Opening balance
+            })
+
+        # Loop through transactions to calculate running balance
+        for t in transactions:
+            # Update running balance
+            running_balance += t[5] - t[6]  # Debit - Credit
+
+            formatted_transactions.append({
+                "transaction_date": t[0].strftime("%d/%m/%Y"),  # Format date
+                "transaction_type": "Debit" if t[5] > 0 else "Credit",
+                "description": t[3],
+                "doc_no": t[4],
+                "debit": t[5] if t[5] > 0 else 0,  # Avoid negative
+                "credit": t[6] if t[6] > 0 else 0,  # Avoid negative
+                "balance": running_balance,  # Running balance
+            })
+
+        # Render PDF
+        html_content = frappe.render_template("templates/transaction_statement.html", {
+            "transactions": formatted_transactions,
+            "branch_name": branch_name,
+            "branch_code": branch_code,
+            "ac_no": ac_no,
+            "account_number": ac_no,
+            "start_date": start_date.strftime("%d/%m/%Y"),  # Format date for display
+            "end_date": end_date.strftime("%d/%m/%Y"),  # Format date for display
+            "customer_info": customer_info,
+            "opening_balance": opening_balance_display,  # Pass opening balance to template
+        })
+
+        pdf_data = get_pdf(html_content)
+
+        # Return PDF as response
+        frappe.local.response.filename = f"Transaction_Statement_{ac_no}.pdf"
+        frappe.local.response.filecontent = pdf_data
+        frappe.local.response.type = "download"
+
+    except cx_Oracle.DatabaseError as e:
+        error, = e.args
+        frappe.throw(f"Database error: {error.message}")
+    except Exception as e:
+        frappe.throw(str(e))
+    finally:
+        if 'connection' in locals():
+            connection.close()

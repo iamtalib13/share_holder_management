@@ -7,17 +7,17 @@ frappe.ui.form.on("Share Application", {
   validate: function (frm) {
     //check customer_id is more than 6 digit
     // Check if customer_id is present
-    if (frm.doc.customer_id) {
-      // Check if customer_id is not more than 6 digits
-      if (frm.doc.customer_id.length <= 6) {
-        // Valid customer_id
-        console.log("Valid customer_id");
-      } else {
-        // Invalid customer_id
-        frappe.throw("Customer ID must not be more than 6 digits.");
-        frappe.validated = false;
-      }
-    }
+    // if (frm.doc.customer_id) {
+    //   // Check if customer_id is not more than 6 digits
+    //   if (frm.doc.customer_id.length <= 6) {
+    //     // Valid customer_id
+    //     console.log("Valid customer_id");
+    //   } else {
+    //     // Invalid customer_id
+    //     frappe.throw("Customer ID must not be more than 6 digits.");
+    //     frappe.validated = false;
+    //   }
+    // }
 
     // Check if the sanction date is blank or before 1/02/2024
     if (
@@ -25,11 +25,11 @@ frappe.ui.form.on("Share Application", {
       frappe.datetime.str_to_obj(frm.doc.sanction_date) >
         frappe.datetime.str_to_obj("2024-02-01")
     ) {
-      // Check if the child table is empty
-      if (!frm.doc.nominee_details || frm.doc.nominee_details.length === 0) {
-        frappe.throw("Please Add at Least One Nominee.");
-        console.log("chcking nominee");
-      }
+      // // Check if the child table is empty
+      // if (!frm.doc.nominee_details || frm.doc.nominee_details.length === 0) {
+      //   frappe.throw("Please Add at Least One Nominee.");
+      //   console.log("chcking nominee");
+      // }
     } else {
     }
   },
@@ -332,6 +332,24 @@ frappe.ui.form.on("Share Application", {
               "Admin -> Draft?",
               () => {
                 frm.set_value("status", "Draft");
+                frm.refresh_field("status");
+
+                frm.save();
+              },
+              () => {
+                // action to perform if No is selected
+              }
+            );
+          },
+          __("Admin")
+        );
+        frm.add_custom_button(
+          __("Submit"),
+          function () {
+            frappe.confirm(
+              "Admin -> Submitted?",
+              () => {
+                frm.set_value("status", "Submitted");
                 frm.refresh_field("status");
 
                 frm.save();

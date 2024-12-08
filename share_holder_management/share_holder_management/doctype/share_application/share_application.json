@@ -897,8 +897,7 @@
   {
    "fieldname": "taluka",
    "fieldtype": "Data",
-   "label": "Taluka / Tahshil",
-   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\"||doc.status != \"Submitted\""
+   "label": "Taluka / Tahshil"
   },
   {
    "fieldname": "city",
@@ -939,8 +938,7 @@
   {
    "fieldname": "occupation",
    "fieldtype": "Data",
-   "label": "Occupation",
-   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\"||doc.status != \"Submitted\""
+   "label": "Occupation"
   },
   {
    "default": "Regular",
@@ -986,7 +984,6 @@
    "fieldname": "ac_type",
    "fieldtype": "Data",
    "label": "Account Type",
-   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\"||doc.status != \"Submitted\"",
    "read_only": 1
   },
   {
@@ -1013,7 +1010,6 @@
    "fieldname": "saving_current_gl_code",
    "fieldtype": "Link",
    "label": "Account GL Code",
-   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\"||doc.status != \"Submitted\"",
    "options": "Account GL Code"
   },
   {
@@ -1181,7 +1177,6 @@
    "fieldname": "account_type",
    "fieldtype": "Select",
    "label": "Account Type",
-   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\"||doc.status != \"Submitted\"",
    "options": "\nSAVING\nCURRENT\nLIABILITY"
   },
   {
@@ -1216,7 +1211,6 @@
    "fieldname": "account_name",
    "fieldtype": "Data",
    "label": "Account Name",
-   "mandatory_depends_on": "eval:doc.status != \"Sanctioned\"||doc.status != \"Submitted\"",
    "read_only": 1
   },
   {
@@ -1420,12 +1414,18 @@
   {
    "fieldname": "fin_account_type",
    "fieldtype": "Data",
-   "label": "Account Type"
+   "label": "Finacle Account Type"
   }
  ],
  "index_web_pages_for_search": 1,
- "links": [],
- "modified": "2024-09-10 16:46:42.411946",
+ "links": [
+  {
+   "group": "Finacle Transaction",
+   "link_doctype": "Journal Entry",
+   "link_fieldname": "custom_share_application_id"
+  }
+ ],
+ "modified": "2024-12-04 10:16:28.900504",
  "modified_by": "Administrator",
  "module": "Share Holder Management",
  "name": "Share Application",

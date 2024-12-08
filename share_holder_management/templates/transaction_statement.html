@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Transaction Statement</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+      }
+      .container {
+        margin: 0 auto;
+      }
+      .logo {
+        text-align: center;
+      }
+      h1 {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+      .details {
+        display: flex;
+        justify-content: space-between;
+      }
+      .bank-detail {
+        padding-left: 10px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+      th {
+        background-color: #4caf50;
+        color: white;
+        padding: 12px;
+        text-align: center;
+      }
+      td {
+        padding: 12px;
+        text-align: center;
+        border-bottom: 1px solid #ddd;
+      }
+      tbody tr:nth-child(even) {
+        background-color: #f2f2f2;
+      }
+      tbody tr:hover {
+        background-color: #f1f1f1;
+      }
+      table,
+      th,
+      td {
+        border: 1px solid #ddd;
+      }
+      .debit {
+        color: red; /* Red for debit */
+      }
+      .credit {
+        color: green; /* Green for credit */
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="logo">
+        <img src="/files/Sahayog.png" alt="" width="300" />
+      </div>
+      <h1>Transaction Statement</h1>
+      <h2>Customer Ledger For SAVING DEPOSIT</h2>
+      <div class="details">
+        <div class="customer-detail">
+          <p><strong>Account No:</strong> {{ ac_no }}</p>
+          <p><strong>Customer Name:</strong> {{ customer_info.name }}</p>
+          <p><strong>Address:</strong> {{ customer_info.address }}</p>
+          <p><strong>City:</strong> {{ customer_info.city }}</p>
+          <p><strong>Mobile No.:</strong> {{ customer_info.telephone }}</p>
+          <p>
+            <strong>Aadhar Reference No.:</strong> {{ customer_info.aadhar }}
+          </p>
+        </div>
+        <div class="bank-detail">
+          <p><strong>Branch Name:</strong> {{ branch_name }}</p>
+          <p><strong>Branch Code:</strong> {{ branch_code }}</p>
+
+        </div>
+      </div>
+      <div>
+        <p>
+          <strong>Statement Period:</strong> From {{ start_date }} to {{
+          end_date }}
+        </p>
+        <p>
+          <strong>Generated on:</strong> {{
+          frappe.utils.formatdate(frappe.utils.now_datetime(), "dd-MM-yyyy") }}
+        </p>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Dr/Cr</th>
+            <th>Particular</th>
+            <th>Doc No.</th>
+            <th>Debit</th>
+            <th>Credit</th>
+            <th>Balance</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% set cumulative_balance = opening_balance %}
+          <tr>
+            <td>{{ start_date }}</td>
+            <td>-</td>
+            <td>Opening Balance</td>
+            <td></td>
+            <td></td>  <!-- Show opening balance directly -->
+            <td></td>  <!-- Leave this cell empty or as required -->
+            <td>{{  abs(cumulative_balance) }}</td>  <!-- Show cumulative balance -->
+        </tr>
+        
+          
+          </tr>
+          {% for transaction in transactions %}
+          <tr>
+            <td>{{ transaction.transaction_date }}</td>
+            <td>{{ transaction.transaction_type }}</td>
+            <td>{{ transaction.description }}</td>
+            <td>{{ transaction.doc_no }}</td>
+            <td class="debit">
+              {{ transaction.debit if transaction.debit > 0 else '-' }}
+            </td>
+            <td class="credit">
+              {{ transaction.credit if transaction.credit > 0 else '-' }}
+            </td>
+            <td>{{ abs(transaction.balance) }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>

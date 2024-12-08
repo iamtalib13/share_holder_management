@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Transaction Statement</title>
+    <script src="/assets/frappe/js/frappe-web.min.js"></script>
+    <link rel="stylesheet" href="/assets/frappe/css/bootstrap.css" />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
+      .container {
+        max-width: 600px;
+        margin: 0 auto;
+      }
+      h1 {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+      .btn-primary {
+        width: 100%;
+      }
+      .alert {
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="logo text-center">
+        <img src="/files/Sahayog.png" alt="" width="500" />
+      </div>
+      <h1>Transaction Statement</h1>
+      <form id="statement-form">
+        <div class="mb-3">
+          <label for="account_number" class="form-label">Account Number</label>
+          <input
+            type="text"
+            class="form-control"
+            id="account_number"
+            placeholder="Enter Account Number"
+            required
+          />
+        </div>
+        <div class="mb-3">
+          <label for="start_date" class="form-label">Start Date</label>
+          <input type="date" class="form-control" id="start_date" required />
+        </div>
+        <div class="mb-3">
+          <label for="end_date" class="form-label">End Date</label>
+          <input type="date" class="form-control" id="end_date" required />
+        </div>
+        <button type="submit" class="btn btn-primary">
+          Download Statement
+        </button>
+      </form>
+
+      <div
+        id="alert-container"
+        class="alert alert-danger d-none"
+        role="alert"
+      ></div>
+    </div>
+
+    <script>
+      document
+        .getElementById("statement-form")
+        .addEventListener("submit", async (event) => {
+          event.preventDefault();
+
+          // Collect form data
+          const accountNumber = document.getElementById("account_number").value;
+          let startDate = document.getElementById("start_date").value;
+          let endDate = document.getElementById("end_date").value;
+
+          console.log("account_number", accountNumber);
+          console.log("startDate", startDate);
+          console.log("endDate:", endDate);
+
+          try {
+            // Make API request to fetch transactions
+            const response = await fetch(
+              "/api/method/share_holder_management.task.fetch_transactions",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  start_date: startDate,
+                  end_date: endDate,
+                }),
+              }
+            );
+
+            if (response.ok) {
+              const contentType = response.headers.get("Content-Type");
+
+              if (contentType && contentType.includes("application/pdf")) {
+                const blob = await response.blob();
+                const link = document.createElement("a");
+                link.href = window.URL.createObjectURL(blob);
+                link.download = `Transaction_Statement_${accountNumber}.pdf`;
+                link.click();
+              } else {
+                const errorData = await response.text();
+                showAlert(errorData || "Failed to generate statement.");
+              }
+            } else {
+              const errorData = await response.text(); // Get error message from the response
+              showAlert(errorData || "Failed to generate statement.");
+            }
+          } catch (error) {
+            showAlert("An unexpected error occurred. Please try again.");
+            console.error(error);
+          }
+        });
+
+      function showAlert(message) {
+        const alertContainer = document.getElementById("alert-container");
+        alertContainer.textContent = message;
+        alertContainer.classList.remove("d-none");
+      }
+    </script>
+  </body>
+</html>
