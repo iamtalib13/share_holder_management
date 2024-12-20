@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      body {
+        background-color: #000; /* Black background for better contrast */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+      }
+      .blinking-text {
+        color: white;
+        font-size: 3em; /* Increased font size */
+        font-weight: bold;
+        animation: blink 1.5s infinite;
+      }
+
+      @keyframes blink {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.5;
+        }
+      }
+
+      .login-button {
+        margin-top: 20px;
+        padding: 10px 20px;
+        font-size: 1.5em;
+        color: #000;
+        background-color: #fff;
+        border: none;
+        border-radius: 5px;
+        text-decoration: none;
+        cursor: pointer;
+        font-weight: bold;
+      }
+
+      .login-button:hover {
+        background-color: #ddd; /* Slight hover effect */
+      }
+    </style>
+  </head>
+  <body>
+    <div class="blinking-text">Please Log in for Netwin Statement</div>
+    <a href="/#login" class="login-button">Log in</a>
+  </body>
+</html>

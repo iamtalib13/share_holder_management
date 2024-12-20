@@ -66,6 +66,8 @@
     </style>
   </head>
   <body>
+    {% if frappe.session.user != "Guest" %}
+
     <div class="container">
       <div class="logo text-center">
         <p style="color: yellow">
@@ -125,6 +127,8 @@
 
       <div id="alert-container" class="alert" role="alert"></div>
     </div>
+
+    {% else %} {% include "/templates/not-found.html" %} {% endif %}
 
     <script>
       document
@@ -210,6 +214,35 @@
           alertContainer.style.display = "none"; // Hide after 5 seconds
         }, 5000);
       }
+    </script>
+    <script>
+      // Function to fetch branch code on page load
+      async function fetchBranchCode() {
+        try {
+          const response = await fetch(
+            "/api/method/share_holder_management.share_holder_management.netwin.netwin"
+          );
+          if (response.ok) {
+            const data = await response.json();
+            const branchCode = data.message;
+            // Log the branch code to the console
+            console.log("Fetched Branch Code:", branchCode);
+            // Set branch code only if it's not "All"
+            if (branchCode && branchCode !== "All") {
+              const branchCodeField = document.getElementById("branch_code");
+              branchCodeField.value = branchCode;
+              branchCodeField.readOnly = true; // Make it readonly
+            }
+          } else {
+            console.error("Failed to fetch branch code.");
+          }
+        } catch (error) {
+          console.error("An error occurred while fetching branch code:", error);
+        }
+      }
+
+      // Fetch branch code when the page loads
+      window.addEventListener("load", fetchBranchCode);
     </script>
   </body>
 </html>
