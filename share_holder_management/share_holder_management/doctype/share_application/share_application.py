@@ -4,6 +4,7 @@ from frappe.model.document import Document
 import re
 from datetime import datetime
 class ShareApplication(Document):
+
     def before_insert(self):
         self.no_of_shares = 1
     #    user_id = frappe.session.user.split('@')[0]
@@ -53,6 +54,18 @@ class ShareApplication(Document):
         
     def create_journal_entry(self):
         try:
+            # Check if a Journal Entry already exists for this `self.name`
+            existing_entry = frappe.db.exists(
+                "Journal Entry", {"custom_share_application_id": self.name}
+            )
+            if existing_entry:
+                frappe.msgprint(
+                    f"A Journal Entry already exists for this Share Application ({self.name}): {existing_entry}",
+                    indicator="yellow",
+                    alert=True,
+                )
+                return  # Stop further execution if an entry exists
+
             # Validate the existence of `self.saving_current_ac_no`
             if not self.saving_current_ac_no:
                 frappe.throw("Saving/Current Account Number is required to create a Journal Entry.")
@@ -66,25 +79,22 @@ class ShareApplication(Document):
             accounts = [
                 {
                     "account": main_account,
-                   
-                    "party_type": None,  # Set if needed (e.g., "Customer", "Supplier")
-                    "party": None,  # Specify the party if applicable
-                    "debit_in_account_currency": 20.00,  # Debit amount
-                    "credit_in_account_currency": 0.00,  # Credit amount
+                    "party_type": None,
+                    "party": None,
+                    "debit_in_account_currency": 20.00,
+                    "credit_in_account_currency": 0.00,
                 },
                 {
-                    "account": "100001410010001 - SH -  SHARE ACCOUNT - Sahayog",  # Replace with your account name
-                    
-                    "party_type": None,  # Set if needed (e.g., "Customer", "Supplier")
-                    "party": None,  # Specify the party if applicable
+                    "account": "100001410010001 - SH -  SHARE ACCOUNT - Sahayog",
+                    "party_type": None,
+                    "party": None,
                     "debit_in_account_currency": 0.00,
-                    "credit_in_account_currency": 10.00,  # Credit amount
+                    "credit_in_account_currency": 10.00,
                 },
                 {
-                    "account": "100001670060001 - MBEFEE - SHARE MEMBER ENTRY FEE - Sahayog",  # Replace with your account name
-                   
-                    "party_type": None,  # Set if needed (e.g., "Customer", "Supplier")
-                    "party": None,  # Specify the party if applicable
+                    "account": "100001670060001 - MBEFEE - SHARE MEMBER ENTRY FEE - Sahayog",
+                    "party_type": None,
+                    "party": None,
                     "debit_in_account_currency": 0.00,
                     "credit_in_account_currency": 10.00,
                 },
@@ -93,11 +103,11 @@ class ShareApplication(Document):
             # Create the Journal Entry in draft mode
             journal_entry = frappe.get_doc({
                 "doctype": "Journal Entry",
-                "posting_date": frappe.utils.today(),  # Use current date
-                "voucher_type": "Journal Entry",  # Adjust type if needed
-                "custom_share_application_id": self.name,  # Custom link field
-                "accounts": accounts,  # Add the child table data
-                "docstatus": 0,  # Save as draft
+                "posting_date": frappe.utils.today(),
+                "voucher_type": "Journal Entry",
+                "custom_share_application_id": self.name,
+                "accounts": accounts,
+                "docstatus": 0,
             })
 
             # Insert the Journal Entry
@@ -112,8 +122,9 @@ class ShareApplication(Document):
             frappe.msgprint(
                 f"An error occurred while creating the Journal Entry: {str(e)}",
                 indicator="red",
-                alert=True
+                alert=True,
             )
+
       
 
     def before_save(self):
@@ -132,6 +143,7 @@ class ShareApplication(Document):
             fname, lname = frappe.db.get_value('Employee', {'employee_id': user_id}, ['first_name', 'last_name'])
             self.accepter_user_id = user_id
             self.accepter_name = f"{fname} {lname}"
+            self.status = "Sanctioned"
 
     def _set_share_ac_no(self):
         try:

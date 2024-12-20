@@ -126,24 +126,29 @@ app_license = "MIT"
 
 # Scheduled Tasks
 # ---------------
-
 scheduler_events = {
-	# "all": [
-	# 	"share_holder_management.tasks.all"
-	# ],
-	# "daily": [
-	# 	"share_holder_management.tasks.daily"
-	# ],
-	"hourly": [
-		"share_holder_management.share_holder_management.task.check_db_and_sync"
-	],
-	# "weekly": [
-	# 	"share_holder_management.tasks.weekly"
-	# ],
-	# "monthly": [
-	# 	"share_holder_management.tasks.monthly"
-	# ],
+    # "all": [
+    #     "share_holder_management.tasks.all"
+    # ],
+    # "daily": [
+    #     "share_holder_management.tasks.daily"
+    # ],
+    "hourly": [
+        "share_holder_management.share_holder_management.task.check_db_and_sync"
+    ],
+    "cron": {
+        "*/15 * * * *": [
+            "share_holder_management.share_holder_management.task.check_db_and_sync"
+        ]
+    },
+    # "weekly": [
+    #     "share_holder_management.tasks.weekly"
+    # ],
+    # "monthly": [
+    #     "share_holder_management.tasks.monthly"
+    # ],
 }
+
 
 # Testing
 # -------
@@ -156,6 +161,7 @@ scheduler_events = {
 # override_whitelisted_methods = {
 # 	"frappe.desk.doctype.event.event.get_events": "share_holder_management.event.get_events"
 # }
+
 #
 # each overriding function accepts a `data` argument;
 # generated from the base implementation of the doctype dashboard,

@@ -361,6 +361,24 @@ frappe.ui.form.on("Share Application", {
           },
           __("Admin")
         );
+        frm.add_custom_button(
+          __("Sanctioned"),
+          function () {
+            frappe.confirm(
+              "Admin -> Sanctioned?",
+              () => {
+                frm.set_value("status", "Sanctioned");
+                frm.refresh_field("status");
+
+                frm.save();
+              },
+              () => {
+                // action to perform if No is selected
+              }
+            );
+          },
+          __("Admin")
+        );
 
         console.log("System Admin");
       } else if (frappe.user.has_role("Share Admin")) {
@@ -2294,6 +2312,9 @@ frappe.ui.form.on("Share Application", {
         frm.trigger("share_application_english_print");
         frm.trigger("share_application_hindi_print");
         frm.trigger("share_application_marathi_print");
+        if (frm.doc.status == "Received" || frm.doc.status == "Sanctioned") {
+          frm.trigger("finacle_balance");
+        }
 
         if (frm.doc.status === "Sanctioned") {
           frm.trigger("share_certificate_print");
@@ -2315,6 +2336,51 @@ frappe.ui.form.on("Share Application", {
       // });
     }
     frm.trigger("custome_home_button");
+  },
+  finacle_balance(frm) {
+    console.log("Calling balance inquiry...");
+
+    let ac_no = frm.doc.saving_current_ac_no;
+    console.log("passed ac no - ", ac_no);
+    // Check if account number exists
+    if (!ac_no) {
+      frappe.msgprint(__("Please enter a valid account number."));
+      return;
+    }
+
+    frappe.call({
+      method:
+        "share_holder_management.share_holder_management.balance_inquiry.balance_inquiry",
+      args: {
+        account_number: frm.doc.saving_current_ac_no, // Ensure this has the correct value
+      },
+      freeze: true,
+      freeze_message: __("Fetching balance..."),
+      callback: function (r) {
+        console.log("Balance Response:", r.message); // Log the full response
+
+        if (r.message !== undefined) {
+          if (r.message < 120) {
+            frm.set_intro(
+              "Insufficient Balance , You cannot Sanction Share Holder",
+              "red"
+            );
+          } else if (r.message >= 120) {
+            frm.set_intro("You can Sanction this Share Holder", "green");
+          }
+        } else {
+          frm.set_intro(
+            "Insufficient Balance , You cannot Sanction Share Holder",
+            "red"
+          );
+        }
+      },
+      error: function (r) {
+        // Handle any errors during the call
+        console.error("Error fetching balance:", r);
+        frappe.msgprint(__("An error occurred while fetching the balance."));
+      },
+    });
   },
 
   share_application_english_print(frm) {

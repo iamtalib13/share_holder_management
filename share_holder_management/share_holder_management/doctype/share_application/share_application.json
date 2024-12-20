@@ -408,6 +408,7 @@
   {
    "fieldname": "share_ac_no",
    "fieldtype": "Link",
+   "ignore_user_permissions": 1,
    "label": "Share A/C No",
    "options": "Share Account",
    "read_only": 1
@@ -714,12 +715,11 @@
  "index_web_pages_for_search": 1,
  "links": [
   {
-   "group": "Finacle Transaction",
    "link_doctype": "Journal Entry",
    "link_fieldname": "custom_share_application_id"
   }
  ],
- "modified": "2024-12-04 10:16:28.900504",
+ "modified": "2024-12-11 23:32:31.883536",
  "modified_by": "Administrator",
  "module": "Share Holder Management",
  "name": "Share Application",

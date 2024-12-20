@@ -3,59 +3,62 @@
   <head>
     <title>Transaction Statement</title>
     <style>
-      body {
-        font-family: Arial, sans-serif;
-      }
-      .container {
-        margin: 0 auto;
-      }
-      .logo {
-        text-align: center;
-      }
-      h1 {
-        text-align: center;
-        margin-bottom: 20px;
-      }
-      .details {
-        display: flex;
-        justify-content: space-between;
-      }
-      .bank-detail {
-        padding-left: 10px;
-      }
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 20px;
-      }
-      th {
-        background-color: #4caf50;
-        color: white;
-        padding: 12px;
-        text-align: center;
-      }
-      td {
-        padding: 12px;
-        text-align: center;
-        border-bottom: 1px solid #ddd;
-      }
-      tbody tr:nth-child(even) {
-        background-color: #f2f2f2;
-      }
-      tbody tr:hover {
-        background-color: #f1f1f1;
-      }
-      table,
-      th,
-      td {
-        border: 1px solid #ddd;
-      }
-      .debit {
-        color: red; /* Red for debit */
-      }
-      .credit {
-        color: green; /* Green for credit */
-      }
+body {
+  font-family: Arial, sans-serif;
+}
+.container {
+  margin: 0 auto;
+  width: 100%;
+}
+.logo {
+  text-align: center;
+  margin-bottom: 20px;
+}
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+.details {
+  width: 100%;
+  display: table; /* Use table layout */
+}
+.customer-detail, .bank-detail {
+  display: table-cell; /* Mimic flexbox-like behavior */
+  vertical-align: top;
+  padding: 10px;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+th {
+  background-color: #4caf50;
+  color: white;
+  padding: 12px;
+  text-align: center;
+}
+td {
+  padding: 12px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+}
+tbody tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+tbody tr:hover {
+  background-color: #f1f1f1;
+}
+table, th, td {
+  border: 1px solid #ddd;
+}
+.debit {
+  color: red; /* Red for debit */
+}
+.credit {
+  color: green; /* Green for credit */
+}
+
     </style>
   </head>
   <body>
@@ -64,7 +67,7 @@
         <img src="/files/Sahayog.png" alt="" width="300" />
       </div>
       <h1>Transaction Statement</h1>
-      <h2>Customer Ledger For SAVING DEPOSIT</h2>
+      <h2>Customer Ledger For {{ ac_name }}</h2>
       <div class="details">
         <div class="customer-detail">
           <p><strong>Account No:</strong> {{ ac_no }}</p>
@@ -113,7 +116,7 @@
             <td></td>
             <td></td>  <!-- Show opening balance directly -->
             <td></td>  <!-- Leave this cell empty or as required -->
-            <td>{{  abs(cumulative_balance) }}</td>  <!-- Show cumulative balance -->
+            <td>{{ cumulative_balance }}</td>  <!-- Show cumulative balance -->
         </tr>
         
           
@@ -123,14 +126,17 @@
             <td>{{ transaction.transaction_date }}</td>
             <td>{{ transaction.transaction_type }}</td>
             <td>{{ transaction.description }}</td>
-            <td>{{ transaction.doc_no }}</td>
+            <td>{{ transaction.doc_no if transaction.doc_no else '0' }}</td>
             <td class="debit">
-              {{ transaction.debit if transaction.debit > 0 else '-' }}
+              {{ "{:.2f}".format(transaction.debit|float) if transaction.debit else '0.00' }}
             </td>
             <td class="credit">
-              {{ transaction.credit if transaction.credit > 0 else '-' }}
+              {{ "{:.2f}".format(transaction.credit|float) if transaction.credit else '0.00' }}
             </td>
-            <td>{{ abs(transaction.balance) }}</td>
+            <td>
+              {{ "{:.2f}".format(transaction.balance|float) }}
+              
+            </td>
           </tr>
           {% endfor %}
         </tbody>

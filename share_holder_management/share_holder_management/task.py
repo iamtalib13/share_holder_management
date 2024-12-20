@@ -14,6 +14,11 @@ from datetime import datetime
 from datetime import datetime
 import frappe
 
+
+@frappe.whitelist(allow_guest=True)
+def test_print():
+    return "Work kar raha hai"
+
 def convert_date_format(date_str, input_format='%d-%m-%Y', output_format='%Y-%m-%d'):
     """Convert date string from input_format to output_format."""
     try:
@@ -60,10 +65,9 @@ def create_or_update_share_application(data):
                 "branch_code": data.get('branch_code', None),
                 "ac_open_dt": cif_creation_dt,
                 "application_date": cif_creation_dt,
-                "saving_current_ac_no": acct_num,
                 "fin_account_type": data.get('account_type', None),
-                "gl_sub_head_code": data.get('gl_sub_head_code', None),
-                "status": "Submitted"
+               
+                
             }
             
             # Update fields using db_set with update_modified=False
@@ -155,7 +159,9 @@ def check_db():
     except Exception as e:
         print(f"Error: {e}")
     finally:
-        print("Database connection closed")        
+        print("Database connection closed") 
+
+
 
 def cron():
     tickets = frappe.get_all(
@@ -602,20 +608,20 @@ def test_db():
         print("Database connection closed")
 
 
-
 import frappe
 import random
 import requests
 import xmltodict
+from datetime import datetime
 
 def finacle_fund_transfer_api():
-    try:
-        # Fetch all Journal Entries with docstatus 0
-        journal_entries = frappe.get_all('Journal Entry', filters={'docstatus': 0}, fields=['name'])
+    # Fetch all Journal Entries with docstatus 0 that haven't been processed yet
+    journal_entries = frappe.get_all('Journal Entry', filters={'docstatus': 0}, fields=['name'])
 
-        for entry in journal_entries:
-            entry_name = entry.name  # Get the name of each Journal Entry
-
+    for entry in journal_entries:
+        entry_name = entry.name  # Get the name of each Journal Entry
+        
+        try:
             # Fetch the specific Journal Entry record
             entry_doc = frappe.get_doc('Journal Entry', entry_name, ignore_permissions=True)
 
@@ -629,203 +635,109 @@ def finacle_fund_transfer_api():
                     break  # Exit the loop after finding the first matching record
 
             print("Debitor Account Number:", debitor_account)
-
+             # Get the current date and time in the required format
+            current_date = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3]  # Format to YYYY-MM-DDTHH:MM:SS.sss
             # Generate a random GUID (10-digit random number)
             guid = random.randint(1000000000, 9999999999)
 
             # XML Data to be sent
             xml_data = f"""<?xml version="1.0" encoding="UTF-8"?>
-
 <FIXML xsi:schemaLocation="http://www.finacle.com/fixml XferTrnAdd.xsd" xmlns="http://www.finacle.com/fixml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-
     <Header>
-
         <RequestHeader>
-
             <MessageKey>
-
                 <RequestUUID>{guid}</RequestUUID>
-
                 <ServiceRequestId>XferTrnAdd</ServiceRequestId>
-
                 <ServiceRequestVersion>10.2</ServiceRequestVersion>
-
                 <ChannelId>COR</ChannelId>
-
                 <LanguageId></LanguageId>
-
             </MessageKey>
-
             <RequestMessageInfo>
-
                 <BankId>01</BankId>
-
                 <TimeZone></TimeZone>
-
                 <EntityId></EntityId>
-
                 <EntityType></EntityType>
-
                 <ArmCorrelationId></ArmCorrelationId>
-
-                <MessageDateTime>2019-08-30T12:40:18.494</MessageDateTime>
-
+                <MessageDateTime>2024-12-11T00:00:00.000</MessageDateTime>
             </RequestMessageInfo>
-
             <Security>
-
                 <Token>
-
                     <PasswordToken>
-
                         <UserId></UserId>
-
                         <Password></Password>
-
                     </PasswordToken>
-
                 </Token>
-
                 <FICertToken></FICertToken>
-
                 <RealUserLoginSessionId></RealUserLoginSessionId>
-
                 <RealUser></RealUser>
-
                 <RealUserPwd></RealUserPwd>
-
                 <SSOTransferToken></SSOTransferToken>
-
             </Security>
-
         </RequestHeader>
-
     </Header>
-
     <Body>
-
         <XferTrnAddRequest>
-
             <XferTrnAddRq>
-
                 <XferTrnHdr>
-
                     <TrnType>T</TrnType>
-
                     <TrnSubType>CI</TrnSubType>
-
                 </XferTrnHdr>
-
                 <XferTrnDetail>
-
                     <!-- Debit Transaction -->
                     <PartTrnRec>
-
                         <AcctId>
-
                             <AcctId>{debitor_account}</AcctId>
-
                         </AcctId>
-
                         <CreditDebitFlg>D</CreditDebitFlg>
-
                         <TrnAmt>
-
                             <amountValue>20</amountValue>
-
                             <currencyCode>INR</currencyCode>
-
                         </TrnAmt>
-
-                        <TrnParticulars>Debit tran</TrnParticulars>
-
-                        <PartTrnRmks>Talib</PartTrnRmks>
-
-                        <ValueDt>2024-09-14T00:00:00.000</ValueDt>
-
+                        <TrnParticulars>Share Fund Debited</TrnParticulars>
+                        <PartTrnRmks>Share Fund Debited</PartTrnRmks>
+                        <ValueDt>{current_date}</ValueDt>
                         <UserPartTrnCode></UserPartTrnCode>
-
                     </PartTrnRec>
-
                     <!-- Credit Transaction 1 -->
                     <PartTrnRec>
-
                         <AcctId>
-
                             <AcctId>100001410010001</AcctId>
-
                         </AcctId>
-
                         <CreditDebitFlg>C</CreditDebitFlg>
-
                         <TrnAmt>
-
                             <amountValue>10</amountValue>
-
                             <currencyCode>INR</currencyCode>
-
                         </TrnAmt>
-
-                        <TrnParticulars>Credit tran 1</TrnParticulars>
-
-                        <PartTrnRmks>Share</PartTrnRmks>
-
-                        <ValueDt>2024-09-14T00:00:00.000</ValueDt>
-
+                        <TrnParticulars>SHARE ACCOUNT</TrnParticulars>
+                        <PartTrnRmks>SHARE ACCOUNT</PartTrnRmks>
+                        <ValueDt>{current_date}</ValueDt>
                         <UserPartTrnCode></UserPartTrnCode>
-
                     </PartTrnRec>
-
                     <!-- Credit Transaction 2 -->
                     <PartTrnRec>
-
                         <AcctId>
-
                             <AcctId>100001670060001</AcctId>
-
                         </AcctId>
-
                         <CreditDebitFlg>C</CreditDebitFlg>
-
                         <TrnAmt>
-
                             <amountValue>10</amountValue>
-
                             <currencyCode>INR</currencyCode>
-
                         </TrnAmt>
-
-                        <TrnParticulars>Credit tran 2</TrnParticulars>
-
-                        <PartTrnRmks>share</PartTrnRmks>
-
-                        <ValueDt>2024-09-14T00:00:00.000</ValueDt>
-
+                        <TrnParticulars>SHARE MEMBER ENTRY FEE</TrnParticulars>
+                        <PartTrnRmks>SHARE MEMBER ENTRY FEE</PartTrnRmks>
+                        <ValueDt>{current_date}</ValueDt>
                         <UserPartTrnCode></UserPartTrnCode>
-
                     </PartTrnRec>
-
                 </XferTrnDetail>
-
             </XferTrnAddRq>
-
         </XferTrnAddRequest>
-
     </Body>
-
 </FIXML>
-
 """
-
-           
 
             # Set up the API request
             url = 'https://smcprd.sahayog.net.in:2950/FISERVLET/fihttp'
             headers = {'Content-Type': 'application/xml'}
-
-            # Initialize variables
-            status = None
-            custom_trn_id = None
 
             # Disable SSL verification and send the request
             response = requests.post(url, data=xml_data, headers=headers, verify=False)
@@ -834,37 +746,53 @@ def finacle_fund_transfer_api():
             print("XML Response Received:\n" + response.text)
 
             if response.status_code == 200:
-                # Convert XML response to JSON
-                response_json = xmltodict.parse(response.text)
-                
-                # Extract necessary values
-                status = response_json.get('FIXML', {}).get('Header', {}).get('ResponseHeader', {}).get('HostTransaction', {}).get('Status')
-                custom_trn_id = response_json.get('FIXML', {}).get('Body', {}).get('XferTrnAddResponse', {}).get('XferTrnAddRs', {}).get('TrnIdentifier', {}).get('TrnId')
-                
-                print(f"Transaction ID for {entry_name}: {custom_trn_id}, Status: {status}")
+                try:
+                    # Parse the XML response
+                    response_dict = xmltodict.parse(response.text)
 
-                # Update the Journal Entry if the transaction is successful
-                if status == "SUCCESS":
-                    entry_doc.db_set('docstatus', 1)
-                    entry_doc.db_set('custom_finacle_transaction_id', custom_trn_id)
-                    entry_doc.db_set('custom_status', status)
-                else:
+                    # Extracting specific fields from the XML
+                    status = response_dict.get('FIXML', {}).get('Header', {}).get('ResponseHeader', {}).get('HostTransaction', {}).get('Status', '').strip()
+                    custom_trn_id = response_dict.get('FIXML', {}).get('Body', {}).get('XferTrnAddResponse', {}).get('XferTrnAddRs', {}).get('TrnIdentifier', {}).get('TrnId', '').strip()
+
+                    print(f"Transaction ID for {entry_name}: {custom_trn_id}, Status: {status}")
+
+                    # Update the Journal Entry if the transaction is successful
+                    if status == "SUCCESS":
+                        entry_doc.db_set('docstatus', 1)
+                        entry_doc.db_set('custom_api_response', response.text)
+                        entry_doc.db_set('custom_finacle_transaction_id', custom_trn_id)
+                        entry_doc.db_set('custom_status', status)
+                    
+                    else:
+                        entry_doc.db_set('docstatus', 0)
+                        entry_doc.db_set('custom_api_response', response.text)
+                        entry_doc.db_set('custom_status', status)
+                except Exception as e:
+                    print(f"Error parsing XML response for {entry_name}: {e}")
                     entry_doc.db_set('docstatus', 0)
-                    entry_doc.db_set('custom_api_response', response.text)
-                    entry_doc.db_set('custom_status', status)
+                    entry_doc.db_set('custom_api_response', f"Error parsing XML: {e}")
+                    entry_doc.db_set('custom_status', 'ERROR')
             else:
                 entry_doc.db_set('docstatus', 0)
                 entry_doc.db_set('custom_api_response', response.text)
-                entry_doc.db_set('custom_status', status)
+                entry_doc.db_set('custom_status', 'FAILED')
 
-    except Exception as e:
-        print(f"Error sending data to API: {e}")
-        return False, f"Error: {e}"
+        except Exception as e:
+            print(f"Error processing entry {entry_name}: {e}")
+            # Optionally, update the entry to reflect the error state
+            entry_doc.db_set('docstatus', 0)
+            entry_doc.db_set('custom_api_response', str(e))
+            entry_doc.db_set('custom_status', 'ERROR')
 
 
 @frappe.whitelist(allow_guest=True)    
 def ping():
     return "Apeksha"
+
+
+
+
+
 
  
 ############################### Sahayog Statement #################################################
@@ -1256,3 +1184,4 @@ def fetch_db(branch_code, ac_code, ac_no, account_type, start_date, end_date):
     finally:
         if 'connection' in locals():
             connection.close()
+
